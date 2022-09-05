@@ -53,4 +53,3 @@ or use cli in terminal using following:
  ./gradlew test
 
  ```
-it will automatically run checkStyle as the first step before run gradle test.
