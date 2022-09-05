@@ -26,6 +26,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.mapstruct:mapstruct-processor:1.5.2.Final'
+    implementation 'com.google.guava:guava:31.1-jre'
 
     compileOnly 'org.projectlombok:lombok'
 
