@@ -26,7 +26,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.flywaydb:flyway-core'
-    implementation 'org.mapstruct:mapstruct-processor:1.5.2.Final'
+    implementation 'org.mapstruct:mapstruct:1.5.2.Final'
     implementation 'com.google.guava:guava:31.1-jre'
 
     compileOnly 'org.projectlombok:lombok'
@@ -38,6 +38,7 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
 
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
