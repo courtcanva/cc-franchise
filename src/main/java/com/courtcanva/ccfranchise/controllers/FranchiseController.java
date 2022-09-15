@@ -19,7 +19,7 @@ public class FranchiseController {
     @PostMapping("/signup")
     public ResponseEntity<String> signUpFranchise(@RequestBody @Valid FranchiseDto franchiseDto){
 
-        franchiseService.createFranchise(franchiseDto);
+//        franchiseService.createFranchise(franchiseDto);
         return ResponseEntity.ok("signup success");
     }
 }
