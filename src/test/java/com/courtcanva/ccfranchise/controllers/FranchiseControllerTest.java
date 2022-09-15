@@ -47,7 +47,7 @@ class FranchiseControllerTest {
                 .build();
 
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/courtcanva/franchise/signup")
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/signup")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(franchiseDto));

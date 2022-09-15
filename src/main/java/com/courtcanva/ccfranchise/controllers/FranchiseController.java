@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/courtcanva/franchise")
+@RequestMapping
 public class FranchiseController {
 
     private FranchiseService franchiseService;
