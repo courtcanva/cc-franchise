@@ -1,3 +1,2 @@
-package com.courtcanva.ccfranchise.config;
-
-
+package com.courtcanva.ccfranchise.config;public class SecurityConfig {
+}
