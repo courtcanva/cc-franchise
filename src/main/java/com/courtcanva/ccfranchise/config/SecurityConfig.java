@@ -24,7 +24,7 @@ public class SecurityConfig {
     private List<String> methods;
 
     @Value("${allowed-headers}")
-    private List<String> heads;
+    private List<String> headers;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -33,7 +33,7 @@ public class SecurityConfig {
                     var cors = new CorsConfiguration();
                     cors.setAllowedMethods(methods);
                     cors.setAllowedOrigins(origins);
-                    cors.setAllowedHeaders(heads);
+                    cors.setAllowedHeaders(headers);
                     return cors;
                 })
                 .and()
