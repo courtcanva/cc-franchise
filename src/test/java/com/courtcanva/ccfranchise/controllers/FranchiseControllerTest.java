@@ -64,22 +64,4 @@ class FranchiseControllerTest {
 
     }
 
-    @Test
-    public void testHello() throws Exception {
-        mockMvc.perform(
-                        MockMvcRequestBuilders.get("/hello")
-                                .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void testHell1o() throws Exception {
-        mockMvc.perform(
-                        MockMvcRequestBuilders.post("/hello")
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                )
-
-                .andExpect(status().isOk());
-    }
-
 }

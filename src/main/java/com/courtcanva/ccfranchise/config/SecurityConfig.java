@@ -1,5 +1,7 @@
 package com.courtcanva.ccfranchise.config;
 
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -11,30 +13,27 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.List;
 
+@Slf4j
+@Setter
 @Configuration
 @EnableWebSecurity
 @ConfigurationProperties(prefix = "management.endpoints.web.cors")
 public class SecurityConfig {
 
-    @Value("${allowed-origins}")
-    private List<String> origins;
 
-    @Value("${allowed-methods}")
-    private List<String> methods;
+    private List<String> allowedOrigins;
 
-    @Value("${allowed-headers}")
-    private List<String> heads;
+    private List<String> allowedMethods;
 
-
-
+    private List<String> allowedHeaders;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .cors().configurationSource(request -> {
                     var cors = new CorsConfiguration();
-                    cors.setAllowedOrigins(origins);
-                    cors.setAllowedHeaders(methods);
-                    cors.setAllowedMethods(heads);
+                    cors.setAllowedOrigins(allowedOrigins);
+                    cors.setAllowedHeaders(allowedMethods);
+                    cors.setAllowedMethods(allowedHeaders);
                     return  cors;
                 })
                 .and()

@@ -1,6 +1,6 @@
 package com.courtcanva.ccfranchise.constants;
 
-public enum StaffStatus {
+public enum VerifyStatus {
 
     UNVERIFIED,
     VERIFIED

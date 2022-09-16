@@ -1,3 +1,7 @@
 package com.courtcanva.ccfranchise.repositories;
-public interface FranchiseRepository {
+
+import com.courtcanva.ccfranchise.model.Franchise;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface FranchiseRepository extends JpaRepository<Franchise,Long> {
 }

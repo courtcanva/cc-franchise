@@ -16,18 +16,8 @@ public class FranchiseController {
     @PostMapping("/signup")
     public ResponseEntity<String> signUpFranchise(@RequestBody @Valid FranchiseDto franchiseDto){
 
-//        franchiseService.createFranchise(franchiseDto);
+        franchiseService.createFranchise(franchiseDto);
         return ResponseEntity.ok("signup success");
     }
-    @PostMapping("/hello")
-    public ResponseEntity<String> signUpFranchise(){
 
-//        franchiseService.createFranchise(franchiseDto);
-        return ResponseEntity.ok("name");
-    }
-
-    @GetMapping("/hello")
-    public String getHello() {
-        return "Hello there";
-    }
 }
