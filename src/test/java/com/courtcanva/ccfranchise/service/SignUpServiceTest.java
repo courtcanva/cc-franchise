@@ -2,6 +2,7 @@ package com.courtcanva.ccfranchise.service;
 
 import com.courtcanva.ccfranchise.dto.RequiredEmail;
 import com.courtcanva.ccfranchise.dto.Result;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,5 +23,6 @@ class SignUpServiceTest {
         RequiredEmail requiredEmail = new RequiredEmail("222gmail.com");
         Result result = signUpService.verifyEmail(requiredEmail);
         logger.debug(result.getMsg());
+        Assertions.assertEquals("The email is already exists", result.getMsg());
     }
 }
