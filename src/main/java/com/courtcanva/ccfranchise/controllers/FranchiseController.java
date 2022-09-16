@@ -3,10 +3,7 @@ package com.courtcanva.ccfranchise.controllers;
 import com.courtcanva.ccfranchise.dtos.FranchiseDto;
 import com.courtcanva.ccfranchise.services.FranchiseService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -21,5 +18,16 @@ public class FranchiseController {
 
 //        franchiseService.createFranchise(franchiseDto);
         return ResponseEntity.ok("signup success");
+    }
+    @PostMapping("/hello")
+    public ResponseEntity<String> signUpFranchise(){
+
+//        franchiseService.createFranchise(franchiseDto);
+        return ResponseEntity.ok("name");
+    }
+
+    @GetMapping("/hello")
+    public String getHello() {
+        return "Hello there";
     }
 }
