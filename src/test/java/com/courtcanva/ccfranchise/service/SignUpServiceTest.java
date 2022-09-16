@@ -20,9 +20,11 @@ class SignUpServiceTest {
 
     @Test
     void verifyEmail() {
-        RequiredEmail requiredEmail = new RequiredEmail("222gmail.com");
-        Result result = signUpService.verifyEmail(requiredEmail);
-        logger.debug(result.getMsg());
-        Assertions.assertEquals("The email is already exists", result.getMsg());
+        RequiredEmail requiredEmail1 = new RequiredEmail("222@gmail.com");
+        RequiredEmail requiredEmail2 = new RequiredEmail("222gmail.com");
+        Result result1 = signUpService.verifyEmail(requiredEmail1);
+        Result result2 = signUpService.verifyEmail(requiredEmail2);
+        Assertions.assertEquals("The email is already exists", result1.getMsg());
+        Assertions.assertEquals("The email format is incorrect", result2.getMsg());
     }
 }
