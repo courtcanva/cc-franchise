@@ -1,9 +1,9 @@
 package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.constants.VerifyStatus;
-import com.courtcanva.ccfranchise.dtos.FranchiseDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeDto;
 import com.courtcanva.ccfranchise.dtos.StaffDto;
-import com.courtcanva.ccfranchise.model.Franchise;
+import com.courtcanva.ccfranchise.model.Franchisee;
 import com.courtcanva.ccfranchise.model.Staff;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.utility.mappers.StaffMapper;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 class StaffServiceTest {
 
     @Mock
-    private FranchiseService franchiseService;
+    private FranchiseeService franchiseeService;
 
     @Mock
     private StaffRepository staffRepository;
@@ -34,7 +34,7 @@ class StaffServiceTest {
 
     @Test
     void shouldReturnStaffIdSuccessful(){
-        FranchiseDto franchiseDto = FranchiseDto.builder()
+        FranchiseeDto franchiseeDto = FranchiseeDto.builder()
                 .businessName("AAAAA")
                 .businessAddress("zetland NSWssss")
                 .ABN(1231232)
@@ -49,8 +49,8 @@ class StaffServiceTest {
                 .firstName("first")
                 .lastName("last")
                 .build();
-        franchiseDto.setStaff(staffDto);
-        Franchise mockFranchise = Franchise.builder()
+        franchiseeDto.setStaff(staffDto);
+        Franchisee mockFranchisee = Franchisee.builder()
                 .businessName("AAAAA")
                 .businessAddress("zetland NSWssss")
                 .ABN(1231232)
@@ -65,11 +65,11 @@ class StaffServiceTest {
                 .build();
 
         when(staffMapper.toStaffEntity(any())).thenReturn(mockStaff);
-        when(franchiseService.findFranchiseByABN(any()))
-                .thenReturn(mockFranchise);
+        when(franchiseeService.findFranchiseeByABN(any()))
+                .thenReturn(mockFranchisee);
         when(staffRepository.save(any())).thenReturn(mockStaff);
 
-        var staffId = staffService.createStaffOfFranchise(franchiseDto);
+        var staffId = staffService.createStaffOfFranchise(franchiseeDto);
 
         assertEquals(1232L,staffId);
 

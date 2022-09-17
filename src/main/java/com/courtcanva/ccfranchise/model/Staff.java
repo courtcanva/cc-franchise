@@ -5,7 +5,6 @@ import com.courtcanva.ccfranchise.constants.VerifyStatus;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -60,7 +59,7 @@ public class Staff {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "franchise_id")
-    private Franchise franchise;
+    private Franchisee franchisee;
 
     @Override
     public boolean equals(Object o) {

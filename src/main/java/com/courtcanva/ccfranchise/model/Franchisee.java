@@ -20,7 +20,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "franchisees")
-public class Franchise {
+public class Franchisee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Type(type = "long")
@@ -58,15 +58,15 @@ public class Franchise {
     @Column(name = "approved_by")
     private Long employeeId;
 
-    @OneToMany(mappedBy = "franchise")
+    @OneToMany(mappedBy = "franchisee")
     private Set<Staff> staffs = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Franchise franchise = (Franchise) o;
-        return id != null && Objects.equals(id, franchise.id);
+        Franchisee franchisee = (Franchisee) o;
+        return id != null && Objects.equals(id, franchisee.id);
     }
 
     @Override

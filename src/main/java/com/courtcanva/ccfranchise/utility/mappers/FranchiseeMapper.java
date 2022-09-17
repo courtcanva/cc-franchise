@@ -1,9 +1,7 @@
 package com.courtcanva.ccfranchise.utility.mappers;
 
-import com.courtcanva.ccfranchise.dtos.FranchiseDto;
-import com.courtcanva.ccfranchise.dtos.StaffDto;
-import com.courtcanva.ccfranchise.model.Franchise;
-import com.courtcanva.ccfranchise.model.Staff;
+import com.courtcanva.ccfranchise.dtos.FranchiseeDto;
+import com.courtcanva.ccfranchise.model.Franchisee;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -13,7 +11,7 @@ import org.springframework.stereotype.Component;
 public interface FranchiseeMapper {
 
     @Mapping(target = "id",ignore = true)
-    Franchise toFranchiseeEntity(FranchiseDto staffDto);
+    Franchisee toFranchiseeEntity(FranchiseeDto staffDto);
 
-    FranchiseDto toFranchiseeDto(Franchise staff);
+    FranchiseeDto toFranchiseeDto(Franchisee staff);
 }
