@@ -1,4 +1,4 @@
-package com.courtcanva.ccfranchise.enums;
+package com.courtcanva.ccfranchise.constant;
 
 public enum EmailEnum {
     SUCCESS(200, "success"),

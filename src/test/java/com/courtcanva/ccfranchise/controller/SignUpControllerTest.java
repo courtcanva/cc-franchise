@@ -1,6 +1,7 @@
 package com.courtcanva.ccfranchise.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.courtcanva.ccfranchise.dto.LoginDto;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,10 +36,10 @@ class SignUpControllerTest {
     @Test
     void verifyEmail() throws Exception {
         mock = MockMvcBuilders.webAppContextSetup(wac).build();
-        String param = "222@gmail.com";
-        RequestBuilder request = MockMvcRequestBuilders.post("/signUp/verifyEmail")
+        LoginDto loginDto = new LoginDto("2222@gmail.com","1234567A!");
+        RequestBuilder request = MockMvcRequestBuilders.get("/signUp/firstVerify")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JSON.toJSONString(param));
+                .content(JSON.toJSONString(loginDto));
         MvcResult mvcResult = mock.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())

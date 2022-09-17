@@ -1,4 +1,4 @@
-package com.courtcanva.ccfranchise.dto;
+package com.courtcanva.ccfranchise.model;
 
 import lombok.Data;
 

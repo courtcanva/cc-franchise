@@ -1,15 +1,10 @@
 package com.courtcanva.ccfranchise.exception;
 
 
-public class EmailVerifyException extends Exception {
-    private String msg;
+import com.courtcanva.ccfranchise.constant.EmailEnum;
 
-    public EmailVerifyException(String msg) {
-        this.msg = msg;
-    }
-
-    @Override
-    public String toString() {
-        return "msg";
+public class EmailVerifyException extends RuntimeException {
+    public EmailVerifyException() {
+        super("The email is already existed");
     }
 }

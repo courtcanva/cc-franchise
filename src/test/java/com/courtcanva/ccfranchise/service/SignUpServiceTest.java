@@ -1,15 +1,11 @@
 package com.courtcanva.ccfranchise.service;
 
-import com.courtcanva.ccfranchise.dto.RequiredEmail;
-import com.courtcanva.ccfranchise.dto.Result;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class SignUpServiceTest {
@@ -20,11 +16,9 @@ class SignUpServiceTest {
 
     @Test
     void verifyEmail() {
-        RequiredEmail requiredEmail1 = new RequiredEmail("222@gmail.com");
-        RequiredEmail requiredEmail2 = new RequiredEmail("222gmail.com");
-        Result result1 = signUpService.verifyEmail(requiredEmail1);
-        Result result2 = signUpService.verifyEmail(requiredEmail2);
-        Assertions.assertEquals("The email is already exists", result1.getMsg());
-        Assertions.assertEquals("The email format is incorrect", result2.getMsg());
+        Boolean isExisted1 = signUpService.verifyEmail("222@gmail.com");
+        Boolean isExisted2 = signUpService.verifyEmail("2222@gmail.com");
+        Assertions.assertEquals(true, isExisted1);
+        Assertions.assertEquals(false, isExisted2);
     }
 }
