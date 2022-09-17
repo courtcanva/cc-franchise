@@ -16,7 +16,7 @@ public class StaffService {
     private final StaffMapper staffMapper;
     private final FranchiseeService franchiseeService;
 
-    public Long createStaffOfFranchise(FranchiseeDto franchiseeDto) {
+    public Long createStaffOfFranchisee(FranchiseeDto franchiseeDto) {
 
         Staff staff = staffMapper.toStaffEntity(franchiseeDto.getStaff());
         Franchisee franchisee = franchiseeService.findFranchiseeByABN(franchiseeDto.getABN());
