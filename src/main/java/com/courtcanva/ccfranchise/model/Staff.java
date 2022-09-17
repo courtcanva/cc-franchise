@@ -17,7 +17,6 @@ import java.util.Objects;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Table(name = "franchise")
 public class Staff {
     @Id

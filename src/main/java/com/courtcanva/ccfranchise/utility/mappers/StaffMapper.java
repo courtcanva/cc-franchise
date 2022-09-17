@@ -12,15 +12,15 @@ import org.springframework.stereotype.Component;
 public interface StaffMapper {
 
     @Mapping(target = "id",ignore = true)
-    @Mapping(target = "firstName",source = "firstName")
-    @Mapping(target = "lastName",source = "lastName")
-    @Mapping(target = "email",source = "email")
-    @Mapping(target = "phoneNumber",source = "phoneNumber")
-    @Mapping(target = "address",source = "address")
-    @Mapping(target = "postcode",source = "postcode")
-    @Mapping(target = "state",source = "state")
-    @Mapping(target = "password",source = "password")
-    @Mapping(target = "verificationDocumentLink",source = "verificationDocumentLink")
+//    @Mapping(target = "firstName",source = "firstName")
+//    @Mapping(target = "lastName",source = "lastName")
+//    @Mapping(target = "email",source = "email")
+//    @Mapping(target = "phoneNumber",source = "phoneNumber")
+//    @Mapping(target = "address",source = "address")
+//    @Mapping(target = "postcode",source = "postcode")
+//    @Mapping(target = "state",source = "state")
+//    @Mapping(target = "password",source = "password")
+//    @Mapping(target = "verificationDocumentLink",source = "verificationDocumentLink")
     Staff toStaffEntity(StaffDto staffDto);
 
     StaffDto toStaffDto(Staff staff);
