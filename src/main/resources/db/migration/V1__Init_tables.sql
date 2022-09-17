@@ -1,9 +1,4 @@
 DROP TABLE IF EXISTS cc_employee CASCADE;
-DROP TYPE IF EXISTS cc_employee_status;
-DROP TYPE  IF EXISTS cc_employee_role;
-
-CREATE TYPE cc_employee_status as enum ('INACTIVE','ACTIVE','ARCHIVED');
-CREATE TYPE cc_employee_role as enum ('STAFF','ADMIN');
 
 CREATE TABLE cc_employee
 (
@@ -12,10 +7,10 @@ CREATE TABLE cc_employee
     password   CHAR(64)                 NOT NULL,
     first_name VARCHAR(100)             NOT NULL,
     last_name  VARCHAR(100)             NOT NULL,
-    role       cc_employee_role         NOT NULL,
+    role       VARCHAR(10)              NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    status     cc_employee_status       NOT NULL
+    status     VARCHAR(10)              NOT NULL
 );
 
 COMMENT ON COLUMN cc_employee.email IS 'Employee''s email as login username';
@@ -28,9 +23,6 @@ COMMENT ON COLUMN cc_employee.updated_at IS 'Employee account last update time, 
 COMMENT ON COLUMN cc_employee.status IS 'Employee status: INACTIVE(default)/ACTIVE/ARCHIVED';
 
 DROP TABLE IF EXISTS franchisee CASCADE;
-DROP TYPE IF EXISTS franchisee_status;
-
-CREATE TYPE franchisee_status as enum ('UNVERIFIED','VERIFIED');
 
 CREATE TABLE franchisee
 (
@@ -42,7 +34,7 @@ CREATE TABLE franchisee
     duty_area     VARCHAR                  NOT NULL,
     created_at    TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at    TIMESTAMP WITH TIME ZONE NOT NULL,
-    status        franchisee_status        NOT NULL,
+    is_verified   BOOLEAN                  NOT NULL,
     approved_time TIMESTAMP WITH TIME ZONE,
     approved_by   BIGINT,
     CONSTRAINT fk_approved_by FOREIGN KEY (approved_by) REFERENCES cc_employee (id)
@@ -55,15 +47,12 @@ COMMENT ON COLUMN franchisee.phone_number IS 'Franchisee''s contact number';
 COMMENT ON COLUMN franchisee.duty_area IS 'Franchisee''s duty area, postcode list of franchisee duty area[2017,2000,2032]';
 COMMENT ON COLUMN franchisee.created_at IS 'Franchisee account create time with timestamp, eg:2022-09-14T19:10:25.083Z';
 COMMENT ON COLUMN franchisee.updated_at IS 'Franchisee account last updated time with timestamp, eg:2022-09-14T19:10:25.083Z';
-COMMENT ON COLUMN franchisee.status IS 'Franchisee''s status: UNVERIFIED(default)/VERIFIED';
+COMMENT ON COLUMN franchisee.is_verified IS 'Franchisee''s status: UNVERIFIED(default)/VERIFIED';
 COMMENT ON COLUMN franchisee.approved_time IS 'Franchisee''s account approved time, eg:2022-09-14T19:10:25.083Z';
 COMMENT ON COLUMN franchisee.approved_by IS 'The staff who approved franchisee, eg:2022-09-14T19:10:25.083Z';
 
 
 DROP TABLE IF EXISTS "order" CASCADE;
-DROP TYPE IF EXISTS order_status;
-
-CREATE TYPE order_status as enum ('UNASSIGNED','ACCEPTED','COMPLETED','CANCELED','ASSIGNED');
 
 CREATE TABLE "order"
 (
@@ -76,7 +65,7 @@ CREATE TABLE "order"
     total_amount        VARCHAR                  NOT NULL,
     paid_amount         VARCHAR                  NOT NULL,
     unpaid_amount       VARCHAR                  NOT NULL,
-    status              order_status             NOT NULL,
+    status              VARCHAR(10)              NOT NULL,
     created_at          TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at          TIMESTAMP WITH TIME ZONE NOT NULL,
     franchisee_id       BIGINT,
@@ -100,11 +89,6 @@ COMMENT ON COLUMN "order".invoice_link IS 'URL link to store invoice in the clou
 
 
 DROP TABLE IF EXISTS staff CASCADE;
-DROP TYPE IF EXISTS staff_status;
-DROP TYPE IF EXISTS staff_role;
-
-CREATE TYPE staff_status as enum ('UNVERIFIED','VERIFIED');
-CREATE TYPE staff_role as enum ('STAFF','ADMIN');
 
 CREATE TABLE staff
 (
@@ -117,9 +101,9 @@ CREATE TABLE staff
     address                    VARCHAR(200)             NOT NULL,
     state                      CHAR(64)                 NOT NULL,
     postcode                   INTEGER                  NOT NULL,
-    status                     staff_status             NOT NULL,
+    status                     VARCHAR(10)              NOT NULL,
     franchisee_id              BIGINT                   NOT NULL,
-    role                       staff_role               NOT NULL,
+    role                       VARCHAR(10)              NOT NULL,
     verification_document_link VARCHAR                  NOT NULL,
     created_at                 TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at                 TIMESTAMP WITH TIME ZONE NOT NULL,
