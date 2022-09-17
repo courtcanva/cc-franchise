@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS cc_employee CASCADE;
-DROP TYPE cc_employee_status;
-DROP TYPE  cc_employee_role;
+DROP TYPE IF EXISTS cc_employee_status;
+DROP TYPE  IF EXISTS cc_employee_role;
 
 CREATE TYPE cc_employee_status as enum ('INACTIVE','ACTIVE','ARCHIVED');
 CREATE TYPE cc_employee_role as enum ('STAFF','ADMIN');
@@ -28,7 +28,7 @@ COMMENT ON COLUMN cc_employee.updated_at IS 'Employee account last update time, 
 COMMENT ON COLUMN cc_employee.status IS 'Employee status: INACTIVE(default)/ACTIVE/ARCHIVED';
 
 DROP TABLE IF EXISTS franchisee CASCADE;
-DROP TYPE franchisee_status;
+DROP TYPE IF EXISTS franchisee_status;
 
 CREATE TYPE franchisee_status as enum ('UNVERIFIED','VERIFIED');
 
@@ -61,7 +61,7 @@ COMMENT ON COLUMN franchisee.approved_by IS 'The staff who approved franchisee, 
 
 
 DROP TABLE IF EXISTS "order" CASCADE;
-DROP TYPE order_status;
+DROP TYPE IF EXISTS order_status;
 
 CREATE TYPE order_status as enum ('UNASSIGNED','ACCEPTED','COMPLETED','CANCELED','ASSIGNED');
 
@@ -100,8 +100,8 @@ COMMENT ON COLUMN "order".invoice_link IS 'URL link to store invoice in the clou
 
 
 DROP TABLE IF EXISTS staff CASCADE;
-DROP TYPE staff_status;
-DROP TYPE  staff_role;
+DROP TYPE IF EXISTS staff_status;
+DROP TYPE IF EXISTS staff_role;
 
 CREATE TYPE staff_status as enum ('UNVERIFIED','VERIFIED');
 CREATE TYPE staff_role as enum ('STAFF','ADMIN');
