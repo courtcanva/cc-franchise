@@ -39,6 +39,6 @@ public class StaffDto {
     private String password;
 
     @NotNull
-    private String verificationLink;
+    private String verificationDocumentLink;
 
 }

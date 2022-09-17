@@ -15,7 +15,7 @@ public class FranchiseDto {
 
     private StaffDto staff;
 
-    private String  ABN;
+    private Integer  ABN;
 
     private String businessAddress;
 

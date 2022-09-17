@@ -2,13 +2,15 @@ package com.courtcanva.ccfranchise.model;
 
 import com.courtcanva.ccfranchise.constants.VerifyStatus;
 import lombok.*;
-import org.checkerframework.checker.units.qual.C;
+import org.hibernate.Hibernate;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -35,18 +37,20 @@ public class Franchise {
     private VerifyStatus status;
 
     @Column(nullable = false)
-    private String address;
+    private String businessAddress;
 
     @Column(nullable = false)
-    private String name;
+    private String businessName;
 
     @Column
     private String dutyArea;
 
     @Column(nullable = false)
+    @CreationTimestamp
     private OffsetDateTime createdTime;
 
     @Column(nullable = false)
+    @UpdateTimestamp
     private OffsetDateTime updatedTime;
 
     private OffsetDateTime approvedTime;
@@ -54,7 +58,19 @@ public class Franchise {
     @Column(name = "approved_by")
     private Long employeeId;
 
-    @OneToMany(mappedBy = "franchise",
-            cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "franchise")
     private Set<Staff> staffs = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Franchise franchise = (Franchise) o;
+        return id != null && Objects.equals(id, franchise.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

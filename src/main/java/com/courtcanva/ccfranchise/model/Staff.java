@@ -3,9 +3,14 @@ package com.courtcanva.ccfranchise.model;
 import com.courtcanva.ccfranchise.constants.StaffRole;
 import com.courtcanva.ccfranchise.constants.VerifyStatus;
 import lombok.*;
+import org.hibernate.Hibernate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
+import java.util.Objects;
 
 @Entity
 @Setter
@@ -13,52 +18,60 @@ import java.time.OffsetDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Table(name = "franchise")
 public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
     private String firstName;
 
-    @Column
     private String lastName;
 
-    @Column
     private String password;
 
-    @Column
     private String state;
+    private Integer postcode;
 
-    @Column
     private String phoneNumber;
 
-    @Column
     private String verificationDocumentLink;
 
-    @Column
     private String address;
 
-    @Column
     @Enumerated(EnumType.STRING)
     private VerifyStatus status;
 
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column
+
     @Enumerated(EnumType.STRING)
     private StaffRole role;
 
-    @Column(name = "created_time", nullable = false)
+    @Column( nullable = false)
+    @CreationTimestamp
     private OffsetDateTime createdTime;
 
-    @Column(name = "updated_time", nullable = false)
+    @Column(nullable = false)
+    @UpdateTimestamp
     private OffsetDateTime updatedTime;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "franchise_id")
     private Franchise franchise;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Staff staff = (Staff) o;
+        return id != null && Objects.equals(id, staff.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
