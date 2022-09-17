@@ -1,7 +1,10 @@
+DROP TABLE IF EXISTS cc_employee CASCADE;
+DROP TYPE cc_employee_status;
+DROP TYPE  cc_employee_role;
+
 CREATE TYPE cc_employee_status as enum ('INACTIVE','ACTIVE','ARCHIVED');
 CREATE TYPE cc_employee_role as enum ('STAFF','ADMIN');
 
-DROP TABLE IF EXISTS cc_employee CASCADE;
 CREATE TABLE cc_employee
 (
     id         BIGINT                   NOT NULL PRIMARY KEY,
@@ -24,9 +27,11 @@ COMMENT ON COLUMN cc_employee.created_at IS 'Employee account create time, eg:20
 COMMENT ON COLUMN cc_employee.updated_at IS 'Employee account last update time, eg:2022-09-14T19:10:25.083Z';
 COMMENT ON COLUMN cc_employee.status IS 'Employee status: INACTIVE(default)/ACTIVE/ARCHIVED';
 
+DROP TABLE IF EXISTS franchisee CASCADE;
+DROP TYPE franchisee_status;
+
 CREATE TYPE franchisee_status as enum ('UNVERIFIED','VERIFIED');
 
-DROP TABLE IF EXISTS franchisee CASCADE;
 CREATE TABLE franchisee
 (
     id            BIGINT                   NOT NULL PRIMARY KEY,
@@ -55,9 +60,11 @@ COMMENT ON COLUMN franchisee.approved_time IS 'Franchisee''s account approved ti
 COMMENT ON COLUMN franchisee.approved_by IS 'The staff who approved franchisee, eg:2022-09-14T19:10:25.083Z';
 
 
+DROP TABLE IF EXISTS "order" CASCADE;
+DROP TYPE order_status;
+
 CREATE TYPE order_status as enum ('UNASSIGNED','ACCEPTED','COMPLETED','CANCELED','ASSIGNED');
 
-DROP TABLE IF EXISTS "order" CASCADE;
 CREATE TABLE "order"
 (
     id                  BIGINT                   NOT NULL PRIMARY KEY,
@@ -91,10 +98,14 @@ COMMENT ON COLUMN "order".updated_at IS 'Last updated time of the order with tim
 COMMENT ON COLUMN "order".franchisee_id IS 'Franchisee id who has been assigned';
 COMMENT ON COLUMN "order".invoice_link IS 'URL link to store invoice in the cloud storage, e.g. AWS S3. The user must be authenticated to provide an access token to access this link.';
 
+
+DROP TABLE IF EXISTS staff CASCADE;
+DROP TYPE staff_status;
+DROP TYPE  staff_role;
+
 CREATE TYPE staff_status as enum ('UNVERIFIED','VERIFIED');
 CREATE TYPE staff_role as enum ('STAFF','ADMIN');
 
-DROP TABLE IF EXISTS staff CASCADE;
 CREATE TABLE staff
 (
     id                         BIGINT                   NOT NULL PRIMARY KEY,
