@@ -1,11 +1,12 @@
 package com.courtcanva.ccfranchise.services;
 
-import com.courtcanva.ccfranchise.dtos.FranchiseeDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeInfoDto;
 import com.courtcanva.ccfranchise.model.Franchisee;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
-import com.courtcanva.ccfranchise.utility.mappers.FranchiseeMapper;
+import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -14,17 +15,21 @@ public class FranchiseeService {
 
     private final FranchiseeMapper franchiseeMapper;
 
-    public Long createFranchisee(FranchiseeDto franchiseeDto) {
+    private final StaffService staffService;
 
-        Franchisee franchisee = franchiseeMapper.toFranchiseeEntity(franchiseeDto);
+    @Transactional
+    public Long createFranchisee(FranchiseeInfoDto franchiseeInfoDto) {
 
-        var newFranchisee = franchiseeRepository.save(franchisee);
+        Franchisee franchisee = franchiseeMapper.toFranchiseeEntity(franchiseeInfoDto);
+        Franchisee newFranchisee = franchiseeRepository.save(franchisee);
+
+        staffService.createStaff(franchiseeInfoDto.getStaff());
 
         return newFranchisee.getId();
     }
 
-    public Franchisee findFranchiseeByABN(Integer abn){
+    public Franchisee findFranchiseeByABN(String abn){
 
-        return franchiseeRepository.findByABN(abn).orElseThrow(RuntimeException::new);
+        return franchiseeRepository.findByAbn(abn).orElseThrow(RuntimeException::new);
     }
 }

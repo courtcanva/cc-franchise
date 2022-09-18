@@ -1,32 +1,28 @@
 package com.courtcanva.ccfranchise.controllers;
 
-import com.courtcanva.ccfranchise.dtos.FranchiseeDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeInfoDto;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
-import com.courtcanva.ccfranchise.services.StaffService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping
+@RequestMapping("/franchisee")
+@RequiredArgsConstructor
 public class FranchiseeController {
 
-    @Autowired
-    private FranchiseeService franchiseeService;
-    @Autowired
-    private StaffService staffService;
+    private final FranchiseeService franchiseeService;
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public String signUpFranchiseeAndStaff(@RequestBody @Valid FranchiseeDto franchiseeDto) {
+    public ResponseEntity<String> signUpFranchiseeAndStaff(@RequestBody @Valid FranchiseeInfoDto franchiseeInfoDto) {
 
-        var staffId = staffService.createStaffOfFranchisee(franchiseeDto);
+        franchiseeService.createFranchisee(franchiseeInfoDto);
 
-        var franchiseeId = franchiseeService.createFranchisee(franchiseeDto);
-
-        return "success  " + staffId + franchiseeId;
+        return  ResponseEntity.ok("success");
     }
 
 }

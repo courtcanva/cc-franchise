@@ -1,15 +1,28 @@
 package com.courtcanva.ccfranchise.model;
 
-import com.courtcanva.ccfranchise.constants.StaffRole;
+import com.courtcanva.ccfranchise.constants.Role;
 import com.courtcanva.ccfranchise.constants.VerifyStatus;
-import lombok.*;
-import org.hibernate.Hibernate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.time.OffsetDateTime;
-import java.util.Objects;
+
 
 @Entity
 @Setter
@@ -17,36 +30,43 @@ import java.util.Objects;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "franchise")
+@Table(name = "staff")
 public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String firstName;
 
+    @Column(nullable = false)
     private String lastName;
 
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     private String state;
-    private Integer postcode;
 
+    @Column(nullable = false)
+    private int postcode;
+
+    @Column(nullable = false)
     private String phoneNumber;
 
-    private String verificationDocumentLink;
+    @Column(nullable = false)
+    private String residentialAddress;
 
-    private String address;
-
+    @Column
     @Enumerated(EnumType.STRING)
     private VerifyStatus status;
 
     @Column(unique = true, nullable = false)
     private String email;
 
-
+    @Column
     @Enumerated(EnumType.STRING)
-    private StaffRole role;
+    private Role role;
 
     @Column( nullable = false)
     @CreationTimestamp
@@ -60,16 +80,4 @@ public class Staff {
     @JoinColumn(name = "franchise_id")
     private Franchisee franchisee;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Staff staff = (Staff) o;
-        return id != null && Objects.equals(id, staff.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }

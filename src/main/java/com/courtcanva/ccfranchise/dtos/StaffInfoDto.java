@@ -1,18 +1,23 @@
 package com.courtcanva.ccfranchise.dtos;
 
+import com.courtcanva.ccfranchise.constants.States;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class StaffDto {
+public class StaffInfoDto {
 
     @NotNull
     private String firstName;
@@ -20,25 +25,31 @@ public class StaffDto {
     @NotNull
     private String lastName;
 
+    @NotNull
+    private String franchiseAbn;
+
     @Email
     private String email;
 
     @NotNull
+    @Pattern(regexp = "^[0-9]{9}｜0[0-9]{9}$")
     private String phoneNumber;
 
     @NotNull
-    private String address;
+    private String residentialAddress;
 
     @NotNull
-    private Integer postcode;
+    private int postcode;
 
     @NotNull
-    private String state;
+    @Enumerated(EnumType.STRING)
+    private States state;
 
     @NotNull
+    @Pattern(regexp = ".*[0-9]+.*[A-Z]+.*|.*[A-Z]+.*[0-9]+.*")
     private String password;
 
     @NotNull
-    private String verificationDocumentLink;
+    private Set<String> verificationDocumentLink;
 
 }
