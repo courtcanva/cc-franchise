@@ -18,16 +18,14 @@ public class StaffService {
     private final FranchiseeService franchiseeService;
 
     @Transactional
-    public Long createStaff(StaffInfoDto staffInfoDto) {
+    public Staff createStaff(StaffInfoDto staffInfoDto) {
 
         Staff staff = staffMapper.toStaffEntity(staffInfoDto);
 
         Franchisee franchisee = franchiseeService.findFranchiseeByABN(staffInfoDto.getFranchiseAbn());
         staff.setFranchisee(franchisee);
 
-        Staff newStaff = staffRepository.save(staff);
-
-        return newStaff.getId();
+        return staffRepository.save(staff);
     }
 
 }

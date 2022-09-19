@@ -1,6 +1,6 @@
 package com.courtcanva.ccfranchise.dtos;
 
-import com.courtcanva.ccfranchise.constants.States;
+import com.courtcanva.ccfranchise.constants.State;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +30,7 @@ public class FranchiseeInfoDto {
     private String businessAddress;
 
     @NotNull
-    private States state;
+    private State state;
 
     @NotNull
     private int postcode;

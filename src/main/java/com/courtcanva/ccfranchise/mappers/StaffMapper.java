@@ -8,10 +8,10 @@ import org.mapstruct.ReportingPolicy;
 import org.springframework.stereotype.Component;
 
 @Component
-@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface StaffMapper {
 
-    @Mapping(target = "id",ignore = true)
+    @Mapping(target = "id", ignore = true)
     Staff toStaffEntity(StaffInfoDto staffInfoDto);
 
     StaffInfoDto toStaffDto(Staff staff);

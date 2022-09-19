@@ -55,7 +55,7 @@ public class CcEmployee {
     @Enumerated(EnumType.STRING)
     private EmployeeStatus status;
 
-    @Column( nullable = false)
+    @Column(nullable = false)
     @CreationTimestamp
     private OffsetDateTime createdTime;
 

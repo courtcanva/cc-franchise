@@ -1,7 +1,6 @@
 package com.courtcanva.ccfranchise.model;
 
-import com.courtcanva.ccfranchise.constants.States;
-import com.courtcanva.ccfranchise.constants.VerifyStatus;
+import com.courtcanva.ccfranchise.constants.State;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,7 +47,7 @@ public class Franchisee {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private VerifyStatus status;
+    private Boolean isVerified;
 
     @Column(nullable = false)
     private String businessAddress;
@@ -63,7 +62,7 @@ public class Franchisee {
     private String entityName;
 
     @Column(nullable = false)
-    private States state;
+    private State state;
 
     @Column(nullable = false)
     @CreationTimestamp

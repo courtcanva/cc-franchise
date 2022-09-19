@@ -1,6 +1,6 @@
 package com.courtcanva.ccfranchise.dtos;
 
-import com.courtcanva.ccfranchise.constants.States;
+import com.courtcanva.ccfranchise.constants.State;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -43,7 +43,7 @@ public class StaffInfoDto {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private States state;
+    private State state;
 
     @NotNull
     @Pattern(regexp = ".*[0-9]+.*[A-Z]+.*|.*[A-Z]+.*[0-9]+.*")

@@ -1,11 +1,15 @@
 package com.courtcanva.ccfranchise.controllers;
 
 import com.courtcanva.ccfranchise.dtos.FranchiseeInfoDto;
+import com.courtcanva.ccfranchise.dtos.ResponseDto;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
@@ -18,11 +22,9 @@ public class FranchiseeController {
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<String> signUpFranchiseeAndStaff(@RequestBody @Valid FranchiseeInfoDto franchiseeInfoDto) {
+    public ResponseDto signUpFranchiseeAndStaff(@RequestBody @Valid FranchiseeInfoDto franchiseeInfoDto) {
 
-        franchiseeService.createFranchisee(franchiseeInfoDto);
-
-        return  ResponseEntity.ok("success");
+        return franchiseeService.createFranchiseeAndStaff(franchiseeInfoDto);
     }
 
 }

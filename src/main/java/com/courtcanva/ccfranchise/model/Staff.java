@@ -1,7 +1,6 @@
 package com.courtcanva.ccfranchise.model;
 
 import com.courtcanva.ccfranchise.constants.Role;
-import com.courtcanva.ccfranchise.constants.VerifyStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -59,7 +58,7 @@ public class Staff {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private VerifyStatus status;
+    private Boolean isVerified;
 
     @Column(unique = true, nullable = false)
     private String email;
@@ -68,7 +67,7 @@ public class Staff {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column( nullable = false)
+    @Column(nullable = false)
     @CreationTimestamp
     private OffsetDateTime createdTime;
 

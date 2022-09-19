@@ -1,9 +1,11 @@
 package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.dtos.FranchiseeInfoDto;
+import com.courtcanva.ccfranchise.dtos.ResponseDto;
+import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
+import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import com.courtcanva.ccfranchise.model.Franchisee;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
-import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,18 +20,22 @@ public class FranchiseeService {
     private final StaffService staffService;
 
     @Transactional
-    public Long createFranchisee(FranchiseeInfoDto franchiseeInfoDto) {
+    public ResponseDto createFranchiseeAndStaff(FranchiseeInfoDto franchiseeInfoDto) {
 
-        Franchisee franchisee = franchiseeMapper.toFranchiseeEntity(franchiseeInfoDto);
-        Franchisee newFranchisee = franchiseeRepository.save(franchisee);
+        franchiseeRepository.save(franchiseeMapper
+                .toFranchiseeEntity(franchiseeInfoDto));
 
         staffService.createStaff(franchiseeInfoDto.getStaff());
 
-        return newFranchisee.getId();
+        return ResponseDto.builder()
+                .responseCode("201")
+                .responseMessage("create new Franchisee with new Staff")
+                .build();
     }
 
-    public Franchisee findFranchiseeByABN(String abn){
+    public Franchisee findFranchiseeByABN(String abn) {
 
-        return franchiseeRepository.findByAbn(abn).orElseThrow(RuntimeException::new);
+        return franchiseeRepository.findByAbn(abn)
+                .orElseThrow(()->new ResourceNotFoundException("Franchisee","abn",abn));
     }
 }
