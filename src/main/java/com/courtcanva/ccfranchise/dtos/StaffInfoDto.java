@@ -11,7 +11,6 @@ import javax.persistence.Enumerated;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -49,7 +48,5 @@ public class StaffInfoDto {
     @Pattern(regexp = ".*[0-9]+.*[A-Z]+.*|.*[A-Z]+.*[0-9]+.*")
     private String password;
 
-    @NotNull
-    private Set<String> verificationDocumentLink;
 
 }

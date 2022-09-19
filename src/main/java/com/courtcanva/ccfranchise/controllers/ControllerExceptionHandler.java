@@ -15,7 +15,7 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorDto handleResourceNotFoundException(ResourceNotFoundException e, WebRequest webRequest){
+    public ErrorDto handleResourceNotFoundException(ResourceNotFoundException e, WebRequest webRequest) {
 
         return ErrorDto.builder()
                 .details(webRequest.getDescription(false))

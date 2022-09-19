@@ -1,6 +1,6 @@
 package com.courtcanva.ccfranchise.services;
 
-import com.courtcanva.ccfranchise.dtos.FranchiseeInfoDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffInfoDto;
 import com.courtcanva.ccfranchise.dtos.ResponseDto;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
@@ -20,12 +20,12 @@ public class FranchiseeService {
     private final StaffService staffService;
 
     @Transactional
-    public ResponseDto createFranchiseeAndStaff(FranchiseeInfoDto franchiseeInfoDto) {
+    public ResponseDto createFranchiseeAndStaff(FranchiseeAndStaffInfoDto franchiseeAndStaffInfoDto) {
 
         franchiseeRepository.save(franchiseeMapper
-                .toFranchiseeEntity(franchiseeInfoDto));
+                .toFranchiseeEntity(franchiseeAndStaffInfoDto));
 
-        staffService.createStaff(franchiseeInfoDto.getStaff());
+        staffService.createStaff(franchiseeAndStaffInfoDto.getStaff());
 
         return ResponseDto.builder()
                 .responseCode("201")
@@ -36,6 +36,6 @@ public class FranchiseeService {
     public Franchisee findFranchiseeByABN(String abn) {
 
         return franchiseeRepository.findByAbn(abn)
-                .orElseThrow(()->new ResourceNotFoundException("Franchisee","abn",abn));
+                .orElseThrow(() -> new ResourceNotFoundException("Franchisee", "abn", abn));
     }
 }

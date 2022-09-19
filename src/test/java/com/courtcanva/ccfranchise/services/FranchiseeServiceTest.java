@@ -1,7 +1,7 @@
 package com.courtcanva.ccfranchise.services;
 
 
-import com.courtcanva.ccfranchise.dtos.FranchiseeInfoDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffInfoDto;
 import com.courtcanva.ccfranchise.dtos.ResponseDto;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import com.courtcanva.ccfranchise.model.Franchisee;
@@ -33,7 +33,7 @@ class FranchiseeServiceTest {
     @Test
     void shouldCreateStaffAndFranchiseeSuccessful() {
 
-        FranchiseeInfoDto franchiseeDto = FranchiseeInfoDto.builder()
+        FranchiseeAndStaffInfoDto franchiseeDto = FranchiseeAndStaffInfoDto.builder()
                 .businessName("AAAAA")
                 .businessAddress("zetland NSWssss")
                 .abn("1231232")

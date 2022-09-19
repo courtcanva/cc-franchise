@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface FranchiseeRepository extends JpaRepository<Franchisee,Long> {
+public interface FranchiseeRepository extends JpaRepository<Franchisee, Long> {
 
     Optional<Franchisee> findByAbn(String abn);
 }

@@ -1,7 +1,7 @@
 package com.courtcanva.ccfranchise.controllers;
 
 import com.courtcanva.ccfranchise.constants.State;
-import com.courtcanva.ccfranchise.dtos.FranchiseeInfoDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffInfoDto;
 import com.courtcanva.ccfranchise.dtos.ResponseDto;
 import com.courtcanva.ccfranchise.dtos.StaffInfoDto;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
@@ -43,7 +43,7 @@ class FranchiseeControllerTest {
     @Test
     void shouldReturnStaffAndFranchiseId() throws Exception {
 
-        FranchiseeInfoDto franchiseDto = FranchiseeInfoDto.builder()
+        FranchiseeAndStaffInfoDto franchiseDto = FranchiseeAndStaffInfoDto.builder()
                 .businessName("AAAAA")
                 .businessAddress("zetland NSWssss")
                 .entityName("AAAA info")

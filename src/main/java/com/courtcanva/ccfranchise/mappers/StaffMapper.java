@@ -14,5 +14,4 @@ public interface StaffMapper {
     @Mapping(target = "id", ignore = true)
     Staff toStaffEntity(StaffInfoDto staffInfoDto);
 
-    StaffInfoDto toStaffDto(Staff staff);
 }

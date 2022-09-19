@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FranchiseeInfoDto {
+public class FranchiseeAndStaffInfoDto {
 
     @NotNull
     private String businessName;
