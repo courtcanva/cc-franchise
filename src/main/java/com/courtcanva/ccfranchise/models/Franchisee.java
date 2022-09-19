@@ -1,4 +1,4 @@
-package com.courtcanva.ccfranchise.model;
+package com.courtcanva.ccfranchise.models;
 
 import com.courtcanva.ccfranchise.constants.State;
 import lombok.AllArgsConstructor;

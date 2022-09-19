@@ -4,7 +4,7 @@ import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffInfoDto;
 import com.courtcanva.ccfranchise.dtos.ResponseDto;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
-import com.courtcanva.ccfranchise.model.Franchisee;
+import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

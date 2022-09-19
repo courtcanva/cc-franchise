@@ -4,7 +4,7 @@ package com.courtcanva.ccfranchise.services;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffInfoDto;
 import com.courtcanva.ccfranchise.dtos.ResponseDto;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
-import com.courtcanva.ccfranchise.model.Franchisee;
+import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

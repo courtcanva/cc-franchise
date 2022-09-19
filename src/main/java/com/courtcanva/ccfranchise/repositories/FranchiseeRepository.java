@@ -1,6 +1,6 @@
 package com.courtcanva.ccfranchise.repositories;
 
-import com.courtcanva.ccfranchise.model.Franchisee;
+import com.courtcanva.ccfranchise.models.Franchisee;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

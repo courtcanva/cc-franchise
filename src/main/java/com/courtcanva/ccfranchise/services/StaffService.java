@@ -1,8 +1,8 @@
 package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.dtos.StaffInfoDto;
-import com.courtcanva.ccfranchise.model.Franchisee;
-import com.courtcanva.ccfranchise.model.Staff;
+import com.courtcanva.ccfranchise.models.Franchisee;
+import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.courtcanva.ccfranchise.config;
+package com.courtcanva.ccfranchise.configs;
 
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;

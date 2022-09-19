@@ -1,7 +1,7 @@
 package com.courtcanva.ccfranchise.mappers;
 
 import com.courtcanva.ccfranchise.dtos.StaffInfoDto;
-import com.courtcanva.ccfranchise.model.Staff;
+import com.courtcanva.ccfranchise.models.Staff;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
