@@ -63,7 +63,7 @@ class StaffServiceTest {
                 .thenReturn(mockFranchisee);
         when(staffRepository.save(any())).thenReturn(mockStaff);
 
-        var staff = staffService.createStaff(staffDto);
+        Staff staff = staffService.createStaff(staffDto);
 
         assertEquals(1232L, staff.getId());
 
