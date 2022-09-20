@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS cc_employee CASCADE;
 CREATE TABLE cc_employee
 (
     id         BIGINT                   NOT NULL PRIMARY KEY,
-    email      VARCHAR(100)             NOT NULL,
+    email      VARCHAR(100)             NOT NULL UNIQUE,
     password   CHAR(64)                 NOT NULL,
     first_name VARCHAR(100)             NOT NULL,
     last_name  VARCHAR(100)             NOT NULL,
@@ -19,7 +19,7 @@ DROP TABLE IF EXISTS franchisee CASCADE;
 CREATE TABLE franchisee
 (
     id            BIGINT                   NOT NULL PRIMARY KEY,
-    abn           CHAR(11)                 NOT NULL,
+    abn           CHAR(11)                 NOT NULL UNIQUE,
     address       VARCHAR(200)             NOT NULL,
     postcode      INTEGER                  NOT NULL,
     phone_number  VARCHAR(20)              NOT NULL,
@@ -43,9 +43,9 @@ CREATE TABLE "order"
     contact_information jsonb                    NOT NULL,
     design_information  jsonb                    NOT NULL,
     postcode            VARCHAR                  NOT NULL,
-    total_amount        VARCHAR                  NOT NULL,
-    paid_amount         VARCHAR                  NOT NULL,
-    unpaid_amount       VARCHAR                  NOT NULL,
+    total_amount        NUMERIC(12, 2)           NOT NULL,
+    paid_amount         NUMERIC(12, 2)           NOT NULL,
+    unpaid_amount       NUMERIC(12, 2)           NOT NULL,
     status              VARCHAR(10)              NOT NULL,
     created_at          TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at          TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE staff
     id                         BIGINT                   NOT NULL PRIMARY KEY,
     first_name                 VARCHAR(100)             NOT NULL,
     last_name                  VARCHAR(100)             NOT NULL,
-    email                      VARCHAR(100)             NOT NULL,
+    email                      VARCHAR(100)             NOT NULL UNIQUE,
     password                   CHAR(64)                 NOT NULL,
     phone_number               VARCHAR(20)              NOT NULL,
     address                    VARCHAR(200)             NOT NULL,
