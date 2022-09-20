@@ -1,10 +1,13 @@
 package com.courtcanva.ccfranchise.services;
 
 
+import com.courtcanva.ccfranchise.constants.AUState;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffGetDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeGetDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
+import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
@@ -13,8 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,11 +36,28 @@ class FranchiseeServiceTest {
     @Test
     void shouldCreateStaffAndFranchiseeSuccessful() {
 
-        FranchiseeAndStaffPostDto franchiseeDto = FranchiseeAndStaffPostDto.builder()
+        FranchiseePostDto franchiseePostDto = FranchiseePostDto.builder()
                 .businessName("AAAAA")
                 .businessAddress("zetland NSWssss")
-                .abn("1231232")
+                .entityName("AAAA info")
+                .state(AUState.ACT)
+                .abn("12312123111")
                 .build();
+        StaffPostDto staffPostDto = StaffPostDto.builder()
+                .residentialAddress("gadsfadsfdsa")
+                .email("baoruoxi@163.com")
+                .state(AUState.ACT)
+                .postcode(3213)
+                .password("Bfasdf1123213")
+                .phoneNumber("0466277688")
+                .firstName("first")
+                .lastName("last")
+                .build();
+        FranchiseeAndStaffPostDto franchiseeAndStaffPostDto = FranchiseeAndStaffPostDto.builder()
+                .franchiseePostDto(franchiseePostDto)
+                .staff(staffPostDto)
+                .build();
+
         Franchisee mockReturnFranchisee = Franchisee.builder()
                 .id(1L)
                 .abn("1231232")
@@ -59,24 +77,8 @@ class FranchiseeServiceTest {
         when(franchiseeMapper.franchiseeToFranchiseeGetDto(any())).thenReturn(mockFranchiseeGetDto);
         when(staffService.createStaffWithFranchisee(any(),any())).thenReturn(mockStaffGetDto);
 
-        FranchiseeAndStaffGetDto franchiseeAndStaffGetDto = franchiseeService.createFranchiseeAndStaff(franchiseeDto);
+        FranchiseeAndStaffGetDto franchiseeAndStaffGetDto = franchiseeService.createFranchiseeAndStaff(franchiseeAndStaffPostDto);
         assertEquals(666L, franchiseeAndStaffGetDto.getFranchiseeGetDto().getFranchiseeId());
     }
 
-    @Test
-    void shouldReturnFranchiseById() {
-        Franchisee mockReturnFranchisee = Franchisee.builder()
-                .id(122L)
-                .abn("12321")
-                .postcode(3213)
-                .isVerified(false)
-                .businessAddress("fdsafdsf")
-                .businessName("CCCVVV")
-                .build();
-        when(franchiseeRepository.findById(any())).thenReturn(Optional.ofNullable(mockReturnFranchisee));
-
-        Franchisee franchisee = franchiseeService.findFranchiseeById(122L);
-
-        assertEquals(3213, franchisee.getPostcode());
-    }
 }

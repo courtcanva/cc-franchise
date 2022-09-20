@@ -1,7 +1,7 @@
 package com.courtcanva.ccfranchise.mappers;
 
-import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeGetDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -12,9 +12,9 @@ import org.mapstruct.ReportingPolicy;
 public interface FranchiseeMapper {
 
 
-    Franchisee franchiseePostDtoToFranchisee(FranchiseeAndStaffPostDto franchiseePostDto);
+    Franchisee franchiseePostDtoToFranchisee(FranchiseePostDto franchiseePostDto);
 
-    @Mapping(target = "franchiseeId",source = "id")
+    @Mapping(target = "franchiseeId", source = "id")
     FranchiseeGetDto franchiseeToFranchiseeGetDto(Franchisee franchisee);
 
 }

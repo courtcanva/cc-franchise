@@ -3,7 +3,6 @@ package com.courtcanva.ccfranchise.services;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffGetDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
-import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
@@ -24,7 +23,7 @@ public class FranchiseeService {
     public FranchiseeAndStaffGetDto createFranchiseeAndStaff(FranchiseeAndStaffPostDto franchiseeAndStaffPostDto) {
 
         Franchisee franchisee = franchiseeRepository
-                .save(franchiseeMapper.franchiseePostDtoToFranchisee(franchiseeAndStaffPostDto));
+                .save(franchiseeMapper.franchiseePostDtoToFranchisee(franchiseeAndStaffPostDto.getFranchiseePostDto()));
         franchisee.setIsVerified(false);
 
         StaffGetDto staffGetDto = staffService.createStaffWithFranchisee(franchiseeAndStaffPostDto.getStaff(),franchisee);
@@ -35,9 +34,4 @@ public class FranchiseeService {
                 .build();
     }
 
-    public Franchisee findFranchiseeById(Long id) {
-
-        return franchiseeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("franchisee is not found"));
-    }
 }

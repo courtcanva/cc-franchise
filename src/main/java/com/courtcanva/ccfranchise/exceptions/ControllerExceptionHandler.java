@@ -30,6 +30,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDto handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
+
         log.error(e.getMessage(), e);
 
         return ErrorDto.builder()
@@ -47,6 +48,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorDto handleAllException(Exception e) {
+
         log.error("error occurred", e);
 
         return ErrorDto.builder()

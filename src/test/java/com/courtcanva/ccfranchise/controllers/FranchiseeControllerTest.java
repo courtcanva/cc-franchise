@@ -2,6 +2,7 @@ package com.courtcanva.ccfranchise.controllers;
 
 import com.courtcanva.ccfranchise.constants.AUState;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -12,14 +13,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
 @ActiveProfiles("test")
 class FranchiseeControllerTest {
 
@@ -31,12 +30,12 @@ class FranchiseeControllerTest {
     @Test
     void shouldReturnStaffAndFranchiseId() throws Exception {
 
-        FranchiseeAndStaffPostDto franchiseeAndStaffPostDto = FranchiseeAndStaffPostDto.builder()
+        FranchiseePostDto franchiseePostDto = FranchiseePostDto.builder()
                 .businessName("AAAAA")
                 .businessAddress("zetland NSWssss")
                 .entityName("AAAA info")
                 .state(AUState.ACT)
-                .abn("12312123111")
+                .abn("12345678901")
                 .build();
         StaffPostDto staffPostDto = StaffPostDto.builder()
                 .residentialAddress("gadsfadsfdsa")
@@ -48,13 +47,18 @@ class FranchiseeControllerTest {
                 .firstName("first")
                 .lastName("last")
                 .build();
-        franchiseeAndStaffPostDto.setStaff(staffPostDto);
+        FranchiseeAndStaffPostDto franchiseeAndStaffPostDto = FranchiseeAndStaffPostDto.builder()
+                .franchiseePostDto(franchiseePostDto)
+                .staff(staffPostDto)
+                .build();
+
 
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/signup")
                         .content(objectMapper.writeValueAsString(franchiseeAndStaffPostDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.staffGetDto.email").value("baoruoxi@163.com"));
+                .andExpect(jsonPath("$.staffGetDto.email").value("baoruoxi@163.com"))
+                .andExpect(jsonPath("$.franchiseeGetDto.abn").value("12345678901"));
 
     }
 }
