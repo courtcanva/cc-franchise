@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseDto {
+public class FranchiseeAndStaffGetDto {
 
-    private String responseMessage;
+    private FranchiseeGetDto franchiseeGetDto;
 
-    private String responseCode;
-
-    private Object data;
+    private StaffGetDto staffGetDto;
 
 }

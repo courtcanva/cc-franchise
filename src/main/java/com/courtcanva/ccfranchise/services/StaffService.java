@@ -1,6 +1,7 @@
 package com.courtcanva.ccfranchise.services;
 
-import com.courtcanva.ccfranchise.dtos.StaffInfoDto;
+import com.courtcanva.ccfranchise.dtos.StaffGetDto;
+import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
@@ -15,17 +16,16 @@ public class StaffService {
 
     private final StaffRepository staffRepository;
     private final StaffMapper staffMapper;
-    private final FranchiseeService franchiseeService;
 
     @Transactional
-    public Staff createStaff(StaffInfoDto staffInfoDto) {
+    public StaffGetDto createStaffWithFranchisee(StaffPostDto staffPostDto, Franchisee franchisee) {
 
-        Staff staff = staffMapper.toStaffEntity(staffInfoDto);
+        Staff staff = staffMapper.staffPostDtoToStaff(staffPostDto);
 
-        Franchisee franchisee = franchiseeService.findFranchiseeByABN(staffInfoDto.getFranchiseAbn());
         staff.setFranchisee(franchisee);
+        staff.setIsVerified(false);
 
-        return staffRepository.save(staff);
+        return staffMapper.staffToStaffGetDto(staffRepository.save(staff));
     }
 
 }

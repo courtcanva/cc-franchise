@@ -7,3 +7,5 @@ spring:
     properties:
       hibernate:
         default_schema: PUBLIC
+  flyway:
+    enabled: false

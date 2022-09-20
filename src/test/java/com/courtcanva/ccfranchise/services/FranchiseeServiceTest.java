@@ -1,8 +1,10 @@
 package com.courtcanva.ccfranchise.services;
 
 
-import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffInfoDto;
-import com.courtcanva.ccfranchise.dtos.ResponseDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffGetDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeGetDto;
+import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
@@ -33,12 +35,7 @@ class FranchiseeServiceTest {
     @Test
     void shouldCreateStaffAndFranchiseeSuccessful() {
 
-        FranchiseeAndStaffInfoDto franchiseeDto = FranchiseeAndStaffInfoDto.builder()
-                .businessName("AAAAA")
-                .businessAddress("zetland NSWssss")
-                .abn("1231232")
-                .build();
-        Franchisee franchisee = Franchisee.builder()
+        FranchiseeAndStaffPostDto franchiseeDto = FranchiseeAndStaffPostDto.builder()
                 .businessName("AAAAA")
                 .businessAddress("zetland NSWssss")
                 .abn("1231232")
@@ -51,17 +48,23 @@ class FranchiseeServiceTest {
                 .businessAddress("fdsafdsf")
                 .businessName("CCCVVV")
                 .build();
+        StaffGetDto mockStaffGetDto = StaffGetDto.builder()
+                .staffId(5544L)
+                .build();
+        FranchiseeGetDto mockFranchiseeGetDto  = FranchiseeGetDto.builder()
+                .franchiseeId(666L)
+                .build();
 
         when(franchiseeRepository.save(any())).thenReturn(mockReturnFranchisee);
-        when(franchiseeMapper.toFranchiseeEntity(any())).thenReturn(franchisee);
+        when(franchiseeMapper.franchiseeToFranchiseeGetDto(any())).thenReturn(mockFranchiseeGetDto);
+        when(staffService.createStaffWithFranchisee(any(),any())).thenReturn(mockStaffGetDto);
 
-
-        ResponseDto responseDto = franchiseeService.createFranchiseeAndStaff(franchiseeDto);
-        assertEquals("201", responseDto.getResponseCode());
+        FranchiseeAndStaffGetDto franchiseeAndStaffGetDto = franchiseeService.createFranchiseeAndStaff(franchiseeDto);
+        assertEquals(666L, franchiseeAndStaffGetDto.getFranchiseeGetDto().getFranchiseeId());
     }
 
     @Test
-    void shouldReturnFranchiseByABN() {
+    void shouldReturnFranchiseById() {
         Franchisee mockReturnFranchisee = Franchisee.builder()
                 .id(122L)
                 .abn("12321")
@@ -70,9 +73,9 @@ class FranchiseeServiceTest {
                 .businessAddress("fdsafdsf")
                 .businessName("CCCVVV")
                 .build();
-        when(franchiseeRepository.findByAbn(any())).thenReturn(Optional.ofNullable(mockReturnFranchisee));
+        when(franchiseeRepository.findById(any())).thenReturn(Optional.ofNullable(mockReturnFranchisee));
 
-        Franchisee franchisee = franchiseeService.findFranchiseeByABN("12321");
+        Franchisee franchisee = franchiseeService.findFranchiseeById(122L);
 
         assertEquals(3213, franchisee.getPostcode());
     }

@@ -1,6 +1,6 @@
 package com.courtcanva.ccfranchise.constants;
 
-public enum Role {
+public enum BusinessRole {
     STAFF,
     ADMIN
 }

@@ -1,7 +1,8 @@
 package com.courtcanva.ccfranchise.services;
 
-import com.courtcanva.ccfranchise.constants.State;
-import com.courtcanva.ccfranchise.dtos.StaffInfoDto;
+import com.courtcanva.ccfranchise.constants.AUState;
+import com.courtcanva.ccfranchise.dtos.StaffGetDto;
+import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Staff;
@@ -23,8 +24,6 @@ class StaffServiceTest {
     private StaffRepository staffRepository;
 
     @Mock
-    private FranchiseeService franchiseeService;
-    @Mock
     private StaffMapper staffMapper;
 
     @InjectMocks
@@ -33,10 +32,10 @@ class StaffServiceTest {
     @Test
     void shouldCreatedStaffSuccessful() {
 
-        StaffInfoDto staffDto = StaffInfoDto.builder()
+        StaffPostDto staffPostDto = StaffPostDto.builder()
                 .residentialAddress("gadsfadsfdsa")
                 .email("baoruoxi@163.com")
-                .state(State.ACT)
+                .state(AUState.ACT)
                 .postcode(3213)
                 .password("Bfasd1999324")
                 .phoneNumber("31232131")
@@ -45,10 +44,20 @@ class StaffServiceTest {
                 .build();
 
         Franchisee mockFranchisee = Franchisee.builder()
+                .id(1234L)
                 .businessName("AAAAA")
                 .businessAddress("zetland NSWssss")
                 .abn("1231232")
                 .build();
+        StaffGetDto mockStaffGetDto = StaffGetDto.builder()
+                .staffId(1232L)
+                .isVerified(false)
+                .firstName("ll")
+                .lastName("ff")
+                .email("666@gmail.com")
+                .residentialAddress("fsdfsdafa")
+                .build();
+
         Staff mockStaff = Staff.builder()
                 .id(1232L)
                 .isVerified(false)
@@ -58,15 +67,12 @@ class StaffServiceTest {
                 .residentialAddress("fsdfsdafa")
                 .build();
 
-        when(staffMapper.toStaffEntity(any())).thenReturn(mockStaff);
-        when(franchiseeService.findFranchiseeByABN(any()))
-                .thenReturn(mockFranchisee);
-        when(staffRepository.save(any())).thenReturn(mockStaff);
+        when(staffMapper.staffPostDtoToStaff(any())).thenReturn(mockStaff);
+        when(staffMapper.staffToStaffGetDto(any())).thenReturn(mockStaffGetDto);
 
-        Staff staff = staffService.createStaff(staffDto);
+        StaffGetDto staff = staffService.createStaffWithFranchisee(staffPostDto, mockFranchisee);
 
-        assertEquals(1232L, staff.getId());
-
+        assertEquals(1232L, staff.getStaffId());
 
     }
 }

@@ -1,13 +1,12 @@
 package com.courtcanva.ccfranchise.models;
 
-import com.courtcanva.ccfranchise.constants.State;
+import com.courtcanva.ccfranchise.constants.AUState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
@@ -36,7 +35,6 @@ import java.util.Set;
 public class Franchisee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Type(type = "long")
     private Long id;
 
     @Column(unique = true, nullable = false)
@@ -45,8 +43,7 @@ public class Franchisee {
     @Column(nullable = false)
     private int postcode;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Column
     private Boolean isVerified;
 
     @Column(nullable = false)
@@ -62,9 +59,10 @@ public class Franchisee {
     private String entityName;
 
     @Column(nullable = false)
-    private State state;
+    @Enumerated(EnumType.STRING)
+    private AUState state;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private OffsetDateTime createdTime;
 

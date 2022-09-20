@@ -1,80 +1,60 @@
 package com.courtcanva.ccfranchise.controllers;
 
-import com.courtcanva.ccfranchise.constants.State;
-import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffInfoDto;
-import com.courtcanva.ccfranchise.dtos.ResponseDto;
-import com.courtcanva.ccfranchise.dtos.StaffInfoDto;
-import com.courtcanva.ccfranchise.services.FranchiseeService;
+import com.courtcanva.ccfranchise.constants.AUState;
+import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
+import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@Transactional
+@ActiveProfiles("test")
 class FranchiseeControllerTest {
 
+    @Autowired
+    private ObjectMapper objectMapper;
+    @Autowired
     private MockMvc mockMvc;
-
-    @Mock
-    private FranchiseeService franchiseService;
-
-    @InjectMocks
-    private FranchiseeController franchiseController;
-
-    @BeforeEach
-    public void setUp() {
-
-        mockMvc = MockMvcBuilders.standaloneSetup(franchiseController).build();
-
-    }
 
     @Test
     void shouldReturnStaffAndFranchiseId() throws Exception {
 
-        FranchiseeAndStaffInfoDto franchiseDto = FranchiseeAndStaffInfoDto.builder()
+        FranchiseeAndStaffPostDto franchiseeAndStaffPostDto = FranchiseeAndStaffPostDto.builder()
                 .businessName("AAAAA")
                 .businessAddress("zetland NSWssss")
                 .entityName("AAAA info")
-                .state(State.ACT)
-                .abn("1231232")
+                .state(AUState.ACT)
+                .abn("12312123111")
                 .build();
-        StaffInfoDto staffInfoDto = StaffInfoDto.builder()
+        StaffPostDto staffPostDto = StaffPostDto.builder()
                 .residentialAddress("gadsfadsfdsa")
                 .email("baoruoxi@163.com")
-                .state(State.ACT)
+                .state(AUState.ACT)
                 .postcode(3213)
-                .password("fdsafsdfdsaf")
-                .phoneNumber("31232131")
+                .password("Bfasdf1123213")
+                .phoneNumber("0466277688")
                 .firstName("first")
                 .lastName("last")
                 .build();
-        franchiseDto.setStaff(staffInfoDto);
+        franchiseeAndStaffPostDto.setStaff(staffPostDto);
 
-        ResponseDto mockResponse = ResponseDto.builder()
-                .responseMessage("success")
-                .responseCode("201")
-                .build();
-        when(franchiseService.createFranchiseeAndStaff(any())).thenReturn(mockResponse);
-
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/signup")
-                        .content(new ObjectMapper().writeValueAsString(franchiseDto))
+        mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/signup")
+                        .content(objectMapper.writeValueAsString(franchiseeAndStaffPostDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andReturn();
-        ResponseDto resultResponse = new ObjectMapper().readValue(mvcResult.getResponse().getContentAsString(), ResponseDto.class);
-        assertEquals("success", resultResponse.getResponseMessage());
-        assertEquals("201", resultResponse.getResponseCode());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.staffGetDto.email").value("baoruoxi@163.com"));
 
     }
 }

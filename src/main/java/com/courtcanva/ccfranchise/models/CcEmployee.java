@@ -1,7 +1,7 @@
 package com.courtcanva.ccfranchise.models;
 
 import com.courtcanva.ccfranchise.constants.EmployeeStatus;
-import com.courtcanva.ccfranchise.constants.Role;
+import com.courtcanva.ccfranchise.constants.BusinessRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,7 +29,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
-@Table(name = "Cc_employee")
+@Table(name = "cc_employee")
 public class CcEmployee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +40,7 @@ public class CcEmployee {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private BusinessRole businessRole;
 
     @Column(nullable = false)
     private String firstName;
@@ -55,7 +55,7 @@ public class CcEmployee {
     @Enumerated(EnumType.STRING)
     private EmployeeStatus status;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private OffsetDateTime createdTime;
 
@@ -64,5 +64,5 @@ public class CcEmployee {
     private OffsetDateTime updatedTime;
 
     @OneToMany(mappedBy = "ccEmployee")
-    private Set<Franchisee> franchiseeSet = new HashSet<>();
+    private Set<Franchisee> franchiseeVerificationSet = new HashSet<>();
 }

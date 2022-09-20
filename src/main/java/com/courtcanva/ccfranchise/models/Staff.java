@@ -1,6 +1,7 @@
 package com.courtcanva.ccfranchise.models;
 
-import com.courtcanva.ccfranchise.constants.Role;
+import com.courtcanva.ccfranchise.constants.AUState;
+import com.courtcanva.ccfranchise.constants.BusinessRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,7 +46,8 @@ public class Staff {
     private String password;
 
     @Column(nullable = false)
-    private String state;
+    @Enumerated(EnumType.STRING)
+    private AUState state;
 
     @Column(nullable = false)
     private int postcode;
@@ -57,7 +59,6 @@ public class Staff {
     private String residentialAddress;
 
     @Column
-    @Enumerated(EnumType.STRING)
     private Boolean isVerified;
 
     @Column(unique = true, nullable = false)
@@ -65,9 +66,9 @@ public class Staff {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private BusinessRole businessRole;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private OffsetDateTime createdTime;
 

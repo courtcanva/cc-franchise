@@ -1,7 +1,8 @@
 package com.courtcanva.ccfranchise.services;
 
-import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffInfoDto;
-import com.courtcanva.ccfranchise.dtos.ResponseDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffGetDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
+import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
@@ -20,22 +21,23 @@ public class FranchiseeService {
     private final StaffService staffService;
 
     @Transactional
-    public ResponseDto createFranchiseeAndStaff(FranchiseeAndStaffInfoDto franchiseeAndStaffInfoDto) {
+    public FranchiseeAndStaffGetDto createFranchiseeAndStaff(FranchiseeAndStaffPostDto franchiseeAndStaffPostDto) {
 
-        franchiseeRepository.save(franchiseeMapper
-                .toFranchiseeEntity(franchiseeAndStaffInfoDto));
+        Franchisee franchisee = franchiseeRepository
+                .save(franchiseeMapper.franchiseePostDtoToFranchisee(franchiseeAndStaffPostDto));
+        franchisee.setIsVerified(false);
 
-        staffService.createStaff(franchiseeAndStaffInfoDto.getStaff());
+        StaffGetDto staffGetDto = staffService.createStaffWithFranchisee(franchiseeAndStaffPostDto.getStaff(),franchisee);
 
-        return ResponseDto.builder()
-                .responseCode("201")
-                .responseMessage("create new Franchisee with new Staff")
+        return FranchiseeAndStaffGetDto.builder()
+                .staffGetDto(staffGetDto)
+                .franchiseeGetDto(franchiseeMapper.franchiseeToFranchiseeGetDto(franchisee))
                 .build();
     }
 
-    public Franchisee findFranchiseeByABN(String abn) {
+    public Franchisee findFranchiseeById(Long id) {
 
-        return franchiseeRepository.findByAbn(abn)
-                .orElseThrow(() -> new ResourceNotFoundException("Franchisee", "abn", abn));
+        return franchiseeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("franchisee is not found"));
     }
 }

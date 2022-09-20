@@ -1,6 +1,6 @@
 package com.courtcanva.ccfranchise.constants;
 
-public enum State {
+public enum AUState {
     ACT,
     NSW,
     NT,
