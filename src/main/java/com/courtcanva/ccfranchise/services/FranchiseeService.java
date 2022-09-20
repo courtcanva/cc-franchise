@@ -26,7 +26,7 @@ public class FranchiseeService {
                 .save(franchiseeMapper.franchiseePostDtoToFranchisee(franchiseeAndStaffPostDto.getFranchiseePostDto()));
         franchisee.setIsVerified(false);
 
-        StaffGetDto staffGetDto = staffService.createStaffWithFranchisee(franchiseeAndStaffPostDto.getStaff(),franchisee);
+        StaffGetDto staffGetDto = staffService.createStaffWithFranchisee(franchiseeAndStaffPostDto.getStaff(), franchisee);
 
         return FranchiseeAndStaffGetDto.builder()
                 .staffGetDto(staffGetDto)

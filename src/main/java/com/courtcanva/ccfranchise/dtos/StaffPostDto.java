@@ -30,7 +30,7 @@ public class StaffPostDto {
     private String email;
 
     @NotBlank(message = "Staff's phone number is mandatory")
-    @Pattern(regexp = "^0[0-9]{9}|[0-9]{9}$",message = "Incorrect phone number format")
+    @Pattern(regexp = "^0[0-9]{9}|[0-9]{9}$", message = "Incorrect phone number format")
     private String phoneNumber;
 
     @NotBlank(message = "Staff's residential address is mandatory")
@@ -44,7 +44,7 @@ public class StaffPostDto {
     private AUState state;
 
     @NotBlank(message = "Staff's password is mandatory")
-    @Pattern(regexp = ".*[0-9]+.*[A-Z]+.*|.*[A-Z]+.*[0-9]+.*",message = "At least one uppercase letter and one digit")
+    @Pattern(regexp = ".*[0-9]+.*[A-Z]+.*|.*[A-Z]+.*[0-9]+.*", message = "At least one uppercase letter and one digit")
     private String password;
 
 
