@@ -18,20 +18,20 @@ DROP TABLE IF EXISTS franchisee CASCADE;
 
 CREATE TABLE franchisee
 (
-    id            BIGSERIAL                NOT NULL PRIMARY KEY,
-    abn           CHAR(11)                 NOT NULL UNIQUE,
-    business_name VARCHAR(100)             NOT NULL,
-    entity_name   VARCHAR(100)             NOT NULL,
-    address       VARCHAR(200)             NOT NULL,
-    postcode      INTEGER                  NOT NULL,
-    state         VARCHAR,
-    phone_number  VARCHAR(20)              NOT NULL,
-    duty_area     VARCHAR,
-    created_at    TIMESTAMP WITH TIME ZONE NOT NULL,
-    updated_at    TIMESTAMP WITH TIME ZONE NOT NULL,
-    is_verified   BOOLEAN                  NOT NULL,
-    approved_time TIMESTAMP WITH TIME ZONE,
-    approved_by   BIGINT,
+    id                BIGSERIAL                NOT NULL PRIMARY KEY,
+    abn               CHAR(11)                 NOT NULL UNIQUE,
+    business_name     VARCHAR(100)             NOT NULL,
+    legal_entity_name VARCHAR(100)             NOT NULL,
+    address           VARCHAR(200)             NOT NULL,
+    postcode          INTEGER                  NOT NULL,
+    state             VARCHAR,
+    phone_number      VARCHAR(20)              NOT NULL,
+    duty_area         VARCHAR,
+    created_at        TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at        TIMESTAMP WITH TIME ZONE NOT NULL,
+    is_verified       BOOLEAN                  NOT NULL,
+    approved_time     TIMESTAMP WITH TIME ZONE,
+    approved_by       BIGINT,
     CONSTRAINT fk_approved_by FOREIGN KEY (approved_by) REFERENCES cc_employee (id)
 );
 
