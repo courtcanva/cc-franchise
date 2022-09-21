@@ -17,6 +17,6 @@ public class FranchiseeAndStaffPostDto {
     private FranchiseePostDto franchiseePostDto;
 
     @Valid
-    private StaffPostDto staff;
+    private StaffPostDto staffPostDto;
 
 }

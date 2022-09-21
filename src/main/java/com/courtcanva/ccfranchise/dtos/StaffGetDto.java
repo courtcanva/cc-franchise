@@ -6,13 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.OffsetDateTime;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class StaffGetDto {
+
     private Long staffId;
     private String email;
     private AUState state;
@@ -21,6 +20,5 @@ public class StaffGetDto {
     private String phoneNumber;
     private String residentialAddress;
     private Boolean isVerified;
-    private OffsetDateTime createdTime;
-    private OffsetDateTime updatedTime;
+
 }

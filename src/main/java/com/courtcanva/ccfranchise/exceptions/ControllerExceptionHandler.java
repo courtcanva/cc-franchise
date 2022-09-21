@@ -5,33 +5,34 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler(ResourceNotFoundException.class)
+    @ExceptionHandler(value = ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorDto handleResourceNotFoundException(ResourceNotFoundException e) {
 
-        log.error(e.getMessage(), e);
+        log.error("Resource is not found", e);
+
         return ErrorDto.builder()
                 .error(HttpStatus.NOT_FOUND.getReasonPhrase())
-                .details(List.of(e.getMessage()))
+                .details(List.of("Resource is not found", e.getMessage()))
                 .build();
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDto handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
 
-        log.error(e.getMessage(), e);
+        log.error("Methods argument is not valid", e);
 
         return ErrorDto.builder()
                 .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
@@ -45,7 +46,7 @@ public class ControllerExceptionHandler {
 
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(value = Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorDto handleAllException(Exception e) {
 

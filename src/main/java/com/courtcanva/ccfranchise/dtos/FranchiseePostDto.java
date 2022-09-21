@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -20,11 +19,9 @@ public class FranchiseePostDto {
     @NotBlank(message = "Franchisee's business name is mandatory")
     private String businessName;
 
-    @NotBlank(message = "Franchisee's entity name is mandatory")
-    private String entityName;
+    @NotBlank(message = "Franchisee's legal entity name is mandatory")
+    private String legalEntityName;
 
-    @Valid
-    private StaffPostDto staff;
 
     @NotBlank(message = "Franchisee's abn is mandatory")
     @Pattern(regexp = "[0-9]{11}", message = "Incorrect ABN format")

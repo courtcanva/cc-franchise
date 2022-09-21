@@ -11,7 +11,7 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface StaffMapper {
 
-
+    @Mapping(target = "isVerified", constant = "false")
     Staff staffPostDtoToStaff(StaffPostDto staffPostDto);
 
     @Mapping(target = "staffId", source = "id")

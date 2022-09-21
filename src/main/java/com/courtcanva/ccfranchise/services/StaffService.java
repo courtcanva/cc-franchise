@@ -23,7 +23,6 @@ public class StaffService {
         Staff staff = staffMapper.staffPostDtoToStaff(staffPostDto);
 
         staff.setFranchisee(franchisee);
-        staff.setIsVerified(false);
 
         return staffMapper.staffToStaffGetDto(staffRepository.save(staff));
     }

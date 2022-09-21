@@ -56,7 +56,7 @@ public class Franchisee {
     private String dutyArea;
 
     @Column(nullable = false)
-    private String entityName;
+    private String legalEntityName;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
