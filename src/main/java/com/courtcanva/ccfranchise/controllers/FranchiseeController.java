@@ -24,7 +24,9 @@ public class FranchiseeController {
     @ResponseStatus(HttpStatus.CREATED)
     public FranchiseeAndStaffGetDto signUpFranchiseeAndStaff(@RequestBody @Valid FranchiseeAndStaffPostDto franchiseeAndStaffPostDto) {
 
-        return franchiseeService.createFranchiseeAndStaff(franchiseeAndStaffPostDto);
+        return franchiseeService.createFranchiseeAndStaff(franchiseeAndStaffPostDto.getFranchiseePostDto(),
+                franchiseeAndStaffPostDto.getStaffPostDto());
+
     }
 
 }

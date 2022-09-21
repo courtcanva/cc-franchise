@@ -1,11 +1,13 @@
 package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffGetDto;
-import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
-import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
+import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
+import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
+import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,28 +22,27 @@ public class FranchiseeService {
 
     private final FranchiseeMapper franchiseeMapper;
 
+    private final StaffMapper staffMapper;
+
     private final StaffService staffService;
 
     @Transactional
-    public FranchiseeAndStaffGetDto createFranchiseeAndStaff(FranchiseeAndStaffPostDto franchiseeAndStaffPostDto) {
+    public FranchiseeAndStaffGetDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
 
+//        checkAbn();
         Franchisee franchisee = franchiseeRepository
-                .save(franchiseeMapper.franchiseePostDtoToFranchisee(franchiseeAndStaffPostDto.getFranchiseePostDto()));
+                .save(franchiseeMapper.postDtoToFranchisee(franchiseePostDto));
 
-        StaffGetDto staffGetDto = staffService.createStaffWithFranchisee(franchiseeAndStaffPostDto.getStaffPostDto(), franchisee);
+        Staff staff = staffMapper.staffPostDtoToStaff(staffPostDto);
+        staff.setFranchisee(franchisee);
+
+        StaffGetDto staffGetDto = staffService.createStaff(staff);
 
         return FranchiseeAndStaffGetDto.builder()
                 .staffGetDto(staffGetDto)
-                .franchiseeGetDto(franchiseeMapper.franchiseeToFranchiseeGetDto(franchisee))
+                .franchiseeGetDto(franchiseeMapper.franchiseeToGetDto(franchisee))
                 .build();
     }
 
-    public Franchisee getFranchiseeById(Long id) {
 
-        return franchiseeRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Can't found franchisee with id {}", id);
-                    return new ResourceNotFoundException("can't find franchisee");
-                });
-    }
 }

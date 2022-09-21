@@ -59,7 +59,8 @@ public class Staff {
     private String residentialAddress;
 
     @Column
-    private Boolean isVerified;
+    @Builder.Default
+    private Boolean isVerified = false;
 
     @Column(unique = true, nullable = false)
     private String email;

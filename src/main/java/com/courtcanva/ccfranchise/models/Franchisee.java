@@ -44,7 +44,8 @@ public class Franchisee {
     private int postcode;
 
     @Column
-    private Boolean isVerified;
+    @Builder.Default
+    private Boolean isVerified = false;
 
     @Column(nullable = false)
     private String businessAddress;
