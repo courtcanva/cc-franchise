@@ -25,7 +25,7 @@ public class ControllerHelper {
         franchiseePostDto = FranchiseePostDto.builder()
                 .businessName("AAAAA")
                 .businessAddress("zetland NSWssss")
-                .entityName("AAAA info")
+                .legalEntityName("AAAA info")
                 .state(AUState.ACT)
                 .abn("12345678901")
                 .build();

@@ -46,7 +46,7 @@ public class ServiceHelper {
         mockFranchiseePostDto = FranchiseePostDto.builder()
                 .businessName("AAAAA")
                 .businessAddress("zetland NSWssss")
-                .entityName("AAAA info")
+                .legalEntityName("AAAA info")
                 .state(AUState.ACT)
                 .abn("12312123111")
                 .build();
