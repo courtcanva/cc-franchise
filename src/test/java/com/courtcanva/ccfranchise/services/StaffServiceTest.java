@@ -23,12 +23,11 @@ class StaffServiceTest {
     private StaffRepository staffRepository;
 
     private StaffService staffService;
-    private TestHelper testHelper;
 
     @BeforeEach
     public void setStaffServiceUp() {
         StaffMapper staffMapper = new StaffMapperImpl();
-        testHelper = new TestHelper();
+
         staffService = new StaffService(
                 staffRepository,
                 staffMapper
@@ -38,7 +37,7 @@ class StaffServiceTest {
     @Test
     void shouldCreatedStaffSuccessful() {
 
-        Staff staff = testHelper.createStaff();
+        Staff staff = TestHelper.createStaff();
 
         when(staffRepository.save(any())).thenReturn(staff);
 

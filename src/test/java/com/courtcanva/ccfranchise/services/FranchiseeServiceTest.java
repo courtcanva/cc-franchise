@@ -35,14 +35,12 @@ class FranchiseeServiceTest {
     @Mock
     private StaffService staffService;
 
-
     private FranchiseeService franchiseeService;
 
-    private TestHelper testHelper;
 
     @BeforeEach
     public void setFranchiseeServiceUp() {
-        testHelper = new TestHelper();
+
         FranchiseeMapper franchiseeMapper = new FranchiseeMapperImpl();
         StaffMapper staffMapper = new StaffMapperImpl();
         franchiseeService = new FranchiseeService(
@@ -56,11 +54,11 @@ class FranchiseeServiceTest {
     @Test
     void shouldCreateStaffAndFranchiseeGetDto() {
 
-        Franchisee franchisee = testHelper.createFranchisee();
-        StaffGetDto staffGetDto = testHelper.createStaffGetDto();
+        Franchisee franchisee = TestHelper.createFranchiseeWithId();
+        StaffGetDto staffGetDto = TestHelper.createStaffGetDto();
 
-        FranchiseePostDto franchiseePostDto = testHelper.createFranchiseePostDto();
-        StaffPostDto staffPostDto = testHelper.createStaffPostDto();
+        FranchiseePostDto franchiseePostDto = TestHelper.createFranchiseePostDto();
+        StaffPostDto staffPostDto = TestHelper.createStaffPostDto();
 
         when(franchiseeRepository.save(any())).thenReturn(franchisee);
         when(staffService.createStaff(any())).thenReturn(staffGetDto);
@@ -85,8 +83,8 @@ class FranchiseeServiceTest {
     void shouldThrowResourceAlreadyExistException() {
 
 
-        FranchiseePostDto franchiseePostDto = testHelper.createFranchiseePostDto();
-        StaffPostDto staffPostDto = testHelper.createStaffPostDto();
+        FranchiseePostDto franchiseePostDto = TestHelper.createFranchiseePostDto();
+        StaffPostDto staffPostDto = TestHelper.createStaffPostDto();
 
         when(franchiseeRepository.existsFranchiseeByAbn(any()))
                 .thenReturn(true);

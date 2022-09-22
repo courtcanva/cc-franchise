@@ -12,7 +12,7 @@ import com.courtcanva.ccfranchise.models.Staff;
 public class TestHelper {
 
 
-    public Staff createStaff() {
+    public static Staff createStaff() {
 
         return Staff.builder()
                 .id(1232L)
@@ -24,7 +24,7 @@ public class TestHelper {
                 .build();
     }
 
-    public StaffGetDto createStaffGetDto() {
+    public static StaffGetDto createStaffGetDto() {
 
         return StaffGetDto.builder()
                 .staffId(1232L)
@@ -36,7 +36,7 @@ public class TestHelper {
                 .build();
     }
 
-    public StaffPostDto createStaffPostDto() {
+    public static StaffPostDto createStaffPostDto() {
 
         return StaffPostDto.builder()
                 .residentialAddress("gadsfadsfdsa")
@@ -50,18 +50,31 @@ public class TestHelper {
                 .build();
     }
 
-    public Franchisee createFranchisee() {
+    public static Franchisee createFranchiseeWithId() {
 
         return Franchisee.builder()
                 .id(1234L)
                 .contactNumber("234567891")
                 .businessName("AAAAA")
                 .businessAddress("zetland NSWssss")
-                .abn("1231232")
+                .abn("12312123111")
                 .build();
     }
 
-    public FranchiseePostDto createFranchiseePostDto() {
+    public static Franchisee createFranchisee() {
+
+        return Franchisee.builder()
+                .contactNumber("234567891")
+                .businessName("AAAAA")
+                .legalEntityName("COUNTCANVA")
+                .state(AUState.ACT)
+                .postcode(1234)
+                .businessAddress("zetland NSWssss")
+                .abn("12312123111")
+                .build();
+    }
+
+    public static FranchiseePostDto createFranchiseePostDto() {
 
         return FranchiseePostDto.builder()
                 .businessName("AAAAA")
@@ -73,7 +86,7 @@ public class TestHelper {
                 .build();
     }
 
-    public FranchiseeGetDto createFranchiseeGetDto() {
+    public static FranchiseeGetDto createFranchiseeGetDto() {
 
         return FranchiseeGetDto.builder()
                 .franchiseeId(1234L)
@@ -81,7 +94,7 @@ public class TestHelper {
                 .build();
     }
 
-    public FranchiseeAndStaffPostDto createFranchiseeAndStaffPostDto() {
+    public static FranchiseeAndStaffPostDto createFranchiseeAndStaffPostDto() {
 
         return FranchiseeAndStaffPostDto.builder()
                 .staffPostDto(createStaffPostDto())

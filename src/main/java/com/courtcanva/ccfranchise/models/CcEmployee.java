@@ -55,7 +55,7 @@ public class CcEmployee {
     @Column
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private EmployeeStatus status = EmployeeStatus.ACTIVE;
+    private EmployeeStatus status = EmployeeStatus.INACTIVE;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
