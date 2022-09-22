@@ -22,6 +22,9 @@ public class FranchiseePostDto {
     @NotBlank(message = "Franchisee's legal entity name is mandatory")
     private String legalEntityName;
 
+    @NotBlank(message = "Franchisee's contact number is mandatory")
+    @Pattern(regexp = "^0[0-9]{9}|[0-9]{9}$", message = "Incorrect phone number format")
+    private String contactNumber;
 
     @NotBlank(message = "Franchisee's abn is mandatory")
     @Pattern(regexp = "[0-9]{11}", message = "Incorrect ABN format")
@@ -33,6 +36,5 @@ public class FranchiseePostDto {
     @NotNull(message = "Franchisee's state is mandatory")
     private AUState state;
 
-    @NotNull(message = "Franchisee's postcode is mandatory")
     private int postcode;
 }

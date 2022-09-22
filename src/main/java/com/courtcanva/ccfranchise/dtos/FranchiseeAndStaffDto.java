@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FranchiseeAndStaffGetDto {
+public class FranchiseeAndStaffDto {
 
     private FranchiseeGetDto franchiseeGetDto;
 

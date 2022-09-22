@@ -47,11 +47,14 @@ public class Franchisee {
     @Builder.Default
     private Boolean isVerified = false;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "address")
     private String businessAddress;
 
     @Column(nullable = false)
     private String businessName;
+
+    @Column(nullable = false)
+    private String contactNumber;
 
     @Column
     private String dutyArea;
@@ -63,18 +66,18 @@ public class Franchisee {
     @Enumerated(EnumType.STRING)
     private AUState state;
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, name = "created_at")
     @CreationTimestamp
     private OffsetDateTime createdTime;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "updated_at")
     @UpdateTimestamp
     private OffsetDateTime updatedTime;
 
     @Column
     private OffsetDateTime approvedTime;
 
-    @JoinColumn(name = "approvedBy")
+    @JoinColumn(name = "approved_by")
     @ManyToOne(fetch = FetchType.LAZY)
     private CcEmployee ccEmployee;
 

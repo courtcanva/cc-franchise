@@ -55,7 +55,7 @@ public class Staff {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "address")
     private String residentialAddress;
 
     @Column
@@ -65,20 +65,21 @@ public class Staff {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column
+    @Column(name = "role")
     @Enumerated(EnumType.STRING)
-    private BusinessRole businessRole;
+    @Builder.Default
+    private BusinessRole businessRole = BusinessRole.STAFF;
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, name = "created_at")
     @CreationTimestamp
     private OffsetDateTime createdTime;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "updated_at")
     @UpdateTimestamp
     private OffsetDateTime updatedTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "franchise_id")
+    @JoinColumn(name = "franchisee_id")
     private Franchisee franchisee;
 
 }

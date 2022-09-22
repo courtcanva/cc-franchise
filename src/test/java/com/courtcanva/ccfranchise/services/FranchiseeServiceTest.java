@@ -1,25 +1,33 @@
 package com.courtcanva.ccfranchise.services;
 
 
-import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffGetDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
+import com.courtcanva.ccfranchise.dtos.StaffGetDto;
+import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapperImpl;
+import com.courtcanva.ccfranchise.mappers.StaffMapper;
+import com.courtcanva.ccfranchise.mappers.StaffMapperImpl;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.utils.TestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-
-import java.util.Optional;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 
-class FranchiseeServiceTest extends ServiceHelper {
+@ExtendWith(MockitoExtension.class)
+class FranchiseeServiceTest {
 
     @Mock
     private FranchiseeRepository franchiseeRepository;
@@ -27,47 +35,65 @@ class FranchiseeServiceTest extends ServiceHelper {
     @Mock
     private StaffService staffService;
 
+
     private FranchiseeService franchiseeService;
+
+    private TestHelper testHelper;
 
     @BeforeEach
     public void setFranchiseeServiceUp() {
-        super.setUp();
+        testHelper = new TestHelper();
         FranchiseeMapper franchiseeMapper = new FranchiseeMapperImpl();
-
+        StaffMapper staffMapper = new StaffMapperImpl();
         franchiseeService = new FranchiseeService(
-                franchiseeRepository, franchiseeMapper, staffService
+                franchiseeRepository,
+                franchiseeMapper,
+                staffMapper,
+                staffService
         );
     }
 
     @Test
     void shouldCreateStaffAndFranchiseeGetDto() {
 
-        when(franchiseeRepository.save(any())).thenReturn(mockFranchisee);
-        when(staffService.createStaffWithFranchisee(any(), any())).thenReturn(mockStaffGetDto);
+        Franchisee franchisee = testHelper.createFranchisee();
+        StaffGetDto staffGetDto = testHelper.createStaffGetDto();
 
-        FranchiseeAndStaffGetDto franchiseeAndStaffGetDto = franchiseeService.createFranchiseeAndStaff(mockFranchiseeAndStaffPostDto);
-        assertEquals(1234L, franchiseeAndStaffGetDto.getFranchiseeGetDto().getFranchiseeId());
+        FranchiseePostDto franchiseePostDto = testHelper.createFranchiseePostDto();
+        StaffPostDto staffPostDto = testHelper.createStaffPostDto();
+
+        when(franchiseeRepository.save(any())).thenReturn(franchisee);
+        when(staffService.createStaff(any())).thenReturn(staffGetDto);
+
+        FranchiseeAndStaffDto franchiseeAndStaffDto = franchiseeService.createFranchiseeAndStaff(franchiseePostDto, staffPostDto);
+        assertEquals(1234L, franchiseeAndStaffDto.getFranchiseeGetDto().getFranchiseeId());
+    }
+
+
+    @Test
+    void shouldReturnTrueWhenResourceAlreadyExist() {
+
+        String franchiseeAbn = "124";
+
+        when(franchiseeRepository.existsFranchiseeByAbn(franchiseeAbn))
+                .thenReturn(true);
+
+        assertTrue(franchiseeService.checkFranchiseeIsExist(franchiseeAbn));
     }
 
     @Test
-    void shouldReturnFranchiseeGetDto() {
+    void shouldThrowResourceAlreadyExistException() {
 
-        Long franchiseeId = 1234L;
-        when(franchiseeRepository.findById(franchiseeId)).thenReturn(Optional.ofNullable(mockFranchisee));
 
-        Franchisee franchisee = franchiseeService.getFranchiseeById(franchiseeId);
+        FranchiseePostDto franchiseePostDto = testHelper.createFranchiseePostDto();
+        StaffPostDto staffPostDto = testHelper.createStaffPostDto();
 
-        assertEquals("1231232", franchisee.getAbn());
-    }
+        when(franchiseeRepository.existsFranchiseeByAbn(any()))
+                .thenReturn(true);
 
-    @Test
-    void shouldThrowResourceNotFoundException() {
+        assertThrows(ResourceAlreadyExistException.class,
+                () -> franchiseeService.createFranchiseeAndStaff(franchiseePostDto, staffPostDto));
 
-        Long franchiseeId = 124L;
-
-        when(franchiseeRepository.findById(franchiseeId)).thenThrow(new ResourceAlreadyExistException("franchisee not found"));
-
-        assertThrows(ResourceAlreadyExistException.class, () -> franchiseeService.getFranchiseeById(franchiseeId));
     }
 
 }

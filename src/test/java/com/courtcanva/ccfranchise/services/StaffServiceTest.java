@@ -3,27 +3,32 @@ package com.courtcanva.ccfranchise.services;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapperImpl;
+import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
+import com.courtcanva.ccfranchise.utils.TestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-class StaffServiceTest extends ServiceHelper {
+@ExtendWith(MockitoExtension.class)
+class StaffServiceTest {
 
     @Mock
     private StaffRepository staffRepository;
 
     private StaffService staffService;
+    private TestHelper testHelper;
 
     @BeforeEach
     public void setStaffServiceUp() {
-        super.setUp();
         StaffMapper staffMapper = new StaffMapperImpl();
-
+        testHelper = new TestHelper();
         staffService = new StaffService(
                 staffRepository,
                 staffMapper
@@ -33,12 +38,13 @@ class StaffServiceTest extends ServiceHelper {
     @Test
     void shouldCreatedStaffSuccessful() {
 
+        Staff staff = testHelper.createStaff();
 
-        when(staffRepository.save(any())).thenReturn(mockStaff);
+        when(staffRepository.save(any())).thenReturn(staff);
 
-        StaffGetDto staff = staffService.createStaffWithFranchisee(mockStaffPostDto, mockFranchisee);
+        StaffGetDto staffResult = staffService.createStaff(staff);
 
-        assertEquals(1232L, staff.getStaffId());
+        assertEquals(1232L, staffResult.getStaffId());
 
     }
 }

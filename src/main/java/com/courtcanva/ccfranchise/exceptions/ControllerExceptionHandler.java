@@ -12,11 +12,22 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ControllerExceptionHandler {
 
+    @ExceptionHandler(value = ResourceAlreadyExistException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDto handleResourceAlreadyExistException(ResourceAlreadyExistException e) {
+
+        return ErrorDto.builder()
+                .errorCode(HttpStatus.BAD_REQUEST.value())
+                .details(e.getMessage())
+                .build();
+
+    }
+
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDto handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
 
-        log.error("Methods argument is not valid", e);
+        log.error("Method argument is not valid", e);
 
         return ErrorDto.builder()
                 .errorCode(HttpStatus.BAD_REQUEST.value())

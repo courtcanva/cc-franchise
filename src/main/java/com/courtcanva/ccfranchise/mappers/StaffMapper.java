@@ -12,8 +12,8 @@ import org.mapstruct.ReportingPolicy;
 public interface StaffMapper {
 
 
-    Staff staffPostDtoToStaff(StaffPostDto staffPostDto);
+    Staff postDtoToStaff(StaffPostDto staffPostDto);
 
     @Mapping(target = "staffId", source = "id")
-    StaffGetDto staffToStaffGetDto(Staff staff);
+    StaffGetDto staffToGetDto(Staff staff);
 }

@@ -40,7 +40,8 @@ public class CcEmployee {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private BusinessRole businessRole;
+    @Builder.Default
+    private BusinessRole businessRole = BusinessRole.STAFF;
 
     @Column(nullable = false)
     private String firstName;
@@ -53,7 +54,8 @@ public class CcEmployee {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private EmployeeStatus status;
+    @Builder.Default
+    private EmployeeStatus status = EmployeeStatus.ACTIVE;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp

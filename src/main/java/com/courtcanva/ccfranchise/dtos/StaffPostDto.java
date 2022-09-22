@@ -36,7 +36,6 @@ public class StaffPostDto {
     @NotBlank(message = "Staff's residential address is mandatory")
     private String residentialAddress;
 
-    @NotNull(message = "Staff's postcode is mandatory")
     private int postcode;
 
     @NotNull(message = "Staff's state is mandatory")

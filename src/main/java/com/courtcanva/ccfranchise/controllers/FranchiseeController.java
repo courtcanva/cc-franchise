@@ -1,6 +1,6 @@
 package com.courtcanva.ccfranchise.controllers;
 
-import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffGetDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class FranchiseeController {
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public FranchiseeAndStaffGetDto signUpFranchiseeAndStaff(@RequestBody @Valid FranchiseeAndStaffPostDto franchiseeAndStaffPostDto) {
+    public FranchiseeAndStaffDto signUpFranchiseeAndStaff(@RequestBody @Valid FranchiseeAndStaffPostDto franchiseeAndStaffPostDto) {
 
         return franchiseeService.createFranchiseeAndStaff(franchiseeAndStaffPostDto.getFranchiseePostDto(),
                 franchiseeAndStaffPostDto.getStaffPostDto());

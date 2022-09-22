@@ -16,7 +16,7 @@ public class FranchiseeGetDto {
     private String abn;
     private String businessAddress;
     private String businessName;
-    private String entityName;
+    private String legalEntityName;
     private Boolean isVerified;
     private int postcode;
     private AUState state;
