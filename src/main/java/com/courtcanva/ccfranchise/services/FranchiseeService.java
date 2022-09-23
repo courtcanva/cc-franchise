@@ -32,7 +32,7 @@ public class FranchiseeService {
 
         if (checkFranchiseeIsExist(franchiseePostDto.getAbn())) {
 
-            log.error("franchise already exist");
+            log.error("franchisee with abn: {} already exist",franchiseePostDto.getAbn());
 
             throw new ResourceAlreadyExistException("franchisee already exist");
 
