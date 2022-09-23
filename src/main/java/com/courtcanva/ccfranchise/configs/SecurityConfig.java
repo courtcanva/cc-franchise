@@ -1,8 +1,6 @@
-package com.courtcanva.ccfranchise.config;
+package com.courtcanva.ccfranchise.configs;
 
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +17,7 @@ import java.util.List;
 @EnableWebSecurity
 @ConfigurationProperties(prefix = "management.endpoints.web.cors")
 public class SecurityConfig {
+
 
     private List<String> allowedOrigins;
 
@@ -41,4 +40,3 @@ public class SecurityConfig {
         return http.build();
     }
 }
-
