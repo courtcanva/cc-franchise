@@ -2,7 +2,7 @@ package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.dtos.UserDto;
 import com.courtcanva.ccfranchise.dtos.UserGetDto;
-import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
+import com.courtcanva.ccfranchise.exceptions.UserNotExistException;
 import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,8 @@ public class UserService {
             return checkUserPassword(userDto);
         }
 
-        log.error("staff with email: {} does not exist", userDto.getEmail());
-        throw new ResourceAlreadyExistException("staff email does not exist");
+        log.error("Staff with email: {} does not exist", userDto.getEmail());
+        throw new UserNotExistException("Staff email does not exist");
     }
 
     public boolean checkUserIsExist(String email) {
@@ -32,12 +32,9 @@ public class UserService {
 
     public UserGetDto checkUserPassword(UserDto userDto) {
         Staff curUser = staffRepository.findByEmail(userDto.getEmail());
-        String password = curUser.getPassword();
-        String curPassword = userDto.getPassword();
-        System.out.println(password);
-        System.out.println(curPassword);
-        System.out.println(password.equals(curPassword));
-        UserGetDto userGetDto = new UserGetDto(password.equals(userDto.getPassword()));
+        String userPassword = curUser.getPassword().trim(); //Avoid space completion when passwords are fixed length in database
+        String inputPassword = userDto.getPassword();
+        UserGetDto userGetDto = new UserGetDto(userPassword.equals(inputPassword));
         return userGetDto;
     }
 }
