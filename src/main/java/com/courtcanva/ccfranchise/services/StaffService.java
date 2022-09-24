@@ -17,9 +17,7 @@ public class StaffService {
 
     @Transactional
     public StaffGetDto createStaff(Staff staff) {
-
+        System.out.println(staffRepository);
         return staffMapper.staffToGetDto(staffRepository.save(staff));
-
     }
-
 }
