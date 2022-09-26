@@ -1,4 +1,4 @@
-package com.courtcanva.ccfranchise.service;
+package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.services.SignUpService;

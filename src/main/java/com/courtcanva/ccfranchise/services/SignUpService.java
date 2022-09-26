@@ -13,6 +13,7 @@ public class SignUpService {
 
     /**
      * Check whether user's email has been registered
+     *
      * @param email
      * @return
      */
