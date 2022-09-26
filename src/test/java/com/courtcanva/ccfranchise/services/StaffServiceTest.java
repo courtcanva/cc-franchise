@@ -6,6 +6,7 @@ import com.courtcanva.ccfranchise.mappers.StaffMapperImpl;
 import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.utils.TestHelper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,5 +46,12 @@ class StaffServiceTest {
 
         assertEquals(1232L, staffResult.getStaffId());
 
+    }
+
+    @Test
+    void checkEmailIsExisted() {
+        String email = "222@gmail.com";
+        when(staffRepository.existsStaffByEmail(email)).thenReturn(false);
+        Assertions.assertFalse(staffService.emailExists(email));
     }
 }

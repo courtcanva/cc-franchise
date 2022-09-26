@@ -13,11 +13,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.annotation.Resource;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @AutoConfigureMockMvc
-class SignUpControllerTest {
+class StaffControllerTest {
     @Resource
     private MockMvc mock;
 
@@ -27,8 +25,8 @@ class SignUpControllerTest {
     @Test
     void verifyEmail() throws Exception {
         mock = MockMvcBuilders.webAppContextSetup(wac).build();
-        RequestBuilder request1 = MockMvcRequestBuilders.get("/signUp/checkEmail?email=222@gmail.com");
-        RequestBuilder request2 = MockMvcRequestBuilders.get("/signUp/checkEmail?email=222gmail.com");
+        RequestBuilder request1 = MockMvcRequestBuilders.get("/staffs/email/exists?email=222@gmail.com");
+        RequestBuilder request2 = MockMvcRequestBuilders.get("/staffs/email/exists?email=222gmail.com");
         mock.perform(request1)
                 .andExpect(MockMvcResultMatchers.status().isOk());
         mock.perform(request2)

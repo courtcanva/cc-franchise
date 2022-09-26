@@ -1,6 +1,7 @@
 package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
+import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
@@ -20,6 +21,14 @@ public class StaffService {
 
         return staffMapper.staffToGetDto(staffRepository.save(staff));
 
+    }
+
+    public Boolean emailExists(String email) {
+        Boolean isExisted = staffRepository.existsStaffByEmail(email);
+        if (isExisted) {
+            throw new ResourceAlreadyExistException("Email already existed");
+        }
+        return isExisted;
     }
 
 }
