@@ -6,5 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface FranchiseeRepository extends JpaRepository<Franchisee, Long> {
 
     boolean existsFranchiseeByAbn(String abn);
-
 }

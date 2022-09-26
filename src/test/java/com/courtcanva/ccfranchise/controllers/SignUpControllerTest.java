@@ -1,19 +1,12 @@
-package com.courtcanva.ccfranchise.controller;
+package com.courtcanva.ccfranchise.controllers;
 
-import com.alibaba.fastjson.JSON;
-import com.courtcanva.ccfranchise.dto.LoginDto;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -31,19 +24,14 @@ class SignUpControllerTest {
     @Autowired
     private WebApplicationContext wac;
 
-    Logger logger = LoggerFactory.getLogger(SignUpControllerTest.class);
-
     @Test
     void verifyEmail() throws Exception {
         mock = MockMvcBuilders.webAppContextSetup(wac).build();
-        LoginDto loginDto = new LoginDto("2222@gmail.com","1234567A!");
-        RequestBuilder request = MockMvcRequestBuilders.get("/signUp/firstVerify")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JSON.toJSONString(loginDto));
-        MvcResult mvcResult = mock.perform(request)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andDo(MockMvcResultHandlers.print())
-                .andReturn();
-        logger.info(mvcResult.getResponse().getContentAsString());
+        RequestBuilder request1 = MockMvcRequestBuilders.get("/signUp/checkEmail?email=222@gmail.com");
+        RequestBuilder request2 = MockMvcRequestBuilders.get("/signUp/checkEmail?email=222gmail.com");
+        mock.perform(request1)
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        mock.perform(request2)
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError());
     }
 }
