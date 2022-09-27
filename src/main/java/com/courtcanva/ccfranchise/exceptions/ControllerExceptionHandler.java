@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ControllerExceptionHandler {
 
     @ExceptionHandler(value = ResourceAlreadyExistException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorDto handleResourceAlreadyExistException(ResourceAlreadyExistException e) {
 
         return ErrorDto.builder()
-                .errorCode(HttpStatus.BAD_REQUEST.value())
+                .errorCode(HttpStatus.CONFLICT.value())
                 .details(e.getMessage())
                 .build();
 

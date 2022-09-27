@@ -1,6 +1,7 @@
 package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
+import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapperImpl;
 import com.courtcanva.ccfranchise.models.Staff;
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -50,8 +52,13 @@ class StaffServiceTest {
 
     @Test
     void checkEmailIsExisted() {
-        String email = "222@gmail.com";
-        when(staffRepository.existsStaffByEmail(email)).thenReturn(false);
-        Assertions.assertFalse(staffService.emailExists(email));
+        String email1 = "222@gmail.com";
+        when(staffRepository.existsStaffByEmail(email1)).thenReturn(false);
+        Assertions.assertFalse(staffService.emailExists(email1));
+
+        String email2 = "333@gmail.com";
+        when(staffRepository.existsStaffByEmail(email2)).thenReturn((true));
+        assertThrows(ResourceAlreadyExistException.class,
+                () -> staffService.emailExists(email2));
     }
 }
