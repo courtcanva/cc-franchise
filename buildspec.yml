@@ -30,7 +30,6 @@ phases:
       - pwd
       #- ls -alh
       #- docker images
-      - service docker start
       - echo Building the Docker image...
       - docker build -t ${IMAGE_REPO_NAME}:latest .
       - docker tag ${IMAGE_REPO_NAME}:latest ${REPOSITORY_URI}:${IMAGE_TAG}
