@@ -39,7 +39,7 @@ phases:
       - echo Pushing the Docker image...
       - docker push ${REPOSITORY_URI}:${IMAGE_TAG}
       - echo Writing image definitions file...
-      - sed -i "s|{{imageID}}|${IMAGE_TAG}|" taskdef-uat.json
+      #- sed -i "s|{{imageID}}|${IMAGE_TAG}|" taskdef-uat.json
       - printf '[{"name":"%s","imageUri":"%s"}]' ${CC_CONTAINER} ${REPOSITORY_URI}:${IMAGE_TAG} > imagedefinitions.json
       # $AW_CONTAINER defined in Build Environment 
       #- npm i
