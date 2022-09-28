@@ -19,7 +19,7 @@ phases:
       - IMAGE_TAG=${COMMIT_HASH:=latest}
       - pwd
       - ls -alh
-      - sudo service docker start
+      - systemctl start docker
       - echo ${IMAGE_TAG}
       - echo ${IMAGE_REPO_NAME}
   build:
