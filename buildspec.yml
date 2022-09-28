@@ -42,11 +42,11 @@ phases:
       - sed -i "s|{{imageID}}|${IMAGE_TAG}|" taskdef-uat.json
       - printf '[{"name":"%s","imageUri":"%s"}]' ${CC_CONTAINER} ${REPOSITORY_URI}:${IMAGE_TAG} > imagedefinitions.json
       # $AW_CONTAINER defined in Build Environment 
-      - npm i
-      - export DATA_MIGRATION_URL=${DATA_MIGRATION_URL}
-      - export DATABASE=DEV
-      - export PORT=8080
-      - npm run migrate-up
+      #- npm i
+      #- export DATA_MIGRATION_URL=${DATA_MIGRATION_URL}
+      #- export DATABASE=DEV
+      #- export PORT=8080
+      #- npm run migrate-up
       - aws ecs register-task-definition --execution-role-arn arn:aws:iam::245866473499:role/myEcsTaskExecutionRole --cli-input-json file://taskdef-uat.json --region ap-southeast-2
       - aws ecs update-service --cluster ${AWS_ECS_CLUSTER} --service ${AWS_ECS_SERVICE} --task-definition ${task_def_arn} --region ap-southeast-2
       #- export DATA_MIGRATION_URL=${DATA_MIGRATION_URL_PROD}
