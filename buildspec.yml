@@ -19,7 +19,6 @@ phases:
       - IMAGE_TAG=${COMMIT_HASH:=latest}
       - pwd
       - ls -alh
-      - systemctl start docker
       - echo ${IMAGE_TAG}
       - echo ${IMAGE_REPO_NAME}
   build:
@@ -31,6 +30,7 @@ phases:
       - pwd
       #- ls -alh
       #- docker images
+      - service docker start
       - echo Building the Docker image...
       - docker build -t ${IMAGE_REPO_NAME}:latest .
       - docker tag ${IMAGE_REPO_NAME}:latest ${REPOSITORY_URI}:${IMAGE_TAG}
