@@ -28,8 +28,8 @@ phases:
       - echo $DOCKERHUB_PW | docker login -u $DOCKERHUB_USER --password-stdin
       - uname -a
       - pwd
-      - ls -alh
-      - docker images
+      #- ls -alh
+      #- docker images
       - echo Building the Docker image...
       - docker build -t ${IMAGE_REPO_NAME}:latest .
       - docker tag ${IMAGE_REPO_NAME}:latest ${REPOSITORY_URI}:${IMAGE_TAG}
