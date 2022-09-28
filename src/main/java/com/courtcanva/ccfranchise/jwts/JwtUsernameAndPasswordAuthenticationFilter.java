@@ -2,7 +2,6 @@ package com.courtcanva.ccfranchise.jwts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,12 +17,20 @@ import java.time.LocalDate;
 import java.util.Date;
 
 
-@RequiredArgsConstructor
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
+
+    public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager, SecretKey secretKey, JwtConfig jwtConfig) {
+
+        super.setFilterProcessesUrl("/staff/login");
+        this.authenticationManager = authenticationManager;
+        this.secretKey = secretKey;
+        this.jwtConfig = jwtConfig;
+        
+    }
 
     @Override
     @SneakyThrows
@@ -54,7 +61,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                 .signWith(secretKey)
                 .compact();
 
-        response.addHeader(jwtConfig.getAuthorization(), "Bearer " + token );
+        response.addHeader(jwtConfig.getAuthorization(), "Bearer " + token);
 
     }
 }

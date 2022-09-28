@@ -60,7 +60,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests(authorize ->
                         authorize.antMatchers("/franchisee/signup").permitAll()
-                                .antMatchers("/login").permitAll()
+                                .antMatchers("/staff/login").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilter(

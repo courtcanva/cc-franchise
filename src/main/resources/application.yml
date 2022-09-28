@@ -37,3 +37,6 @@ management:
 
 jwt:
   secretKey: "courtcanvasecurekeysecurekeysecurekeysecurekeysecurekeysecurekeysecurekeysecurekeysecurekeysecurekey"
+
+login:
+  staff_login_url: "/staff/login"
