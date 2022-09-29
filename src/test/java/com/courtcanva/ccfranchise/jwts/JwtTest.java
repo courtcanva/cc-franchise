@@ -1,8 +1,11 @@
 package com.courtcanva.ccfranchise.jwts;
 
+import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
 import com.courtcanva.ccfranchise.utils.TestHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -25,6 +28,21 @@ class JwtTest {
     @Autowired
     private FranchiseeService franchiseeService;
 
+    @Autowired
+    private FranchiseeRepository franchiseeRepository;
+    @Autowired
+    private StaffRepository staffRepository;
+
+    @BeforeEach
+    public void clear(){
+        
+        staffRepository.deleteAll();
+        staffRepository.flush();
+
+        franchiseeRepository.deleteAll();
+        franchiseeRepository.flush();
+
+    }
 
 
     @Test
