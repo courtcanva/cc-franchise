@@ -1,5 +1,6 @@
 package com.courtcanva.ccfranchise.configs;
 
+import com.courtcanva.ccfranchise.auths.JwtAuthenticationEntryPoint;
 import com.courtcanva.ccfranchise.auths.StaffDetailService;
 import com.courtcanva.ccfranchise.jwts.JwtConfig;
 import com.courtcanva.ccfranchise.jwts.JwtTokenVerifier;
@@ -68,6 +69,7 @@ public class SecurityConfig {
                                 secretKey,
                                 jwtConfig))
                 .addFilterAfter(new JwtTokenVerifier(secretKey), JwtUsernameAndPasswordAuthenticationFilter.class)
+                .exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint())
         ;
 
         return http.build();

@@ -29,7 +29,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
         this.authenticationManager = authenticationManager;
         this.secretKey = secretKey;
         this.jwtConfig = jwtConfig;
-        
+
     }
 
     @Override
