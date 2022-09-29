@@ -35,12 +35,10 @@ class JwtTest {
 
     @BeforeEach
     public void clear(){
-        
+
         staffRepository.deleteAll();
-        staffRepository.flush();
 
         franchiseeRepository.deleteAll();
-        franchiseeRepository.flush();
 
     }
 

@@ -23,7 +23,6 @@ class StaffDetailServiceTest  {
     @Mock
     private StaffRepository staffRepository;
 
-
     @Test
     public void ShouldReturnStaffDetailsSuccessfully(){
         Staff mockStaff = TestHelper.createStaff();
