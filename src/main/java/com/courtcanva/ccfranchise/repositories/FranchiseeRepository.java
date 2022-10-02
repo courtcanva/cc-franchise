@@ -7,4 +7,6 @@ public interface FranchiseeRepository extends JpaRepository<Franchisee, Long> {
 
     boolean existsFranchiseeByAbn(String abn);
 
+    Franchisee findFranchiseeById(Long franchiseeId);
+
 }

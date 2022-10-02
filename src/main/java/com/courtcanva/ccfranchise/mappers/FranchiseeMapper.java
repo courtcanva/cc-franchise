@@ -11,7 +11,6 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface FranchiseeMapper {
 
-
     Franchisee postDtoToFranchisee(FranchiseePostDto franchiseePostDto);
 
     @Mapping(target = "franchiseeId", source = "id")

@@ -1,13 +1,18 @@
 package com.courtcanva.ccfranchise.utils;
 
 import com.courtcanva.ccfranchise.constants.AUState;
-import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
-import com.courtcanva.ccfranchise.dtos.FranchiseeGetDto;
-import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
-import com.courtcanva.ccfranchise.dtos.StaffGetDto;
-import com.courtcanva.ccfranchise.dtos.StaffPostDto;
+import com.courtcanva.ccfranchise.dtos.*;
+import com.courtcanva.ccfranchise.dtos.suburbs.SuburbGetDto;
+import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
+import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
+import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Staff;
+import com.courtcanva.ccfranchise.models.Suburb;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class TestHelper {
 
@@ -101,6 +106,65 @@ public class TestHelper {
                 .franchiseePostDto(createFranchiseePostDto())
                 .build();
     }
+
+
+    public static SuburbPostDto createSuburbPostDto() {
+        return SuburbPostDto.builder()
+                .sscCode(11344L)
+                .build();
+    }
+
+    public static SuburbGetDto createSuburbGetDto() {
+        return SuburbGetDto.builder()
+                .sscCode(11344L)
+                .suburbName("East Albury")
+                .postcode(2640)
+                .state(AUState.NSW)
+                .build();
+    }
+
+
+    public static SuburbListPostDto createSuburbListPostDto() {
+        List<SuburbPostDto> suburbs = new ArrayList<>();
+        suburbs.add(new SuburbPostDto(11344L));
+        suburbs.add(new SuburbPostDto(12287L));
+        return SuburbListPostDto.builder().suburbs(suburbs).build();
+    }
+
+
+    public static SuburbListGetDto createSuburbListGetDto() {
+        List<SuburbGetDto> suburbs = new ArrayList<>();
+        suburbs.add(new SuburbGetDto(11344L, "East Albury", 2640, AUState.NSW));
+        suburbs.add(new SuburbGetDto(12287L, "Lavington", 2641, AUState.NSW));
+        return SuburbListGetDto.builder().suburbs(suburbs).build();
+    }
+
+    public static List<Suburb> suburbs() {
+        List<Suburb> suburbs = new ArrayList<>();
+        suburbs.add(0,new Suburb(11344L,"East Albury",2640,AUState.NSW,null));
+        suburbs.add(1,new Suburb(12287L,"Lavington",2640,AUState.NSW,null));
+        return suburbs;
+    }
+
+    public static Suburb suburb1(){
+        return Suburb.builder()
+                .sscCode(11344L)
+                .suburbName("East Albury")
+                .postcode(2640)
+                .state(AUState.NSW)
+                .build();
+    }
+
+    public static Suburb suburb2(){
+        return Suburb.builder()
+                .sscCode(12287L)
+                .suburbName("Lavington")
+                .postcode(2641)
+                .state(AUState.NSW)
+                .build();
+    }
+
+
 
 
 }

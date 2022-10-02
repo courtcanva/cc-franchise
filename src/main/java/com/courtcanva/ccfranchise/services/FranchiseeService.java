@@ -1,19 +1,25 @@
 package com.courtcanva.ccfranchise.services;
 
-import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
-import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
-import com.courtcanva.ccfranchise.dtos.StaffGetDto;
-import com.courtcanva.ccfranchise.dtos.StaffPostDto;
+import com.courtcanva.ccfranchise.dtos.*;
+import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
+import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
+import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
+import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
+import com.courtcanva.ccfranchise.mappers.SuburbMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Staff;
+import com.courtcanva.ccfranchise.models.Suburb;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -27,12 +33,16 @@ public class FranchiseeService {
 
     private final StaffService staffService;
 
+    private final SuburbService suburbService;
+
+    private final SuburbMapper suburbMapper;
+
     @Transactional
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
 
         if (checkFranchiseeIsExist(franchiseePostDto.getAbn())) {
 
-            log.error("franchisee with abn: {} already exist",franchiseePostDto.getAbn());
+            log.error("franchisee with abn: {} already exist", franchiseePostDto.getAbn());
 
             throw new ResourceAlreadyExistException("franchisee already exist");
 
@@ -52,9 +62,45 @@ public class FranchiseeService {
                 .build();
     }
 
+
+    @Transactional
+    public SuburbListGetDto addDutyAreas(SuburbListPostDto suburbListPostDto, Long franchiseeId) {
+
+        Franchisee franchisee = findFranchiseeById(franchiseeId);
+
+        if (findFranchiseeById(franchiseeId) == null) {
+
+            log.error("franchisee with id {} is not exit", franchiseeId);
+
+            throw new ResourceNotFoundException("franchisee is not exist");
+
+        }
+
+        List<Suburb> allSuburbs = suburbService.findSuburbBySscCodes(suburbListPostDto.getSuburbs()
+                .stream()
+                .map(SuburbPostDto::getSscCode)
+                .collect(Collectors.toList()));
+
+        franchisee.addDutyAreas(allSuburbs);
+        franchiseeRepository.save(franchisee);
+
+        return SuburbListGetDto.builder().suburbs(allSuburbs
+                        .stream()
+                        .map(suburbMapper::suburbToGetDto)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
+
     public boolean checkFranchiseeIsExist(String abn) {
 
         return franchiseeRepository.existsFranchiseeByAbn(abn);
+
+    }
+
+    public Franchisee findFranchiseeById(Long franchiseeId) {
+
+        return franchiseeRepository.findFranchiseeById(franchiseeId);
 
     }
 
