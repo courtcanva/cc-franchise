@@ -19,13 +19,15 @@ import java.util.Date;
 
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+    private static final String LOGIN_URL = "/staff/signin";
+    private static final String BEARER = "Bearer ";
     private final AuthenticationManager authenticationManager;
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
 
     public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager, SecretKey secretKey, JwtConfig jwtConfig) {
 
-        super.setFilterProcessesUrl("/staff/login");
+        super.setFilterProcessesUrl(LOGIN_URL);
         this.authenticationManager = authenticationManager;
         this.secretKey = secretKey;
         this.jwtConfig = jwtConfig;
@@ -55,13 +57,13 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
         String token = Jwts.builder()
                 .setSubject(authResult.getName())
-                .claim("authorities", authResult.getAuthorities())
+                .claim(jwtConfig.getAuthorization(), authResult.getAuthorities())
                 .setIssuedAt(new Date())
                 .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(1)))
                 .signWith(secretKey)
                 .compact();
 
-        response.addHeader(jwtConfig.getAuthorization(), "Bearer " + token);
+        response.addHeader(jwtConfig.getAuthorization(), BEARER + token);
 
     }
 }

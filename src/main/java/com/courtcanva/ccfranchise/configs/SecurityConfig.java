@@ -32,18 +32,16 @@ import java.util.List;
 public class SecurityConfig {
 
 
-    private List<String> allowedOrigins;
-
-    private List<String> allowedMethods;
-
-    private List<String> allowedHeaders;
-
+    private static final String[] AUTH_URL_WHITELIST = {
+            "/franchisee/signup",
+            "/staff/signin"
+    };
     private final SecretKey secretKey;
-
     private final StaffDetailService staffDetailService;
-
     private final JwtConfig jwtConfig;
-
+    private List<String> allowedOrigins;
+    private List<String> allowedMethods;
+    private List<String> allowedHeaders;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -60,15 +58,14 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests(authorize ->
-                        authorize.antMatchers("/franchisee/signup").permitAll()
-                                .antMatchers("/staff/login").permitAll()
+                        authorize.antMatchers(AUTH_URL_WHITELIST).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilter(
                         new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(),
                                 secretKey,
                                 jwtConfig))
-                .addFilterAfter(new JwtTokenVerifier(secretKey), JwtUsernameAndPasswordAuthenticationFilter.class)
+                .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtUsernameAndPasswordAuthenticationFilter.class)
                 .exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint())
         ;
 

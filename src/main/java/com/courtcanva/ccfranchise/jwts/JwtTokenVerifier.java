@@ -26,21 +26,25 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JwtTokenVerifier extends OncePerRequestFilter {
 
+    private static final String BEARER = "Bearer ";
+    private static final String AUTHORITY = "authority";
     private final SecretKey secretKey;
+    private final JwtConfig jwtConfig;
 
     @Override
     @SneakyThrows
+
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String authorizationHeader = request.getHeader("Authorization");
+        String authorizationHeader = request.getHeader(jwtConfig.getAuthorization());
 
-        if(Strings.isNullOrEmpty(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")){
-            filterChain.doFilter(request,response);
+        if (Strings.isNullOrEmpty(authorizationHeader) || !authorizationHeader.startsWith(BEARER)) {
+            filterChain.doFilter(request, response);
             return;
         }
-        String token = authorizationHeader.replace("Bearer ","");
+        String token = authorizationHeader.replace(BEARER, "");
 
         Jws<Claims> claimsJws = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
@@ -49,10 +53,10 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
         Claims body = claimsJws.getBody();
         String username = body.getSubject();
 
-        List<Map<String, String>> authorities = (List<Map<String, String>>) body.get("authorities");
+        List<Map<String, String>> authorities = (List<Map<String, String>>) body.get(AUTHORITY);
 
         Set<SimpleGrantedAuthority> grantedAuthorities = authorities.stream()
-                .map(map -> new SimpleGrantedAuthority(map.get("authority")))
+                .map(map -> new SimpleGrantedAuthority(map.get(AUTHORITY)))
                 .collect(Collectors.toSet());
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(

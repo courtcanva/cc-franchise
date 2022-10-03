@@ -2,7 +2,7 @@ package com.courtcanva.ccfranchise.jwts;
 
 
 import io.jsonwebtoken.security.Keys;
-import lombok.Data;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,13 +12,13 @@ import javax.crypto.SecretKey;
 
 
 @Configuration
-@Data
+@Setter
 @ConfigurationProperties(prefix = "jwt")
 public class JwtConfig {
 
     private String secretKey;
 
-    public String getAuthorization(){
+    public String getAuthorization() {
         return HttpHeaders.AUTHORIZATION;
     }
 
