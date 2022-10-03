@@ -1,9 +1,5 @@
 package com.courtcanva.ccfranchise.repositories;
 
-import com.courtcanva.ccfranchise.constants.AUState;
-import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
-import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
-import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.utils.TestHelper;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +17,11 @@ class FranchiseeRepositoryTest {
 
     @Autowired
     private FranchiseeRepository franchiseeRepository;
+
+    @BeforeEach
+    void setUp() {
+        franchiseeRepository.deleteAll();
+    }
 
     @Test
     public void shouldReturnTureWhenAbnAlreadyExist() {
@@ -41,6 +42,6 @@ class FranchiseeRepositoryTest {
         Franchisee franchisee = TestHelper.createFranchisee();
         franchiseeRepository.save(franchisee);
 
-        assertEquals(franchisee.getAbn(),franchiseeRepository.findFranchiseeById(franchiseeId).getAbn());
+        assertEquals(franchisee.getAbn(), franchiseeRepository.findFranchiseeById(franchiseeId).getAbn());
     }
 }

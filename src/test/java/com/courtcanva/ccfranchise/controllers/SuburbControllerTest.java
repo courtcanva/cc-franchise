@@ -31,16 +31,16 @@ class SuburbControllerTest {
     private SuburbRepository suburbRepository;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         suburbRepository.save(TestHelper.suburb1());
         suburbRepository.save(TestHelper.suburb2());
     }
 
     @Test
-    void shouldReturn200AndSuburbDtoWhenGetSuburbDto() throws Exception{
+    void shouldReturn200AndSuburbDtoWhenGetSuburbDto() throws Exception {
         mockMvc.perform(get("/suburb/all"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.suburbs",hasSize(2)))
+                .andExpect(jsonPath("$.suburbs", hasSize(2)))
                 .andExpect(jsonPath("$.suburbs[0].sscCode").value(11344L));
 
     }

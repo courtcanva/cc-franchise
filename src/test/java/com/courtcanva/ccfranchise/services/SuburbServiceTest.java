@@ -1,6 +1,5 @@
 package com.courtcanva.ccfranchise.services;
 
-import com.courtcanva.ccfranchise.dtos.suburbs.SuburbGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
@@ -12,7 +11,6 @@ import com.courtcanva.ccfranchise.utils.TestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 

@@ -1,6 +1,9 @@
 package com.courtcanva.ccfranchise.services;
 
-import com.courtcanva.ccfranchise.dtos.*;
+import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
+import com.courtcanva.ccfranchise.dtos.StaffGetDto;
+import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
@@ -19,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -82,7 +84,6 @@ public class FranchiseeService {
                 .map(SuburbPostDto::getSscCode)
                 .collect(Collectors.toList()));
 
-//        franchisee.addDutyAreas(allSuburbs);
         franchisee.addDutyAreas(allSuburbs);
         franchiseeRepository.save(franchisee);
 
