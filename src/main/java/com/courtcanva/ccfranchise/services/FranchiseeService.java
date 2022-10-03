@@ -81,7 +81,8 @@ public class FranchiseeService {
                 .map(SuburbPostDto::getSscCode)
                 .collect(Collectors.toList()));
 
-        franchisee.addDutyAreas(allSuburbs);
+//        franchisee.addDutyAreas(allSuburbs);
+        franchiseeRepository.addDutyAreas(allSuburbs);
         franchiseeRepository.save(franchisee);
 
         return SuburbListGetDto.builder().suburbs(allSuburbs
@@ -102,6 +103,10 @@ public class FranchiseeService {
 
         return franchiseeRepository.findFranchiseeById(franchiseeId);
 
+    }
+
+    public Franchisee addDutyAreas(List<Suburb> suburbs){
+        return franchiseeRepository.addDutyAreas(suburbs);
     }
 
 }

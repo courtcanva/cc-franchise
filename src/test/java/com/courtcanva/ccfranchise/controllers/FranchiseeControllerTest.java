@@ -1,13 +1,11 @@
 package com.courtcanva.ccfranchise.controllers;
 
-import com.alibaba.fastjson.JSON;
 import com.courtcanva.ccfranchise.constants.AUState;
 import com.courtcanva.ccfranchise.dtos.*;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
-import com.courtcanva.ccfranchise.services.FranchiseeService;
+import com.courtcanva.ccfranchise.repositories.SuburbRepository;
 import com.courtcanva.ccfranchise.utils.TestHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +36,8 @@ class FranchiseeControllerTest {
 
     private Long mockFranchiseeId;
 
-    private FranchiseeService service;
+    @Autowired
+    private SuburbRepository suburbRepository;
 
     @Autowired
     private WebApplicationContext wac;
@@ -46,6 +45,8 @@ class FranchiseeControllerTest {
     @BeforeEach
     void setUp() {
         mockFranchiseeId = franchiseeController.signUpFranchiseeAndStaff(new FranchiseeAndStaffPostDto(new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "123456789", "Melbourne", AUState.VIC, 3000), new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd"))).getFranchiseeGetDto().getFranchiseeId();
+        suburbRepository.save(TestHelper.suburb1());
+        suburbRepository.save(TestHelper.suburb2());
     }
 
     @Test
@@ -69,13 +70,11 @@ class FranchiseeControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/" + mockFranchiseeId.toString() + "/service_areas")
                         .content(objectMapper.writeValueAsString(suburbListPostDto))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(JSON.toJSONString(suburbListPostDto)))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(jsonPath("$.suburbs[*].sscCode").value(Lists.newArrayList(11344L)))
-                .andExpect(jsonPath("$.suburbs[*].sscCode").value(Lists.newArrayList(12287L)));
-
+                .andExpect(jsonPath("$.suburbs[0].sscCode").value(11344L))
+                .andExpect(jsonPath("$.suburbs[1].sscCode").value(12287L));
 
     }
 }

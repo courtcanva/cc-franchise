@@ -8,7 +8,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode
 public class SuburbListGetDto {
 
     private List<SuburbGetDto> suburbs;

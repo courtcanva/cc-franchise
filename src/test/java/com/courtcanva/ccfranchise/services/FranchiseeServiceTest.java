@@ -18,14 +18,17 @@ import com.courtcanva.ccfranchise.utils.TestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 
 
@@ -40,12 +43,20 @@ class FranchiseeServiceTest {
 
     private FranchiseeService franchiseeService;
 
+    @Mock
     private SuburbService suburbService;
 
+    @Mock
     private SuburbRepository suburbRepository;
 
-    private final FranchiseeAndStaffPostDto franchiseeAndStaffPostDto = new FranchiseeAndStaffPostDto(new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "123456789", "Melbourne", AUState.VIC, 3000), new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd"));
 
+
+    @BeforeEach
+    void setUp() {
+        franchiseeRepository.save(TestHelper.createFranchiseeWithId());
+        suburbRepository.save(TestHelper.suburb1());
+        suburbRepository.save(TestHelper.suburb2());
+    }
 
     @BeforeEach
     public void setFranchiseeServiceUp() {
@@ -79,27 +90,22 @@ class FranchiseeServiceTest {
         assertEquals(1234L, franchiseeAndStaffDto.getFranchiseeGetDto().getFranchiseeId());
     }
 
-    private final Suburb mockSuburb = Suburb.builder().suburbName("Melbourne").postcode(3000).sscCode(21003L).state(AUState.VIC).build();
-
-    private final List<Suburb> mockSuburbList = new ArrayList<>();
     @Test
     void shouldAddSuburbListGetDto() {
 
+        Franchisee franchisee = TestHelper.createFranchiseeWithId();
+        List<Suburb> suburbsListWithFranchisee = TestHelper.createSuburbsListWithFranchisee();
+        Franchisee franchiseeWithDutyAreas = TestHelper.createFranchiseeWithDutyAreas();
 
         SuburbListPostDto suburbListPostDto = TestHelper.createSuburbListPostDto();
 
-        Franchisee franchisee = TestHelper.createFranchiseeWithId();
+        when(franchiseeRepository.findFranchiseeById(any())).thenReturn(franchisee);
+        when(suburbService.findSuburbBySscCodes(any())).thenReturn(suburbsListWithFranchisee);
+        when(franchisee.addDutyAreas(anyList()).;
+        when(franchiseeRepository.save(any())).thenReturn(franchiseeWithDutyAreas);
 
-
-
-        List<Suburb> suburbs = new ArrayList<>();
-        suburbs.add(TestHelper.suburb1());
-        suburbs.add(TestHelper.suburb2());
-
-
-        franchisee.addDutyAreas(suburbs);
-        when(franchiseeRepository.save(any())).thenReturn(franchisee);
-
+        SuburbListGetDto suburbListGetDto = franchiseeService.addDutyAreas(suburbListPostDto, franchisee.getId());
+        assertEquals(11344L, suburbListGetDto.getSuburbs().get(1).getSscCode());
     }
 
 
@@ -129,19 +135,7 @@ class FranchiseeServiceTest {
 
     }
 
-//    @Test
-//    void shouldReturnSuburbsWhenSuburbsAreExist(){
-//
-//        List<SuburbGetDto> suburbGetDto = TestHelper.createSuburbListGetDto().getSuburbs();
-//
-//        List<Suburb> suburbs = suburbRepository.findBySscCodeIn(TestHelper.createSuburbListPostDto().getSuburbs().stream().map(SuburbPostDto::getSscCode).collect(Collectors.toList()))
-//;
-//        when(suburbRepository.findBySscCodeIn(TestHelper.createSuburbListPostDto().getSuburbs().stream().map(SuburbPostDto::getSscCode).collect(Collectors.toList())))
-//                .thenReturn(suburbs);
-//
-//        assertEquals(suburbs.get(1),suburbGetDto.get(1));
-//
-//    }
+
 
     @Test
     void shouldThrowResourceNotFoundExist() {

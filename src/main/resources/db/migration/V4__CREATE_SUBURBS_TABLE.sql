@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS suburb;
+DROP TABLE IF EXISTS suburb CASCADE;
 CREATE TABLE suburb(
                        ssc_code INTEGER  NOT NULL PRIMARY KEY
     ,suburb   VARCHAR(37) NOT NULL

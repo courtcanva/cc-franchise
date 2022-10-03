@@ -43,7 +43,6 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    implementation 'com.alibaba:fastjson:2.0.12.graal'
 
 }
 

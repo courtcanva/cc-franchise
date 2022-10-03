@@ -13,6 +13,7 @@ import com.courtcanva.ccfranchise.models.Suburb;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TestHelper {
 
@@ -139,10 +140,10 @@ public class TestHelper {
         return SuburbListGetDto.builder().suburbs(suburbs).build();
     }
 
-    public static List<Suburb> suburbs() {
+    public static List<Suburb> createSuburbsListWithFranchisee() {
         List<Suburb> suburbs = new ArrayList<>();
         suburbs.add(0,new Suburb(11344L,"East Albury",2640,AUState.NSW,null));
-        suburbs.add(1,new Suburb(12287L,"Lavington",2640,AUState.NSW,null));
+        suburbs.add(1,new Suburb(12287L,"Lavington",2641,AUState.NSW,null));
         return suburbs;
     }
 
@@ -164,6 +165,53 @@ public class TestHelper {
                 .build();
     }
 
+    public static Suburb suburbWithFranchisee1(){
+        return Suburb.builder()
+                .sscCode(11344L)
+                .suburbName("East Albury")
+                .postcode(2640)
+                .state(AUState.NSW)
+                .availableFranchisees(createFranchiseeSet())
+                .build();
+    }
+
+    public static Suburb suburbWithFranchisee2(){
+        return Suburb.builder()
+                .sscCode(12287L)
+                .suburbName("Lavington")
+                .postcode(2641)
+                .state(AUState.NSW)
+                .availableFranchisees(createFranchiseeSet())
+                .build();
+    }
+
+    public static Set<Franchisee> createFranchiseeSet(){
+        Set<Franchisee> franchisees = new HashSet<>();
+        franchisees.add(createFranchiseeWithId());
+        return franchisees;
+    }
+
+
+
+    public static Set<Suburb> createSuburbSet(){
+        Set<Suburb> suburbs = new HashSet<>();
+        suburbs.add(suburbWithFranchisee1());
+        suburbs.add(suburbWithFranchisee2());
+
+        return suburbs;
+    }
+
+    public static Franchisee createFranchiseeWithDutyAreas(){
+        return Franchisee.builder()
+                .id(1234L)
+                .contactNumber("234567891")
+                .businessName("AAAAA")
+                .businessAddress("zetland NSWssss")
+                .abn("12312123111")
+                .dutyAreas(createSuburbSet())
+                .build();
+
+    }
 
 
 
