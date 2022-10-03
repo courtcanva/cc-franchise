@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -48,7 +48,6 @@ class FranchiseeServiceTest {
 
     @Mock
     private SuburbRepository suburbRepository;
-
 
 
     @BeforeEach
@@ -96,12 +95,13 @@ class FranchiseeServiceTest {
         Franchisee franchisee = TestHelper.createFranchiseeWithId();
         List<Suburb> suburbsListWithFranchisee = TestHelper.createSuburbsListWithFranchisee();
         Franchisee franchiseeWithDutyAreas = TestHelper.createFranchiseeWithDutyAreas();
-
         SuburbListPostDto suburbListPostDto = TestHelper.createSuburbListPostDto();
 
-        when(franchiseeRepository.findFranchiseeById(any())).thenReturn(franchisee);
+        Franchisee mockFranchisee = TestHelper.createMockFranchisee();
+
+        when(franchiseeRepository.findFranchiseeById(any())).thenReturn(mockFranchisee);
         when(suburbService.findSuburbBySscCodes(any())).thenReturn(suburbsListWithFranchisee);
-//        when(franchisee.addDutyAreas(anyList()).;
+        doNothing().when(mockFranchisee).addDutyAreas(suburbsListWithFranchisee);
         when(franchiseeRepository.save(any())).thenReturn(franchiseeWithDutyAreas);
 
         SuburbListGetDto suburbListGetDto = franchiseeService.addDutyAreas(suburbListPostDto, franchisee.getId());
@@ -134,8 +134,6 @@ class FranchiseeServiceTest {
                 () -> franchiseeService.createFranchiseeAndStaff(franchiseePostDto, staffPostDto));
 
     }
-
-
 
     @Test
     void shouldThrowResourceNotFoundExist() {

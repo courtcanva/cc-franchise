@@ -39,8 +39,6 @@ class FranchiseeControllerTest {
     @Autowired
     private SuburbRepository suburbRepository;
 
-    @Autowired
-    private WebApplicationContext wac;
 
     @BeforeEach
     void setUp() {

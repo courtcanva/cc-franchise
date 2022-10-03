@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.mockito.Mockito.mock;
+
 public class TestHelper {
 
 
@@ -65,6 +67,17 @@ public class TestHelper {
                 .businessAddress("zetland NSWssss")
                 .abn("12312123111")
                 .build();
+    }
+
+    public static Franchisee createMockFranchisee(){
+
+        Franchisee mockFranchisee = mock(Franchisee.class);
+        mockFranchisee.setId(1234L);
+        mockFranchisee.setContactNumber("234567891");
+        mockFranchisee.setBusinessName("AAAAA");
+        mockFranchisee.setBusinessAddress("zetland NSWssss");
+        mockFranchisee.setAbn("12312123111");
+        return mockFranchisee;
     }
 
     public static Franchisee createFranchisee() {
@@ -212,7 +225,5 @@ public class TestHelper {
                 .build();
 
     }
-
-
 
 }
