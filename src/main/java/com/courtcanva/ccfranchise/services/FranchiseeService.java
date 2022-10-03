@@ -82,7 +82,7 @@ public class FranchiseeService {
                 .collect(Collectors.toList()));
 
 //        franchisee.addDutyAreas(allSuburbs);
-        franchiseeRepository.addDutyAreas(allSuburbs);
+        franchisee.addDutyAreas(allSuburbs);
         franchiseeRepository.save(franchisee);
 
         return SuburbListGetDto.builder().suburbs(allSuburbs
@@ -105,8 +105,5 @@ public class FranchiseeService {
 
     }
 
-    public Franchisee addDutyAreas(List<Suburb> suburbs){
-        return franchiseeRepository.addDutyAreas(suburbs);
-    }
 
 }

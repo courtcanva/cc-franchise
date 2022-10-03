@@ -12,6 +12,5 @@ public interface FranchiseeRepository extends JpaRepository<Franchisee, Long> {
 
     Franchisee findFranchiseeById(Long franchiseeId);
 
-    Franchisee addDutyAreas(List<Suburb> suburbs);
 
 }

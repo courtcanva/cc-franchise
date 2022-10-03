@@ -101,11 +101,11 @@ class FranchiseeServiceTest {
 
         when(franchiseeRepository.findFranchiseeById(any())).thenReturn(franchisee);
         when(suburbService.findSuburbBySscCodes(any())).thenReturn(suburbsListWithFranchisee);
-        when(franchisee.addDutyAreas(anyList()).;
+//        when(franchisee.addDutyAreas(anyList()).;
         when(franchiseeRepository.save(any())).thenReturn(franchiseeWithDutyAreas);
 
         SuburbListGetDto suburbListGetDto = franchiseeService.addDutyAreas(suburbListPostDto, franchisee.getId());
-        assertEquals(11344L, suburbListGetDto.getSuburbs().get(1).getSscCode());
+        assertEquals(12287L, suburbListGetDto.getSuburbs().get(1).getSscCode());
     }
 
 
