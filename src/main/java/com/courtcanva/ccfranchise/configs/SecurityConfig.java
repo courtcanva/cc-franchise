@@ -48,8 +48,8 @@ public class SecurityConfig {
         http.csrf().disable()
                 .cors().configurationSource(request -> {
                     var cors = new CorsConfiguration();
-                    cors.setAllowedMethods(allowedOrigins);
-                    cors.setAllowedOrigins(allowedMethods);
+                    cors.setAllowedMethods(allowedMethods);
+                    cors.setAllowedOrigins(allowedOrigins);
                     cors.setAllowedHeaders(allowedHeaders);
                     return cors;
                 })
