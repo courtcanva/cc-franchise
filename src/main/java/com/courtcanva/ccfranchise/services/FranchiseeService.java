@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -43,9 +44,9 @@ public class FranchiseeService {
     @Transactional
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
 
-        if (checkFranchiseeIsExist(franchiseePostDto.getAbn())) {
+        if (ifFranchiseeExists(franchiseePostDto.getAbn())) {
 
-            log.error("franchisee with abn: {} already exist", franchiseePostDto.getAbn());
+            log.debug("franchisee with abn: {} already exist", franchiseePostDto.getAbn());
 
             throw new ResourceAlreadyExistException("franchisee already exist");
 
@@ -69,15 +70,15 @@ public class FranchiseeService {
     @Transactional
     public SuburbListGetDto addDutyAreas(SuburbListPostDto suburbListPostDto, Long franchiseeId) {
 
-        Franchisee franchisee = findFranchiseeById(franchiseeId);
+        Optional<Franchisee> optionalFranchisee = findFranchiseeById(franchiseeId);
 
-        if (findFranchiseeById(franchiseeId) == null) {
+        Franchisee franchisee = optionalFranchisee.orElseThrow(() -> {
 
-            log.error("franchisee with id {} is not exit", franchiseeId);
+            log.debug("franchisee with id: {} is not exist", franchiseeId);
 
-            throw new ResourceNotFoundException("franchisee is not exist");
+            return new ResourceNotFoundException("franchisee id is not exist");
 
-        }
+        });
 
         List<Suburb> allSuburbs = suburbService.findSuburbBySscCodes(suburbListPostDto.getSuburbs()
                 .stream()
@@ -95,13 +96,13 @@ public class FranchiseeService {
     }
 
 
-    public boolean checkFranchiseeIsExist(String abn) {
+    public boolean ifFranchiseeExists(String abn) {
 
         return franchiseeRepository.existsFranchiseeByAbn(abn);
 
     }
 
-    public Franchisee findFranchiseeById(Long franchiseeId) {
+    public Optional<Franchisee> findFranchiseeById(Long franchiseeId) {
 
         return franchiseeRepository.findFranchiseeById(franchiseeId);
 

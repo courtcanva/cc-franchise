@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -42,6 +44,6 @@ class FranchiseeRepositoryTest {
         Franchisee franchisee = TestHelper.createFranchisee();
         franchiseeRepository.save(franchisee);
 
-        assertEquals(franchisee.getAbn(), franchiseeRepository.findFranchiseeById(franchiseeId).getAbn());
+        assertEquals(franchisee.getAbn(), Objects.requireNonNull(franchiseeRepository.findFranchiseeById(franchiseeId).orElse(null)).getAbn());
     }
 }

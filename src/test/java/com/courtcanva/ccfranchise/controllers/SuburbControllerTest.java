@@ -2,7 +2,6 @@ package com.courtcanva.ccfranchise.controllers;
 
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
 import com.courtcanva.ccfranchise.utils.TestHelper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class SuburbControllerTest {
 
     @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
@@ -38,7 +34,7 @@ class SuburbControllerTest {
 
     @Test
     void shouldReturn200AndSuburbDtoWhenGetSuburbDto() throws Exception {
-        mockMvc.perform(get("/suburb/all"))
+        mockMvc.perform(get("/suburbs"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.suburbs", hasSize(2)))
                 .andExpect(jsonPath("$.suburbs[0].sscCode").value(11344L));

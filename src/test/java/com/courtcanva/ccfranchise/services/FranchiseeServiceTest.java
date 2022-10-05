@@ -1,15 +1,20 @@
 package com.courtcanva.ccfranchise.services;
 
 
-import com.courtcanva.ccfranchise.constants.AUState;
-import com.courtcanva.ccfranchise.dtos.*;
-import com.courtcanva.ccfranchise.dtos.suburbs.SuburbGetDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
+import com.courtcanva.ccfranchise.dtos.StaffGetDto;
+import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
-import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
-import com.courtcanva.ccfranchise.mappers.*;
+import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
+import com.courtcanva.ccfranchise.mappers.FranchiseeMapperImpl;
+import com.courtcanva.ccfranchise.mappers.StaffMapper;
+import com.courtcanva.ccfranchise.mappers.StaffMapperImpl;
+import com.courtcanva.ccfranchise.mappers.SuburbMapper;
+import com.courtcanva.ccfranchise.mappers.SuburbMapperImpl;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Suburb;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
@@ -18,18 +23,18 @@ import com.courtcanva.ccfranchise.utils.TestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -97,11 +102,11 @@ class FranchiseeServiceTest {
         Franchisee franchiseeWithDutyAreas = TestHelper.createFranchiseeWithDutyAreas();
         SuburbListPostDto suburbListPostDto = TestHelper.createSuburbListPostDto();
 
-        Franchisee mockFranchisee = TestHelper.createMockFranchisee();
+        Optional<Franchisee> optionalFranchisee = TestHelper.createOptionalFranchisee();
 
-        when(franchiseeRepository.findFranchiseeById(any())).thenReturn(mockFranchisee);
+        when(franchiseeRepository.findFranchiseeById(any())).thenReturn(optionalFranchisee);
         when(suburbService.findSuburbBySscCodes(any())).thenReturn(suburbsListWithFranchisee);
-        doNothing().when(mockFranchisee).addDutyAreas(suburbsListWithFranchisee);
+        doNothing().when(optionalFranchisee.orElse(null)).addDutyAreas(suburbsListWithFranchisee);
         when(franchiseeRepository.save(any())).thenReturn(franchiseeWithDutyAreas);
 
         SuburbListGetDto suburbListGetDto = franchiseeService.addDutyAreas(suburbListPostDto, franchisee.getId());
@@ -117,7 +122,7 @@ class FranchiseeServiceTest {
         when(franchiseeRepository.existsFranchiseeByAbn(franchiseeAbn))
                 .thenReturn(true);
 
-        assertTrue(franchiseeService.checkFranchiseeIsExist(franchiseeAbn));
+        assertTrue(franchiseeService.ifFranchiseeExists(franchiseeAbn));
     }
 
     @Test
@@ -140,8 +145,7 @@ class FranchiseeServiceTest {
         SuburbListPostDto suburbListPostDto = TestHelper.createSuburbListPostDto();
 
         when(franchiseeRepository.findFranchiseeById(any()))
-                .thenReturn(null);
-
+                .thenReturn(Optional.empty());
         assertThrows(ResourceNotFoundException.class, () -> franchiseeService.addDutyAreas(suburbListPostDto, 6L));
 
     }

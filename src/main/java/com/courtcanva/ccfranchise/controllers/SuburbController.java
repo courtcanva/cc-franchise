@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/suburb")
+@RequestMapping("/suburbs")
 @RequiredArgsConstructor
 public class SuburbController {
 
     private final SuburbService suburbService;
 
-    @GetMapping("/all")
+    @GetMapping
     public SuburbListGetDto getAllSuburbs() {
 
         return suburbService.findAllSuburbs();

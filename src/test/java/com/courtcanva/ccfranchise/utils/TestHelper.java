@@ -1,7 +1,11 @@
 package com.courtcanva.ccfranchise.utils;
 
 import com.courtcanva.ccfranchise.constants.AUState;
-import com.courtcanva.ccfranchise.dtos.*;
+import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeGetDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
+import com.courtcanva.ccfranchise.dtos.StaffGetDto;
+import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
@@ -13,6 +17,7 @@ import com.courtcanva.ccfranchise.models.Suburb;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.mockito.Mockito.mock;
@@ -69,7 +74,7 @@ public class TestHelper {
                 .build();
     }
 
-    public static Franchisee createMockFranchisee(){
+    public static Franchisee createMockFranchisee() {
 
         Franchisee mockFranchisee = mock(Franchisee.class);
         mockFranchisee.setId(1234L);
@@ -78,6 +83,22 @@ public class TestHelper {
         mockFranchisee.setBusinessAddress("zetland NSWssss");
         mockFranchisee.setAbn("12312123111");
         return mockFranchisee;
+    }
+
+
+    public static Optional<Franchisee> createOptionalFranchisee() {
+
+        Franchisee franchisee = createMockFranchisee();
+
+        Optional<Franchisee> optionalFranchisee = Optional.of(franchisee);
+        optionalFranchisee.get().setId(1234L);
+        optionalFranchisee.get().setContactNumber("234567891");
+        optionalFranchisee.get().setBusinessName("AAAAA");
+        optionalFranchisee.get().setBusinessAddress("zetland NSWssss");
+        optionalFranchisee.get().setAbn("12312123111");
+
+        return optionalFranchisee;
+
     }
 
     public static Franchisee createFranchisee() {
@@ -155,12 +176,12 @@ public class TestHelper {
 
     public static List<Suburb> createSuburbsListWithFranchisee() {
         List<Suburb> suburbs = new ArrayList<>();
-        suburbs.add(0,new Suburb(11344L,"East Albury",2640,AUState.NSW,null));
-        suburbs.add(1,new Suburb(12287L,"Lavington",2641,AUState.NSW,null));
+        suburbs.add(0, new Suburb(11344L, "East Albury", 2640, AUState.NSW, null));
+        suburbs.add(1, new Suburb(12287L, "Lavington", 2641, AUState.NSW, null));
         return suburbs;
     }
 
-    public static Suburb suburb1(){
+    public static Suburb suburb1() {
         return Suburb.builder()
                 .sscCode(11344L)
                 .suburbName("East Albury")
@@ -169,7 +190,7 @@ public class TestHelper {
                 .build();
     }
 
-    public static Suburb suburb2(){
+    public static Suburb suburb2() {
         return Suburb.builder()
                 .sscCode(12287L)
                 .suburbName("Lavington")
@@ -178,7 +199,7 @@ public class TestHelper {
                 .build();
     }
 
-    public static Suburb suburbWithFranchisee1(){
+    public static Suburb suburbWithFranchisee1() {
         return Suburb.builder()
                 .sscCode(11344L)
                 .suburbName("East Albury")
@@ -188,7 +209,7 @@ public class TestHelper {
                 .build();
     }
 
-    public static Suburb suburbWithFranchisee2(){
+    public static Suburb suburbWithFranchisee2() {
         return Suburb.builder()
                 .sscCode(12287L)
                 .suburbName("Lavington")
@@ -198,15 +219,13 @@ public class TestHelper {
                 .build();
     }
 
-    public static Set<Franchisee> createFranchiseeSet(){
+    public static Set<Franchisee> createFranchiseeSet() {
         Set<Franchisee> franchisees = new HashSet<>();
         franchisees.add(createFranchiseeWithId());
         return franchisees;
     }
 
-
-
-    public static Set<Suburb> createSuburbSet(){
+    public static Set<Suburb> createSuburbSet() {
         Set<Suburb> suburbs = new HashSet<>();
         suburbs.add(suburbWithFranchisee1());
         suburbs.add(suburbWithFranchisee2());
@@ -214,7 +233,7 @@ public class TestHelper {
         return suburbs;
     }
 
-    public static Franchisee createFranchiseeWithDutyAreas(){
+    public static Franchisee createFranchiseeWithDutyAreas() {
         return Franchisee.builder()
                 .id(1234L)
                 .contactNumber("234567891")
