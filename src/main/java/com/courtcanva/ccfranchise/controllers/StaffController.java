@@ -3,13 +3,11 @@ package com.courtcanva.ccfranchise.controllers;
 import com.courtcanva.ccfranchise.services.StaffService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
+import javax.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/staffs")
@@ -18,8 +16,8 @@ import javax.validation.constraints.Email;
 public class StaffController {
     private final StaffService staffService;
 
-    @GetMapping("/email/exists")
-    public Boolean emailExists(@Email @RequestParam("email") @Valid String email) {
+    @GetMapping("/email/{email}")
+    public Boolean emailExists(@Email @PathVariable("email") String email) {
         return staffService.emailExists(email);
     }
 }

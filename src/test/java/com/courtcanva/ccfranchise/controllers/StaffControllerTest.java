@@ -33,15 +33,15 @@ class StaffControllerTest {
 
     @Test
     void verifyEmail() throws Exception {
-        RequestBuilder request1 = MockMvcRequestBuilders.get("/staffs/email/exists?email=222@gmail.com");
-        RequestBuilder request2 = MockMvcRequestBuilders.get("/staffs/email/exists?email=222gmail.com");
+        RequestBuilder request1 = MockMvcRequestBuilders.get("/staffs/email/222@gmail.com");
+        RequestBuilder request2 = MockMvcRequestBuilders.get("/staffs/email/222gmail.com");
         mockMvc.perform(request1)
                 .andExpect(MockMvcResultMatchers.status().isOk());
         mockMvc.perform(request2)
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError());
 
         when(staffService.emailExists(any())).thenThrow(new ResourceAlreadyExistException("Email already existed"));
-        mockMvc.perform(MockMvcRequestBuilders.get("/staffs/email/exists?email=333@gmail.com"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/staffs/email/333@gmail.com"))
                 .andExpect(MockMvcResultMatchers.status().isConflict());
     }
 }

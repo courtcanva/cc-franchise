@@ -51,7 +51,7 @@ class StaffServiceTest {
     }
 
     @Test
-    void checkEmailIsExisted() {
+    void shouldThrowErrorWhenEmailExits() {
         String email1 = "222@gmail.com";
         when(staffRepository.existsStaffByEmail(email1)).thenReturn(false);
         Assertions.assertFalse(staffService.emailExists(email1));
