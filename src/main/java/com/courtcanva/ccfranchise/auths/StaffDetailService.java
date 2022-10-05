@@ -36,6 +36,7 @@ public class StaffDetailService implements UserDetailsService {
 
         return StaffDetail.builder()
                 .username(staff.getEmail())
+                .id(staff.getId())
                 .password(staff.getPassword())
                 .grantedAuthorities(grantedAuthorities)
                 .isAccountNonLocked(true)

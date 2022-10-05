@@ -19,7 +19,9 @@ public class StaffDetail implements UserDetails {
     private final boolean isAccountNonLocked;
     private final boolean isCredentialsNonExpired;
     private final boolean isEnabled;
-    
+
+    private final Long id;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return grantedAuthorities;
@@ -54,4 +56,9 @@ public class StaffDetail implements UserDetails {
     public boolean isEnabled() {
         return isEnabled;
     }
+
+    public Long getId() {
+        return id;
+    }
+
 }

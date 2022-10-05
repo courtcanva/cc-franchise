@@ -1,8 +1,10 @@
 package com.courtcanva.ccfranchise.jwts;
 
+import com.courtcanva.ccfranchise.auths.StaffDetail;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,11 +18,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.Date;
 
-
+@Slf4j
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private static final String LOGIN_URL = "/staff/signin";
     private static final String BEARER = "Bearer ";
+
+    private static final String STAFF_ID = "StaffId";
     private final AuthenticationManager authenticationManager;
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
@@ -38,7 +42,6 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     @SneakyThrows
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
-
         UsernameAndPasswordAuthenticationRequest authenticationRequest = new ObjectMapper()
                 .readValue(request.getInputStream(), UsernameAndPasswordAuthenticationRequest.class);
 
@@ -58,6 +61,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
         String token = Jwts.builder()
                 .setSubject(authResult.getName())
                 .claim(jwtConfig.getAuthorization(), authResult.getAuthorities())
+                .claim(STAFF_ID, ((StaffDetail) authResult.getPrincipal()).getId())
                 .setIssuedAt(new Date())
                 .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(1)))
                 .signWith(secretKey)
