@@ -16,7 +16,7 @@ import javax.websocket.server.PathParam;
 public class StaffController {
     private final StaffService staffService;
 
-    @GetMapping("/email/{email}")
+    @GetMapping("/emails/{email}")
     public Boolean emailExists(@Email @PathVariable("email") String email) {
         return staffService.emailExists(email);
     }
