@@ -25,7 +25,7 @@ public class StaffService {
 
     public Boolean emailExists(String email) {
         Boolean isExisted = staffRepository.existsStaffByEmail(email);
-        if (isExisted) {
+        if (Boolean.TRUE.equals(isExisted)) {
             throw new ResourceAlreadyExistException("Email already existed");
         }
         return isExisted;
