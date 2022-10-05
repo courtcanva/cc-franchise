@@ -34,7 +34,7 @@ class JwtTest {
     private StaffRepository staffRepository;
 
     @BeforeEach
-    public void clear(){
+    public void clear() {
 
         staffRepository.deleteAll();
 
@@ -46,7 +46,7 @@ class JwtTest {
     @Test
     public void ShouldReturnOKSuccessfullyWhenLogin() throws Exception {
         franchiseeService
-                .createFranchiseeAndStaff(TestHelper.createFranchiseePostDto(),TestHelper.createStaffPostDto());
+                .createFranchiseeAndStaff(TestHelper.createFranchiseePostDto(), TestHelper.createStaffPostDto());
 
         UsernameAndPasswordAuthenticationRequest user
                 = new UsernameAndPasswordAuthenticationRequest();
@@ -54,7 +54,7 @@ class JwtTest {
         user.setPassword("Bfasdf1123213");
         user.setUsername("baoruoxi@163.com");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/staff/login")
+        mockMvc.perform(MockMvcRequestBuilders.post("/staff/signin")
                         .content(objectMapper.writeValueAsString(user))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());

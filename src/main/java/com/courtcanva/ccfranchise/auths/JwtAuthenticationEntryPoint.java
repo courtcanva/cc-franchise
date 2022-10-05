@@ -14,10 +14,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-        log.debug(authException.toString());
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         response.getWriter().print("username or password is wrong");
-//        log.debug("username and password is not authenticated");
-        log.debug(authException.getMessage());
     }
 }

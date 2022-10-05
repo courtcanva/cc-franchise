@@ -19,7 +19,6 @@ public class StaffDetail implements UserDetails {
     private final boolean isAccountNonLocked;
     private final boolean isCredentialsNonExpired;
     private final boolean isEnabled;
-
     private final Long id;
 
     @Override
