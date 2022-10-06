@@ -32,21 +32,21 @@ class StaffControllerTest {
     private StaffController staffController;
 
     @Test
-    void shouldGetSuccessWhenEmailNotExists() throws Exception {
+    void shouldReturnSuccessWhenEmailNotExists() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders.get("/staffs/emails/222@gmail.com");
         mockMvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
-    void shouldGetBadRequestWhenEmailFormatInvalid() throws Exception {
+    void shouldReturnBadRequestWhenEmailFormatInvalid() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders.get("/staffs/emails/222gmail.com");
         mockMvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
-    void shouldGetBadRequestWhenEmailAlreadyExists() throws Exception {
+    void shouldReturnConflictWhenEmailAlreadyExists() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders.get("/staffs/emails/333@gmail.com");
         when(staffService.emailExists(any())).thenThrow(new ResourceAlreadyExistException("Email already existed"));
         mockMvc.perform(request)
