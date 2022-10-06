@@ -38,7 +38,7 @@ class StaffControllerTest {
         mockMvc.perform(request1)
                 .andExpect(MockMvcResultMatchers.status().isOk());
         mockMvc.perform(request2)
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
         when(staffService.emailExists(any())).thenThrow(new ResourceAlreadyExistException("Email already existed"));
         mockMvc.perform(MockMvcRequestBuilders.get("/staffs/emails/333@gmail.com"))
