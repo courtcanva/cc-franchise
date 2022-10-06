@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
+
 @Slf4j
 @RestControllerAdvice
 public class ControllerExceptionHandler {
@@ -26,6 +28,19 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDto handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
+
+        log.error("Method argument is not valid", e);
+
+        return ErrorDto.builder()
+                .errorCode(HttpStatus.BAD_REQUEST.value())
+                .details(e.getMessage())
+                .build();
+
+    }
+
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDto handleConstraintViolationException(ConstraintViolationException e) {
 
         log.error("Method argument is not valid", e);
 
