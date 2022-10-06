@@ -6,7 +6,8 @@ import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
-import com.courtcanva.ccfranchise.utils.TestHelper;
+import com.courtcanva.ccfranchise.utils.FranchiseeAndStaffTestHelper;
+import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ class FranchiseeControllerTest {
     @Test
     void shouldReturnStaffAndFranchise() throws Exception {
 
-        FranchiseeAndStaffPostDto franchiseeAndStaffPostDto = TestHelper.createFranchiseeAndStaffPostDto();
+        FranchiseeAndStaffPostDto franchiseeAndStaffPostDto = FranchiseeAndStaffTestHelper.createFranchiseeAndStaffPostDto();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/signup")
                         .content(objectMapper.writeValueAsString(franchiseeAndStaffPostDto))
@@ -56,10 +57,10 @@ class FranchiseeControllerTest {
     @Test
     void shouldReturnSelectSuburbs() throws Exception {
         Long mockFranchiseeId = franchiseeController.signUpFranchiseeAndStaff(new FranchiseeAndStaffPostDto(new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "23468290381", "Melbourne", AUState.VIC, 3000), new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd"))).getFranchiseeGetDto().getFranchiseeId();
-        suburbRepository.save(TestHelper.suburb1());
-        suburbRepository.save(TestHelper.suburb2());
+        suburbRepository.save(SuburbTestHelper.suburb1());
+        suburbRepository.save(SuburbTestHelper.suburb2());
 
-        SuburbListPostDto suburbListPostDto = TestHelper.createSuburbListPostDto();
+        SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDto();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/" + mockFranchiseeId.toString() + "/service_areas")
                         .content(objectMapper.writeValueAsString(suburbListPostDto))

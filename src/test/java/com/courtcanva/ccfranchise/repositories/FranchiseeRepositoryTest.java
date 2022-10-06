@@ -1,7 +1,7 @@
 package com.courtcanva.ccfranchise.repositories;
 
 import com.courtcanva.ccfranchise.models.Franchisee;
-import com.courtcanva.ccfranchise.utils.TestHelper;
+import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ class FranchiseeRepositoryTest {
     public void shouldReturnTureWhenAbnAlreadyExist() {
 
         franchiseeRepository.save(
-                TestHelper.createFranchisee());
+                FranchiseeTestHelper.createFranchisee());
 
         assertTrue(franchiseeRepository.existsFranchiseeByAbn("12312123111"));
 
@@ -41,7 +41,7 @@ class FranchiseeRepositoryTest {
 
         Long franchiseeId = 1L;
 
-        Franchisee franchisee = TestHelper.createFranchisee();
+        Franchisee franchisee = FranchiseeTestHelper.createFranchisee();
         franchiseeRepository.save(franchisee);
 
         assertEquals(franchisee.getAbn(), Objects.requireNonNull(franchiseeRepository.findFranchiseeById(franchiseeId).orElse(null)).getAbn());

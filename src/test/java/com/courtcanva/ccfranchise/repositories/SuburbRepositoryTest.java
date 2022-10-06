@@ -1,19 +1,13 @@
 package com.courtcanva.ccfranchise.repositories;
 
-import com.courtcanva.ccfranchise.constants.AUState;
-import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
-import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
-import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
-import com.courtcanva.ccfranchise.utils.TestHelper;
+import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,14 +21,14 @@ public class SuburbRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        suburbRepository.save(TestHelper.suburb1());
-        suburbRepository.save(TestHelper.suburb2());
+        suburbRepository.save(SuburbTestHelper.suburb1());
+        suburbRepository.save(SuburbTestHelper.suburb2());
     }
 
     @Test
     public void shouldReturnSuburbListIfSuburbIsExist() {
 
-        assertEquals(12287L, suburbRepository.findBySscCodeIn(TestHelper.createSuburbListPostDto().getSuburbs()
+        assertEquals(12287L, suburbRepository.findBySscCodeIn(SuburbTestHelper.createSuburbListPostDto().getSuburbs()
                         .stream()
                         .map(SuburbPostDto::getSscCode)
                         .collect(Collectors.toList()))

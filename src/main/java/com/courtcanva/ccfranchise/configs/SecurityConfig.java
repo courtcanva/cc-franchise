@@ -4,7 +4,6 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -30,8 +29,8 @@ public class SecurityConfig {
         http.csrf().disable()
                 .cors().configurationSource(request -> {
                     var cors = new CorsConfiguration();
-                    cors.setAllowedMethods(allowedOrigins);
-                    cors.setAllowedOrigins(allowedMethods);
+                    cors.setAllowedMethods(allowedMethods);
+                    cors.setAllowedOrigins(allowedOrigins);
                     cors.setAllowedHeaders(allowedHeaders);
                     return cors;
                 })
