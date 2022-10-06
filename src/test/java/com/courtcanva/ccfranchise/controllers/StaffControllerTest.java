@@ -32,16 +32,24 @@ class StaffControllerTest {
     private StaffController staffController;
 
     @Test
-    void verifyEmail() throws Exception {
-        RequestBuilder request1 = MockMvcRequestBuilders.get("/staffs/emails/222@gmail.com");
-        RequestBuilder request2 = MockMvcRequestBuilders.get("/staffs/emails/222gmail.com");
-        mockMvc.perform(request1)
+    void shouldGetSuccessWhenEmailNotExists() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders.get("/staffs/emails/222@gmail.com");
+        mockMvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk());
-        mockMvc.perform(request2)
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 
+    @Test
+    void shouldGetBadRequestWhenEmailFormatInvalid() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders.get("/staffs/emails/222gmail.com");
+        mockMvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    void shouldGetBadRequestWhenEmailAlreadyExists() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders.get("/staffs/emails/333@gmail.com");
         when(staffService.emailExists(any())).thenThrow(new ResourceAlreadyExistException("Email already existed"));
-        mockMvc.perform(MockMvcRequestBuilders.get("/staffs/emails/333@gmail.com"))
+        mockMvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isConflict());
     }
 }

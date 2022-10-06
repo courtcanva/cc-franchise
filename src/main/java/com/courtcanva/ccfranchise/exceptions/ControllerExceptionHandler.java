@@ -29,7 +29,7 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDto handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
 
-        log.error("Method argument is not valid", e);
+        log.debug("Method argument is not valid", e);
 
         return ErrorDto.builder()
                 .errorCode(HttpStatus.BAD_REQUEST.value())
@@ -42,7 +42,7 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDto handleConstraintViolationException(ConstraintViolationException e) {
 
-        log.error("Method argument is not valid", e);
+        log.debug("Method argument is not valid", e);
 
         return ErrorDto.builder()
                 .errorCode(HttpStatus.BAD_REQUEST.value())
