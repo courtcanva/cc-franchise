@@ -7,7 +7,7 @@ import com.courtcanva.ccfranchise.mappers.SuburbMapper;
 import com.courtcanva.ccfranchise.mappers.SuburbMapperImpl;
 import com.courtcanva.ccfranchise.models.Suburb;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
-import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
+import com.courtcanva.ccfranchise.utils.TestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,8 +31,8 @@ public class SuburbServiceTest {
 
     @BeforeEach
     void setUp() {
-        suburbRepository.save(SuburbTestHelper.suburb1());
-        suburbRepository.save(SuburbTestHelper.suburb2());
+        suburbRepository.save(TestHelper.suburb1());
+        suburbRepository.save(TestHelper.suburb2());
     }
 
     @BeforeEach
@@ -46,24 +46,24 @@ public class SuburbServiceTest {
 
     @Test
     void shouldGetSuburbListDtoWhenGetAllSuburbs() {
-        List<Suburb> suburbList = SuburbTestHelper.createSuburbsListWithFranchisee();
+        List<Suburb> suburbList = TestHelper.createSuburbsListWithFranchisee();
 
         when(suburbRepository.findAll()).thenReturn(suburbList);
 
         SuburbListGetDto suburbListGetDto = suburbService.findAllSuburbs();
-        assertEquals(SuburbTestHelper.createSuburbListGetDto(), suburbListGetDto);
+        assertEquals(TestHelper.createSuburbListGetDto(), suburbListGetDto);
 
     }
 
     @Test
     void shouldReturnSuburbListWhenSuburbIsExist() {
-        List<Suburb> suburbList = SuburbTestHelper.createSuburbsListWithFranchisee();
-        SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDto();
+        List<Suburb> suburbList = TestHelper.createSuburbsListWithFranchisee();
+        SuburbListPostDto suburbListPostDto = TestHelper.createSuburbListPostDto();
 
         when(suburbRepository.findBySscCodeIn(any())).thenReturn(suburbList);
 
         List<Suburb> getSuburbList = suburbService.findSuburbBySscCodes(suburbListPostDto.getSuburbs().stream().map(SuburbPostDto::getSscCode).collect(Collectors.toList()));
 
-        assertEquals(SuburbTestHelper.createSuburbsListWithFranchisee().get(1).getSscCode(), getSuburbList.get(1).getSscCode());
+        assertEquals(TestHelper.createSuburbsListWithFranchisee().get(1).getSscCode(), getSuburbList.get(1).getSscCode());
     }
 }

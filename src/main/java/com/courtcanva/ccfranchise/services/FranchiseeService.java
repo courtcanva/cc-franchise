@@ -44,7 +44,7 @@ public class FranchiseeService {
     @Transactional
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
 
-        if (franchiseeExists(franchiseePostDto.getAbn())) {
+        if (ifFranchiseeExists(franchiseePostDto.getAbn())) {
 
             log.debug("franchisee with abn: {} already exist", franchiseePostDto.getAbn());
 
@@ -96,7 +96,7 @@ public class FranchiseeService {
     }
 
 
-    public boolean franchiseeExists(String abn) {
+    public boolean ifFranchiseeExists(String abn) {
 
         return franchiseeRepository.existsFranchiseeByAbn(abn);
 
