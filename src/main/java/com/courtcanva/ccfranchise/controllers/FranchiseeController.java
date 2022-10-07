@@ -28,5 +28,4 @@ public class FranchiseeController {
                 franchiseeAndStaffPostDto.getStaffPostDto());
 
     }
-
 }

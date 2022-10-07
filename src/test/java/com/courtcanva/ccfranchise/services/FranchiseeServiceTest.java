@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,7 +37,8 @@ class FranchiseeServiceTest {
     private StaffService staffService;
 
     private FranchiseeService franchiseeService;
-
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @BeforeEach
     public void setFranchiseeServiceUp() {
@@ -47,7 +49,8 @@ class FranchiseeServiceTest {
                 franchiseeRepository,
                 franchiseeMapper,
                 staffMapper,
-                staffService
+                staffService,
+                passwordEncoder
         );
     }
 
@@ -93,5 +96,4 @@ class FranchiseeServiceTest {
                 () -> franchiseeService.createFranchiseeAndStaff(franchiseePostDto, staffPostDto));
 
     }
-
 }
