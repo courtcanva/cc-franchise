@@ -4,6 +4,26 @@ import com.courtcanva.ccfranchise.constants.AUState;
 import com.courtcanva.ccfranchise.dtos.FranchiseeGetDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.models.Franchisee;
+import com.courtcanva.ccfranchise.models.Staff;
+
+public class TestHelper {
+
+
+    public static Staff createStaff() {
+
+        return Staff.builder()
+                .id(1232L)
+                .isVerified(false)
+                .firstName("ll")
+                .lastName("ff")
+                .password("Brfasfsad12331")
+                .state(AUState.ACT)
+                .postcode(1234)
+                .phoneNumber("123456789")
+                .email("666@gmail.com")
+                .residentialAddress("fsdfsdafa")
+                .build();
+    }
 
 import java.util.HashSet;
 import java.util.Optional;
