@@ -1,7 +1,7 @@
 package com.courtcanva.ccfranchise.controllers;
 
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
-import com.courtcanva.ccfranchise.utils.TestHelper;
+import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +28,8 @@ class SuburbControllerTest {
 
     @BeforeEach
     void setUp() {
-        suburbRepository.save(TestHelper.suburb1());
-        suburbRepository.save(TestHelper.suburb2());
+        suburbRepository.save(SuburbTestHelper.suburb1());
+        suburbRepository.save(SuburbTestHelper.suburb2());
     }
 
     @Test

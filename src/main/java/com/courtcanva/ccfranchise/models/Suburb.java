@@ -46,8 +46,4 @@ public class Suburb {
             }, mappedBy = "dutyAreas")
     private Set<Franchisee> availableFranchisees = new HashSet<>();
 
-    public Set<Franchisee> getFranchisee() {
-        return availableFranchisees;
-    }
-
 }

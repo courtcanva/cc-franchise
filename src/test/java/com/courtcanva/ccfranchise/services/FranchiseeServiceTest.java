@@ -19,7 +19,9 @@ import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Suburb;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
-import com.courtcanva.ccfranchise.utils.TestHelper;
+import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
+import com.courtcanva.ccfranchise.utils.StaffTestHelper;
+import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,9 +59,9 @@ class FranchiseeServiceTest {
 
     @BeforeEach
     void setUp() {
-        franchiseeRepository.save(TestHelper.createFranchiseeWithId());
-        suburbRepository.save(TestHelper.suburb1());
-        suburbRepository.save(TestHelper.suburb2());
+        franchiseeRepository.save(FranchiseeTestHelper.createFranchiseeWithId());
+        suburbRepository.save(SuburbTestHelper.suburb1());
+        suburbRepository.save(SuburbTestHelper.suburb2());
     }
 
     @BeforeEach
@@ -81,11 +83,11 @@ class FranchiseeServiceTest {
     @Test
     void shouldCreateStaffAndFranchiseeGetDto() {
 
-        Franchisee franchisee = TestHelper.createFranchiseeWithId();
-        StaffGetDto staffGetDto = TestHelper.createStaffGetDto();
+        Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
+        StaffGetDto staffGetDto = StaffTestHelper.createStaffGetDto();
 
-        FranchiseePostDto franchiseePostDto = TestHelper.createFranchiseePostDto();
-        StaffPostDto staffPostDto = TestHelper.createStaffPostDto();
+        FranchiseePostDto franchiseePostDto = FranchiseeTestHelper.createFranchiseePostDto();
+        StaffPostDto staffPostDto = StaffTestHelper.createStaffPostDto();
 
         when(franchiseeRepository.save(any())).thenReturn(franchisee);
         when(staffService.createStaff(any())).thenReturn(staffGetDto);
@@ -97,12 +99,12 @@ class FranchiseeServiceTest {
     @Test
     void shouldAddSuburbListGetDto() {
 
-        Franchisee franchisee = TestHelper.createFranchiseeWithId();
-        List<Suburb> suburbsListWithFranchisee = TestHelper.createSuburbsListWithFranchisee();
-        Franchisee franchiseeWithDutyAreas = TestHelper.createFranchiseeWithDutyAreas();
-        SuburbListPostDto suburbListPostDto = TestHelper.createSuburbListPostDto();
+        Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
+        List<Suburb> suburbsListWithFranchisee = SuburbTestHelper.createSuburbsListWithFranchisee();
+        Franchisee franchiseeWithDutyAreas = FranchiseeTestHelper.createFranchiseeWithDutyAreas();
+        SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDto();
 
-        Optional<Franchisee> optionalFranchisee = TestHelper.createOptionalFranchisee();
+        Optional<Franchisee> optionalFranchisee = FranchiseeTestHelper.createOptionalFranchisee();
 
         when(franchiseeRepository.findFranchiseeById(any())).thenReturn(optionalFranchisee);
         when(suburbService.findSuburbBySscCodes(any())).thenReturn(suburbsListWithFranchisee);
@@ -122,15 +124,15 @@ class FranchiseeServiceTest {
         when(franchiseeRepository.existsFranchiseeByAbn(franchiseeAbn))
                 .thenReturn(true);
 
-        assertTrue(franchiseeService.ifFranchiseeExists(franchiseeAbn));
+        assertTrue(franchiseeService.franchiseeExists(franchiseeAbn));
     }
 
     @Test
     void shouldThrowResourceAlreadyExistException() {
 
 
-        FranchiseePostDto franchiseePostDto = TestHelper.createFranchiseePostDto();
-        StaffPostDto staffPostDto = TestHelper.createStaffPostDto();
+        FranchiseePostDto franchiseePostDto = FranchiseeTestHelper.createFranchiseePostDto();
+        StaffPostDto staffPostDto = StaffTestHelper.createStaffPostDto();
 
         when(franchiseeRepository.existsFranchiseeByAbn(any()))
                 .thenReturn(true);
@@ -142,7 +144,7 @@ class FranchiseeServiceTest {
 
     @Test
     void shouldThrowResourceNotFoundExist() {
-        SuburbListPostDto suburbListPostDto = TestHelper.createSuburbListPostDto();
+        SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDto();
 
         when(franchiseeRepository.findFranchiseeById(any()))
                 .thenReturn(Optional.empty());
