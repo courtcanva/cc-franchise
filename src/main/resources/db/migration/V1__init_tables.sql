@@ -14,6 +14,8 @@ CREATE TABLE cc_employee
 );
 
 
+CREATE TYPE franchisee_status as enum ('UNVERIFIED','VERIFIED');
+
 DROP TABLE IF EXISTS franchisee CASCADE;
 
 CREATE TABLE franchisee
