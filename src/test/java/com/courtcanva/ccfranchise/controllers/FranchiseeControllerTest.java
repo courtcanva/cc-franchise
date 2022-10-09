@@ -8,7 +8,11 @@ import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
 import com.courtcanva.ccfranchise.utils.FranchiseeAndStaffTestHelper;
 import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
+import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.StaffRepository;
+import com.courtcanva.ccfranchise.utils.TestHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -31,6 +35,19 @@ class FranchiseeControllerTest {
     private ObjectMapper objectMapper;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private FranchiseeRepository franchiseeRepository;
+    @Autowired
+    private StaffRepository staffRepository;
+
+    @BeforeEach
+    public void clear(){
+
+        staffRepository.deleteAll();
+
+        franchiseeRepository.deleteAll();
+
+    }
 
     @Autowired
     private FranchiseeController franchiseeController;

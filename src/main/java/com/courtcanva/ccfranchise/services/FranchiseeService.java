@@ -18,6 +18,7 @@ import com.courtcanva.ccfranchise.models.Suburb;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +42,8 @@ public class FranchiseeService {
 
     private final SuburbMapper suburbMapper;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Transactional
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
 
@@ -55,7 +58,9 @@ public class FranchiseeService {
         Franchisee franchisee = franchiseeRepository
                 .save(franchiseeMapper.postDtoToFranchisee(franchiseePostDto));
 
+
         Staff staff = staffMapper.postDtoToStaff(staffPostDto);
+        staff.setPassword(passwordEncoder.encode(staffPostDto.getPassword()));
         staff.setFranchisee(franchisee);
 
         StaffGetDto staffGetDto = staffService.createStaff(staff);
