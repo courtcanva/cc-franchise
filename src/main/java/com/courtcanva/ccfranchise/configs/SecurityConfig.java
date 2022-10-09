@@ -34,7 +34,7 @@ public class SecurityConfig {
 
     private static final String[] AUTH_URL_WHITELIST = {
             "/franchisee/signup",
-            "/staff/signin"
+            "/suburbs"
     };
     private final SecretKey secretKey;
     private final StaffDetailService staffDetailService;
@@ -82,7 +82,6 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
-        provider.setHideUserNotFoundExceptions(false);
         provider.setUserDetailsService(staffDetailService);
         return new ProviderManager(provider);
     }
