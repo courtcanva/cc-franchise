@@ -38,6 +38,8 @@ public class FranchiseeService {
 
     private final StaffService staffService;
 
+    private final PasswordEncoder passwordEncoder;
+
     private final SuburbService suburbService;
 
     private final SuburbMapper suburbMapper;

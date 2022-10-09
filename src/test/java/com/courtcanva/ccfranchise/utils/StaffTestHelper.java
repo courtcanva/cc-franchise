@@ -13,6 +13,10 @@ public class StaffTestHelper {
                 .isVerified(false)
                 .firstName("ll")
                 .lastName("ff")
+                .password("Brfasfsad12331")
+                .state(AUState.ACT)
+                .postcode(1234)
+                .phoneNumber("123456789")
                 .email("666@gmail.com")
                 .residentialAddress("fsdfsdafa")
                 .build();

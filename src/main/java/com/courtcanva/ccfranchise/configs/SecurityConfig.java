@@ -34,7 +34,9 @@ public class SecurityConfig {
 
     private static final String[] AUTH_URL_WHITELIST = {
             "/franchisee/signup",
-            "/staff/signin"
+            "/staff/signin",
+            "/suburbs",
+            "/franchisee/1/service_areas"
     };
     private final SecretKey secretKey;
     private final StaffDetailService staffDetailService;
