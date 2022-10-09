@@ -56,7 +56,8 @@ class FranchiseeServiceTest {
 
     @Mock
     private SuburbRepository suburbRepository;
-
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @BeforeEach
     void setUp() {
@@ -64,8 +65,6 @@ class FranchiseeServiceTest {
         suburbRepository.save(SuburbTestHelper.suburb1());
         suburbRepository.save(SuburbTestHelper.suburb2());
     }
-    @Mock
-    private PasswordEncoder passwordEncoder;
 
     @BeforeEach
     public void setFranchiseeServiceUp() {
@@ -79,7 +78,6 @@ class FranchiseeServiceTest {
                 staffMapper,
                 staffService,
                 passwordEncoder,
-                staffService,
                 suburbService,
                 suburbMapper
         );

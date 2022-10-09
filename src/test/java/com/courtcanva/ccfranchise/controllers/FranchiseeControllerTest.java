@@ -5,12 +5,11 @@ import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
+import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
 import com.courtcanva.ccfranchise.utils.FranchiseeAndStaffTestHelper;
 import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
-import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
-import com.courtcanva.ccfranchise.repositories.StaffRepository;
-import com.courtcanva.ccfranchise.utils.TestHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -39,23 +39,19 @@ class FranchiseeControllerTest {
     private FranchiseeRepository franchiseeRepository;
     @Autowired
     private StaffRepository staffRepository;
+    @Autowired
+    private FranchiseeController franchiseeController;
+    @Autowired
+    private SuburbRepository suburbRepository;
 
     @BeforeEach
-    public void clear(){
+    public void clear() {
 
         staffRepository.deleteAll();
 
         franchiseeRepository.deleteAll();
 
     }
-
-    @Autowired
-    private FranchiseeController franchiseeController;
-
-
-    @Autowired
-    private SuburbRepository suburbRepository;
-
 
     @Test
     void shouldReturnStaffAndFranchise() throws Exception {
@@ -72,6 +68,7 @@ class FranchiseeControllerTest {
     }
 
     @Test
+    @WithMockUser
     void shouldReturnSelectSuburbs() throws Exception {
         Long mockFranchiseeId = franchiseeController.signUpFranchiseeAndStaff(new FranchiseeAndStaffPostDto(new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "23468290381", "Melbourne", AUState.VIC, 3000), new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd"))).getFranchiseeGetDto().getFranchiseeId();
         suburbRepository.save(SuburbTestHelper.suburb1());

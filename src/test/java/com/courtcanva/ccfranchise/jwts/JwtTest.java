@@ -3,7 +3,8 @@ package com.courtcanva.ccfranchise.jwts;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
-import com.courtcanva.ccfranchise.utils.TestHelper;
+import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
+import com.courtcanva.ccfranchise.utils.StaffTestHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,7 @@ class JwtTest {
     @Test
     public void ShouldReturnOKSuccessfullyWhenLogin() throws Exception {
         franchiseeService
-                .createFranchiseeAndStaff(TestHelper.createFranchiseePostDto(), TestHelper.createStaffPostDto());
+                .createFranchiseeAndStaff(FranchiseeTestHelper.createFranchiseePostDto(), StaffTestHelper.createStaffPostDto());
 
         UsernameAndPasswordAuthenticationRequest user
                 = new UsernameAndPasswordAuthenticationRequest();
