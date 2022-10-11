@@ -2,6 +2,8 @@ package com.courtcanva.ccfranchise.controllers;
 
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
@@ -36,6 +38,11 @@ public class FranchiseeController {
     @ResponseStatus(HttpStatus.CREATED)
     public SuburbListGetDto addDutyAreas(@RequestBody @Valid SuburbListPostDto suburbListPostDto, @PathVariable(value = "franchiseeId") Long franchiseeId) {
         return franchiseeService.addDutyAreas(suburbListPostDto, franchiseeId);
+    }
+    @PostMapping("/accept-orders")
+    @ResponseStatus(HttpStatus.CREATED)
+    public OrderListGetDto acceptOrders(@RequestBody @Valid OrderListPostDto orderListPostDto) {
+        return franchiseeService.acceptOrder(orderListPostDto);
     }
 
 }
