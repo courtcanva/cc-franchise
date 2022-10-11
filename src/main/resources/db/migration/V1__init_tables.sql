@@ -79,4 +79,3 @@ CREATE TABLE staff
     updated_at                 TIMESTAMP WITH TIME ZONE NOT NULL,
     CONSTRAINT fk_franchisee_id FOREIGN KEY (franchisee_id) REFERENCES franchisee (id)
 );
-
