@@ -8,6 +8,7 @@ import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.utils.TestHelper;
 import org.junit.jupiter.api.Assertions;
+import com.courtcanva.ccfranchise.utils.StaffTestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +41,7 @@ class StaffServiceTest {
     @Test
     void shouldCreatedStaffSuccessful() {
 
-        Staff staff = TestHelper.createStaff();
+        Staff staff = StaffTestHelper.createStaff();
 
         when(staffRepository.save(any())).thenReturn(staff);
 
