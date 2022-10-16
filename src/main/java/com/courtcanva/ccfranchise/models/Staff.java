@@ -2,6 +2,7 @@ package com.courtcanva.ccfranchise.models;
 
 import com.courtcanva.ccfranchise.constants.AUState;
 import com.courtcanva.ccfranchise.constants.BusinessRole;
+import com.courtcanva.ccfranchise.constants.StaffStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -65,10 +66,18 @@ public class Staff {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private StaffStatus status = StaffStatus.PENDING;
+
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private BusinessRole businessRole = BusinessRole.STAFF;
+
+    @Column
+    private String verificationToken;
 
     @Column(nullable = false, updatable = false, name = "created_at")
     @CreationTimestamp
