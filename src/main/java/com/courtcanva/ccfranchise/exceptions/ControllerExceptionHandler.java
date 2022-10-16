@@ -46,6 +46,15 @@ public class ControllerExceptionHandler {
 
     }
 
+    @ExceptionHandler(value = NoSuchElementException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorDto handleNoSuchElementException(NoSuchElementException ex) {
+        return ErrorDto.builder()
+                .errorCode(HttpStatus.NOT_FOUND.value())
+                .details(ex.getMessage())
+                .build();
+    }
+
     @ExceptionHandler(value = Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorDto handleAllException(Exception e) {
