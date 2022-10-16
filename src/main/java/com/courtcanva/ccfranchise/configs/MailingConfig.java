@@ -11,6 +11,10 @@ import org.springframework.context.annotation.Configuration;
 public class MailingConfig {
     @Value("${cloud-resources.aws.region}")
     private String region;
+    @Value("${cloud-resources.aws.ses.sender}")
+    private String sender;
+    @Value("${cloud-resources.aws.ses.client-side-base-url}")
+    private String clientSideBaseUrl;
     @Value("${cloud-resources.aws.ses.access-key}")
     private String accessKey;
     @Value("${cloud-resources.aws.ses.secret-key}")
