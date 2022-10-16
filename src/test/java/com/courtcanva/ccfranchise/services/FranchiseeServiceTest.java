@@ -155,4 +155,15 @@ class FranchiseeServiceTest {
 
     }
 
+    @Test
+    void selectedOrders() {
+    }
+
+    @Test
+    void acceptOrders() {
+    }
+
+    @Test
+    void findOrdersById() {
+    }
 }

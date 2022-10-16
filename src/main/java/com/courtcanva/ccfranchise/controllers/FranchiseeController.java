@@ -43,7 +43,7 @@ public class FranchiseeController {
     @PostMapping("/accept-orders")
     @ResponseStatus(HttpStatus.CREATED)
     public OrderListGetDto acceptOrders(@RequestBody @Valid OrderListPostDto orderListPostDto) {
-        return franchiseeService.acceptOrder(orderListPostDto);
+        return franchiseeService.acceptOrders(orderListPostDto);
     }
 
 }

@@ -53,8 +53,6 @@ public class FranchiseeService {
 
     private final SuburbMapper suburbMapper;
     private final OrderRepository orderRepository;
-    private final OrderMapper orderMapper;
-
 
     @Transactional
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
@@ -82,7 +80,6 @@ public class FranchiseeService {
                 .franchiseeGetDto(franchiseeMapper.franchiseeToGetDto(franchisee))
                 .build();
     }
-
 
     @Transactional
     public SuburbListGetDto addDutyAreas(SuburbListPostDto suburbListPostDto, Long franchiseeId) {
@@ -125,25 +122,34 @@ public class FranchiseeService {
 
     }
 
-    public OrderListGetDto acceptOrder(OrderListPostDto orderListPostDto) {
+    public List<Order> selectedOrders(OrderListPostDto orderListPostDto){
+
         List<Order> acceptedOrders = findOrdersById(
                 orderListPostDto.getOrders()
                         .stream().map(OrderPostDto::getId)
                         .collect(Collectors.toList()));
+
         if (acceptedOrders.size() == 0) {
+
             throw new SelectNullOrder("You have not select any order.");
         }
-        List<Order> orders = acceptedOrders
+
+        return acceptedOrders;
+    }
+
+    public OrderListGetDto acceptOrders(OrderListPostDto orderListPostDto) {
+
+        List<Order> orders = selectedOrders(orderListPostDto)
                 .stream()
-                .peek(order -> order.setStatus("assia"))
-                .collect(Collectors.toList());
-        List<Order> updatedOrders = orderRepository.saveAll(orders);
-        List<OrderGetDto> orderGetDto = updatedOrders
-                .stream()
-                .map(order -> new OrderGetDto(order.getStatus()))
+                .peek(order -> order.setStatus("ASSIGNED"))
                 .collect(Collectors.toList());
 
-        return new OrderListGetDto(orderGetDto);
+        return OrderListGetDto.builder()
+                .orders(orderRepository.saveAll(orders)
+                .stream()
+                .map(order -> new OrderGetDto(order.getStatus()))
+                .collect(Collectors.toList())).build();
+
     }
 
     public List<Order> findOrdersById(List<Long> id) {

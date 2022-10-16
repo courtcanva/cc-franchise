@@ -14,9 +14,4 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 public class OrderGetDto {
     private String status;
-//    private OffsetDateTime createdTime;
-//    private String customerId;
-//    private String contactInformation;
-//    private String postcode;
-//    private BigDecimal totalAmount;
 }

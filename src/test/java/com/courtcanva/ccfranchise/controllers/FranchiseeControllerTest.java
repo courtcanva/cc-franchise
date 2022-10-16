@@ -85,4 +85,8 @@ class FranchiseeControllerTest {
                 .andExpect(jsonPath("$.suburbs[1].sscCode").value(12287L));
 
     }
+
+    @Test
+    void acceptOrders() {
+    }
 }

@@ -36,7 +36,6 @@ public class SecurityConfig {
             "/franchisee/signup",
             "/suburbs",
             "/actuator/health",
-            "/franchisee/accept-orders"
     };
     private final SecretKey secretKey;
     private final StaffDetailService staffDetailService;
