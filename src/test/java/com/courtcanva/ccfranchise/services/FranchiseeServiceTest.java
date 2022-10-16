@@ -72,7 +72,7 @@ class FranchiseeServiceTest {
         FranchiseeMapper franchiseeMapper = new FranchiseeMapperImpl();
         StaffMapper staffMapper = new StaffMapperImpl();
         SuburbMapper suburbMapper = new SuburbMapperImpl();
-        franchiseeService = new FranchiseeService(
+       /* franchiseeService = new FranchiseeService(
                 franchiseeRepository,
                 franchiseeMapper,
                 staffMapper,
@@ -80,7 +80,7 @@ class FranchiseeServiceTest {
                 passwordEncoder,
                 suburbService,
                 suburbMapper
-        );
+        );*/
     }
 
     @Test

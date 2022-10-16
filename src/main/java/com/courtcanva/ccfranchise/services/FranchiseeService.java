@@ -4,20 +4,26 @@ import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
+import com.courtcanva.ccfranchise.exceptions.SelectNullOrder;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
+import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.mappers.SuburbMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
+import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.models.Suburb;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,12 +46,15 @@ public class FranchiseeService {
 
     private final StaffService staffService;
 
+
     private final PasswordEncoder passwordEncoder;
 
     private final SuburbService suburbService;
 
     private final SuburbMapper suburbMapper;
-    
+    private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
+
 
     @Transactional
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
@@ -116,9 +125,30 @@ public class FranchiseeService {
 
     }
 
-    public OrderListGetDto acceptOrder(OrderListPostDto orderListPostDto){
-        return ;
+    public OrderListGetDto acceptOrder(OrderListPostDto orderListPostDto) {
+        List<Order> acceptedOrders = findOrdersById(
+                orderListPostDto.getOrders()
+                        .stream().map(OrderPostDto::getId)
+                        .collect(Collectors.toList()));
+        if (acceptedOrders.size() == 0) {
+            throw new SelectNullOrder("You have not select any order.");
+        }
+        List<Order> orders = acceptedOrders
+                .stream()
+                .peek(order -> order.setStatus("assia"))
+                .collect(Collectors.toList());
+        List<Order> updatedOrders = orderRepository.saveAll(orders);
+        List<OrderGetDto> orderGetDto = updatedOrders
+                .stream()
+                .map(order -> new OrderGetDto(order.getStatus()))
+                .collect(Collectors.toList());
+
+        return new OrderListGetDto(orderGetDto);
     }
 
+    public List<Order> findOrdersById(List<Long> id) {
+
+        return orderRepository.findAllById(id);
+    }
 
 }

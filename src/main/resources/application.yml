@@ -1,12 +1,12 @@
 server:
-  port: 8080
+  port: 8000
   servlet:
     context-path: /api/v1
 
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=franchise
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=franchise&stringtype=unspecified
     username: postgres
     password: admin
   flyway:

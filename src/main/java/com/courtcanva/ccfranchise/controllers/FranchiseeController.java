@@ -36,7 +36,8 @@ public class FranchiseeController {
 
     @PostMapping("/{franchiseeId}/service_areas")
     @ResponseStatus(HttpStatus.CREATED)
-    public SuburbListGetDto addDutyAreas(@RequestBody @Valid SuburbListPostDto suburbListPostDto, @PathVariable(value = "franchiseeId") Long franchiseeId) {
+    public SuburbListGetDto addDutyAreas(@RequestBody @Valid SuburbListPostDto suburbListPostDto,
+                                         @PathVariable(value = "franchiseeId") Long franchiseeId) {
         return franchiseeService.addDutyAreas(suburbListPostDto, franchiseeId);
     }
     @PostMapping("/accept-orders")
