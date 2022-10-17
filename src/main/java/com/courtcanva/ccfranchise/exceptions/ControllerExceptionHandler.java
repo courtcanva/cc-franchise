@@ -55,6 +55,16 @@ public class ControllerExceptionHandler {
                 .build();
     }
 
+    @ExceptionHandler(value = MailingClientException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorDto handleMailingClientException(MailingClientException ex) {
+        log.error(ex.getMessage());
+        return ErrorDto.builder()
+                .errorCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .details(ex.getMessage())
+                .build();
+    }
+
     @ExceptionHandler(value = Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorDto handleAllException(Exception e) {
