@@ -67,6 +67,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
                 grantedAuthorities
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        authentication.getDetails();
 
         filterChain.doFilter(request, response);
 
