@@ -4,11 +4,14 @@ import com.courtcanva.ccfranchise.constants.AUState;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
 import com.courtcanva.ccfranchise.utils.FranchiseeAndStaffTestHelper;
+import com.courtcanva.ccfranchise.utils.OrderTestHelper;
 import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +46,8 @@ class FranchiseeControllerTest {
     private FranchiseeController franchiseeController;
     @Autowired
     private SuburbRepository suburbRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
     @BeforeEach
     public void clear() {
@@ -52,6 +57,11 @@ class FranchiseeControllerTest {
         franchiseeRepository.deleteAll();
 
     }
+//    @BeforeEach
+//    public void setUp() {
+//
+//        orderRepository.save(OrderTestHelper.Order1());
+//    }
 
     @Test
     void shouldReturnStaffAndFranchise() throws Exception {
@@ -87,6 +97,16 @@ class FranchiseeControllerTest {
     }
 
     @Test
-    void acceptOrders() {
+    void shouldReturnAcceptOrders() throws Exception{
+        orderRepository.save(OrderTestHelper.Order1());
+        OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/accept-orders")
+                .content(objectMapper.writeValueAsString(orderListPostDto))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+//                .andExpect(jsonPath("$.orders[0].status")
+//                        .value("ASSIGNED"));
+
     }
 }

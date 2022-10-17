@@ -45,7 +45,6 @@ public class FranchiseeService {
 
     private final StaffService staffService;
 
-
     private final PasswordEncoder passwordEncoder;
 
     private final SuburbService suburbService;
@@ -123,7 +122,7 @@ public class FranchiseeService {
 
     public List<Order> selectedOrders(OrderListPostDto orderListPostDto){
 
-        List<Order> acceptedOrders = findOrdersById(
+        List<Order> acceptedOrders = orderRepository.findAllById(
                 orderListPostDto.getOrders()
                         .stream().map(OrderPostDto::getId)
                         .collect(Collectors.toList()));
@@ -146,14 +145,7 @@ public class FranchiseeService {
         return OrderListGetDto.builder()
                 .orders(orderRepository.saveAll(orders)
                 .stream()
-                .map(order -> new OrderGetDto(order.getStatus()))
+                .map(order -> new OrderGetDto(order.getId(),order.getOrderId(),order.getStatus(),order.getContactInformation()))
                 .collect(Collectors.toList())).build();
-
     }
-
-    public List<Order> findOrdersById(List<Long> id) {
-
-        return orderRepository.findAllById(id);
-    }
-
 }

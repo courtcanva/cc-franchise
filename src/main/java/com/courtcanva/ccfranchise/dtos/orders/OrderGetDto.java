@@ -10,5 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderGetDto {
+    private Long id;
+    private String orderId;
     private String status;
+    private String contactInformation;
+
 }
