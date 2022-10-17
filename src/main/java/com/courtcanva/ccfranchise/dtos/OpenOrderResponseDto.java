@@ -11,16 +11,14 @@ import java.time.OffsetDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OpenOrderDto {
-    // private Long orderId;
+public class OpenOrderResponseDto {
+
     private OffsetDateTime createdTime;
 
     private String customerId;
-    // TODO: 10/8/22 get customerName from customer table
 
     private String contactInformation;
-    // TODO: 10/8/22 get address from customer table
-    // TODO: 10/8/22 get phone from customer table
+    // TODO: <future function> get customerName, address, phone no. from final database (cc-admin repository).
 
     private String postcode;
 

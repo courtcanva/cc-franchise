@@ -40,7 +40,6 @@ public class Order {
 
     @Column(nullable = false)
     private String contactInformation;
-    // TODO: 10/6/22 jsonb to entity class contactInformation,not String, it depends on format of jsonb
 
     @Column(nullable = false)
     private String designInformation;

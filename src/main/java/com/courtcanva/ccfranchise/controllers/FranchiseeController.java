@@ -3,7 +3,7 @@ package com.courtcanva.ccfranchise.controllers;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 import com.courtcanva.ccfranchise.dtos.IdDto;
-import com.courtcanva.ccfranchise.dtos.OpenOrderDto;
+import com.courtcanva.ccfranchise.dtos.OpenOrderResponseDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
@@ -41,10 +41,10 @@ public class FranchiseeController {
         return franchiseeService.addDutyAreas(suburbListPostDto, franchiseeId);
     }
 
+    // TODO: <future function> use Spring Security to check if user is logged in
     @PostMapping("/my/orders/open")
-    public List<OpenOrderDto> getOpenOrders(@RequestBody IdDto dto){
+    public List<OpenOrderResponseDto> getOpenOrders(@RequestBody IdDto dto){
         System.out.println("id = " + dto.getId());
-        // TODO: frontend send token instead of idDto to backend.
         return franchiseeService.getOpenOrders(dto.getId());
     }
 

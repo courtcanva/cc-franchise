@@ -2,7 +2,7 @@ package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
-import com.courtcanva.ccfranchise.dtos.OpenOrderDto;
+import com.courtcanva.ccfranchise.dtos.OpenOrderResponseDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
@@ -29,8 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -124,18 +122,15 @@ public class FranchiseeService {
     }
 
 
-    public List<OpenOrderDto> getOpenOrders(Long id) {
+    public List<OpenOrderResponseDto> getOpenOrders(Long id) {
         Optional<Franchisee> franchiseeFromDatabase = franchiseeRepository.findById(id);
-        if (franchiseeFromDatabase.isEmpty()) {
-            throw new NoAvailableOrderException("no available orders because of invalid franchisee");
-        }
-        Franchisee franchisee = franchiseeFromDatabase.orElse(null);
+        Franchisee franchisee = franchiseeFromDatabase.orElseThrow(() -> new NoAvailableOrderException("no available orders because of invalid franchisee"));
 
-        List<Order> all = orderRepository.findFirst10ByFranchiseeId(franchisee.getId());
-        if (all.size() == 0) {
+        List<Order> ordersFirst10 = orderRepository.findFirst10ByFranchiseeId(franchisee.getId());
+        if (ordersFirst10.size() == 0) {
             throw new NoAvailableOrderException("no available orders");
         }
-            return all.stream().map(orderDisplayMapper::orderToDto).toList();
+            return ordersFirst10.stream().map(orderDisplayMapper::orderToDto).toList();
 
     }
 }
