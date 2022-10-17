@@ -25,6 +25,8 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     private static final String BEARER = "Bearer ";
     private static final String AUTHORITIES = "authorities";
     private static final String STAFF_ID = "StaffId";
+
+    public static final  String FRANCHISEE_ID = "FranchiseeId";
     private final AuthenticationManager authenticationManager;
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
@@ -62,6 +64,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                 .setSubject(authResult.getName())
                 .claim(AUTHORITIES, authResult.getAuthorities())
                 .claim(STAFF_ID, ((StaffDetail) authResult.getPrincipal()).getId())
+                .claim(FRANCHISEE_ID,((StaffDetail) authResult.getPrincipal()).getFranchiseeId())
                 .setIssuedAt(new Date())
                 .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(1)))
                 .signWith(secretKey)
