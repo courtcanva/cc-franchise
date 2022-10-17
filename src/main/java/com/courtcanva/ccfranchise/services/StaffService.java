@@ -29,8 +29,9 @@ public class StaffService {
     }
 
     public void sendVerificationEmail(Long id) {
-        Staff staff = staffRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Cannot find staff with given id"));
-        log.info("Found requested staff to send verificaiton email to, generating verification token...");
+        Staff staff = staffRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Cannot find staff with given id"));
+        log.info("Found requested staff to send verification email to, generating verification token...");
 
         String verificationToken = randomGenerator.string(32);
         staff.setVerificationToken(verificationToken);
