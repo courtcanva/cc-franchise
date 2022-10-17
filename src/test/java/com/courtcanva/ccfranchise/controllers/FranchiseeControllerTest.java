@@ -57,11 +57,6 @@ class FranchiseeControllerTest {
         franchiseeRepository.deleteAll();
 
     }
-//    @BeforeEach
-//    public void setUp() {
-//
-//        orderRepository.save(OrderTestHelper.Order1());
-//    }
 
     @Test
     void shouldReturnStaffAndFranchise() throws Exception {
