@@ -41,8 +41,10 @@ public class StaffService {
     }
 
     public void verifyEmail(Long id, String verificationToken) {
-        Staff staff = staffRepository.findByIdAndVerificationToken(id, verificationToken).orElseThrow(() -> new NoSuchElementException("Cannot find staff with given id or verification token"));
+        Staff staff = staffRepository.findByIdAndVerificationToken(id, verificationToken)
+                .orElseThrow(() -> new NoSuchElementException("Cannot find staff with given id or verification token"));
         staff.setStatus(StaffStatus.VERIFIED);
+        staffRepository.save(staff);
         log.info("Staff verified.");
     }
 }
