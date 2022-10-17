@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -19,6 +21,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 
 @Entity
 @Setter
@@ -27,6 +30,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "order")
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,10 +42,12 @@ public class Order {
     @Column(nullable = false)
     private String customerId;
 
-    @Column(nullable = false)
+    @Type(type = "jsonb")
+    @Column(nullable = false, columnDefinition = "jsonb")
     private String contactInformation;
 
-    @Column(nullable = false)
+    @Type(type = "jsonb")
+    @Column(nullable = false, columnDefinition = "jsonb")
     private String designInformation;
 
     @Column(nullable = false)

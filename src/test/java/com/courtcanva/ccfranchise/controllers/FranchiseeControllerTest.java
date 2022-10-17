@@ -57,10 +57,10 @@ class FranchiseeControllerTest {
 
     @BeforeEach
     public void clear() {
-
+        orderRepository.deleteAll();
         staffRepository.deleteAll();
-
         franchiseeRepository.deleteAll();
+
 
     }
 
@@ -105,9 +105,9 @@ class FranchiseeControllerTest {
                 new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd")))
                                     .getFranchiseeGetDto().getFranchiseeId();
         // 得到IdDto   id -> IdDto
+        IdDto idDto = OpenOrderTestHelper.createIdDto(mockFranchiseeId);
         // 得到franchisee对象
         List<Franchisee> franchisees = franchiseeRepository.findAll();
-        IdDto idDto = OpenOrderTestHelper.createIdDto(mockFranchiseeId);
         // 2.新建几个open order
         Order order = Order.builder()
                           .orderId("101")
@@ -130,14 +130,12 @@ class FranchiseeControllerTest {
 
         // 需要一个OpenOrderTestHelper
 
-
-
         // 3.mock post请求, response 这个list
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/my/orders/open")
                             .content(objectMapper.writeValueAsString(idDto))
                             .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
             .andDo(MockMvcResultHandlers.print())
+            .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].customerId").value("xxx"))
             .andExpect(jsonPath("$[0].postcode").value("xxx"))
             .andExpect(jsonPath("$[0].totalAmount").value("xxx"));
