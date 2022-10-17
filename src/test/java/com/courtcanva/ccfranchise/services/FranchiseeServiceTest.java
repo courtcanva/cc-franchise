@@ -28,6 +28,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -162,18 +163,18 @@ class FranchiseeServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> franchiseeService.addDutyAreas(suburbListPostDto, 6L));
 
     }
-//    @Test
-//    void shouldThrowNotSelectOrder(){
-//        OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
-//        when(orderRepository.findAllById(any()))
-//                .thenReturn(empty());
-//        assertThrows(SelectNullOrder.class,
-//                () -> franchiseeService.selectedOrders(orderListPostDto));
-//    }
+    @Test
+    void shouldThrowNotSelectOrder(){
+        OrderListPostDto orderListPostDto = OrderTestHelper.createEmptyOrderListPostDto();
+        when(orderRepository.findAllById(any()))
+                .thenReturn(new ArrayList<>());
+        assertThrows(SelectNullOrder.class,
+                () -> franchiseeService.selectedOrders(orderListPostDto));
+    }
 
     @Test
     void shouldThrowAcceptOrders() {
-        OrderListPostDto orderListPostDto = OrderTestHelper.createEmptyOrderListPostDto();
+        OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
     }
 
     @Test

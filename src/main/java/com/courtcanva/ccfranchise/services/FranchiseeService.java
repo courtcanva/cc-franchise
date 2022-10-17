@@ -120,21 +120,7 @@ public class FranchiseeService {
 
     }
 
-    public List<Order> selectedOrders(OrderListPostDto orderListPostDto){
-
-        List<Order> acceptedOrders = orderRepository.findAllById(
-                orderListPostDto.getOrders()
-                        .stream().map(OrderPostDto::getId)
-                        .collect(Collectors.toList()));
-
-        if (acceptedOrders.size() == 0) {
-
-            throw new SelectNullOrder("You have not select any order.");
-        }
-
-        return acceptedOrders;
-    }
-
+    @Transactional
     public OrderListGetDto acceptOrders(OrderListPostDto orderListPostDto) {
 
         List<Order> orders = selectedOrders(orderListPostDto)
@@ -147,5 +133,20 @@ public class FranchiseeService {
                 .stream()
                 .map(order -> new OrderGetDto(order.getId(),order.getOrderId(),order.getStatus(),order.getContactInformation()))
                 .collect(Collectors.toList())).build();
+    }
+
+    public List<Order> selectedOrders(OrderListPostDto orderListPostDto){
+
+        List<Order> Orders = orderRepository.findAllById(
+                orderListPostDto.getOrders()
+                        .stream().map(OrderPostDto::getId)
+                        .collect(Collectors.toList()));
+
+        if (Orders.size() == 0) {
+
+            throw new SelectNullOrder("You have not select any order.");
+        }
+
+        return Orders;
     }
 }

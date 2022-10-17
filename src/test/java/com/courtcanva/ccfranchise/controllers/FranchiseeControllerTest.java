@@ -97,16 +97,16 @@ class FranchiseeControllerTest {
     }
 
     @Test
-    void shouldReturnAcceptOrders() throws Exception{
+    void shouldReturnAcceptOrders() throws Exception {
         orderRepository.save(OrderTestHelper.Order1());
         OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/accept-orders")
-                .content(objectMapper.writeValueAsString(orderListPostDto))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
-//                .andExpect(jsonPath("$.orders[0].status")
-//                        .value("ASSIGNED"));
+                        .content(objectMapper.writeValueAsString(orderListPostDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.orders[0].status")
+                        .value("ASSIGNED"));
 
     }
 }
