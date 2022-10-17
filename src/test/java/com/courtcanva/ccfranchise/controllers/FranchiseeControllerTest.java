@@ -3,12 +3,17 @@ package com.courtcanva.ccfranchise.controllers;
 import com.courtcanva.ccfranchise.constants.AUState;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
+import com.courtcanva.ccfranchise.dtos.IdDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
+import com.courtcanva.ccfranchise.models.Franchisee;
+import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
 import com.courtcanva.ccfranchise.utils.FranchiseeAndStaffTestHelper;
+import com.courtcanva.ccfranchise.utils.OpenOrderTestHelper;
 import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +30,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -43,6 +51,9 @@ class FranchiseeControllerTest {
     private FranchiseeController franchiseeController;
     @Autowired
     private SuburbRepository suburbRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     @BeforeEach
     public void clear() {
@@ -85,4 +96,58 @@ class FranchiseeControllerTest {
                 .andExpect(jsonPath("$.suburbs[1].sscCode").value(12287L));
 
     }
+
+    @Test
+    void test() throws Exception {
+        // 1. 新建franchisee和staff
+        Long mockFranchiseeId = franchiseeController.signUpFranchiseeAndStaff(new FranchiseeAndStaffPostDto(
+                new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "23468290381", "Melbourne", AUState.VIC, 3000),
+                new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd")))
+                                    .getFranchiseeGetDto().getFranchiseeId();
+        // 得到IdDto   id -> IdDto
+        // 得到franchisee对象
+        List<Franchisee> franchisees = franchiseeRepository.findAll();
+        IdDto idDto = OpenOrderTestHelper.createIdDto(mockFranchiseeId);
+        // 2.新建几个open order
+        Order order = Order.builder()
+                          .orderId("101")
+                          .customerId("101")
+                          .contactInformation("""
+                              {"name": "Adam", "phone": "0404123456", "address": "Unit 1, 10 Queen Street, Richmond 3121"}""")
+                          .designInformation("""
+                              {"name": "draft version 1"}""")
+                          .postcode("3000")
+                          .totalAmount(new BigDecimal(3000L))
+                          .paidAmount(new BigDecimal(1000L))
+                          .unpaidAmount(new BigDecimal(2000L))
+                          .status("UNASSIGNED")
+                          .franchisee(franchisees.get(0))
+                          .invoiceLink("http://link.co")
+                          .build();
+
+
+        orderRepository.save(order);
+
+        // 需要一个OpenOrderTestHelper
+
+
+
+        // 3.mock post请求, response 这个list
+        mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/my/orders/open")
+                            .content(objectMapper.writeValueAsString(idDto))
+                            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(jsonPath("$[0].customerId").value("xxx"))
+            .andExpect(jsonPath("$[0].postcode").value("xxx"))
+            .andExpect(jsonPath("$[0].totalAmount").value("xxx"));
+
+
+
+
+    }
+
+
+
+
 }
