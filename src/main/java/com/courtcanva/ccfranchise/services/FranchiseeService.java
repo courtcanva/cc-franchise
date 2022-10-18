@@ -124,9 +124,10 @@ public class FranchiseeService {
 
     @Transactional
     public OrderListGetDto acceptOrders(OrderListPostDto orderListPostDto) {
-        List<Order> selectedOrders = orderRepository.findAllById(
+        List<Order> selectedOrders = orderRepository.findByIdIn(
                 orderListPostDto.getOrders()
-                        .stream().map(OrderPostDto::getId)
+                        .stream()
+                        .map(OrderPostDto::getId)
                         .collect(Collectors.toList()));
 
         if (selectedOrders.size() == 0) {
@@ -138,26 +139,13 @@ public class FranchiseeService {
                 .stream()
                 .peek(order -> order.setStatus("ASSIGNED"))
                 .collect(Collectors.toList());
-
+        List<Order> orderList = orderRepository.saveAll(orders);
         return OrderListGetDto.builder()
-                .orders(orderRepository.saveAll(orders)
-                .stream()
-                .map(orderMapper::orderToGetDto)
-                .collect(Collectors.toList())).build();
+                .orders(orderList
+                        .stream()
+                        .map(order -> {
+                            return new OrderGetDto(order.getId(), order.getOrderId(), order.getStatus(), order.getContactInformation());
+                        })
+                        .collect(Collectors.toList())).build();
     }
-
-//    public List<Order> selectedOrders(OrderListPostDto orderListPostDto){
-//
-//        List<Order> selectedOrders = orderRepository.findAllById(
-//                orderListPostDto.getOrders()
-//                        .stream().map(OrderPostDto::getId)
-//                        .collect(Collectors.toList()));
-//
-//        if (selectedOrders.size() == 0) {
-//
-//            throw new SelectNullOrder("You have not select any order.");
-//        }
-//
-//        return Orders;
-//    }
 }

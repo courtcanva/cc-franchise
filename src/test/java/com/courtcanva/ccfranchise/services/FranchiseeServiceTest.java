@@ -112,8 +112,8 @@ class FranchiseeServiceTest {
         orderRepository.save(OrderTestHelper.Order1());
         orderRepository.save(OrderTestHelper.Order2());
         OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
-        when(orderRepository.findAllById(any())).thenReturn(orders);
-        when(orderRepository.save(any())).thenReturn(acceptedOrders);
+        when(orderRepository.findByIdIn(any())).thenReturn(orders);
+        when(orderRepository.saveAll(any())).thenReturn(acceptedOrders);
         OrderListGetDto orderListGetDto=franchiseeService.acceptOrders(orderListPostDto);
         assertEquals("ASSIGNED",orderListGetDto.getOrders().get(0).getStatus());
     }

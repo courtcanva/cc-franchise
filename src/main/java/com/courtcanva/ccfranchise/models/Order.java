@@ -1,12 +1,27 @@
 package com.courtcanva.ccfranchise.models;
 
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 
 @Entity
 @Setter
@@ -14,9 +29,9 @@ import java.time.OffsetDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "`order`")
+@Table(name = "order")
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,10 +42,12 @@ public class Order {
     @Column(nullable = false)
     private String customerId;
 
-    @Column(nullable = false)
+    @Type(type = "jsonb")
+    @Column(nullable = false, columnDefinition = "jsonb")
     private String contactInformation;
 
-    @Column(nullable = false)
+    @Type(type = "jsonb")
+    @Column(nullable = false, columnDefinition = "jsonb")
     private String designInformation;
 
     @Column(nullable = false)
@@ -56,8 +73,8 @@ public class Order {
     @UpdateTimestamp
     private OffsetDateTime updatedTime;
 
-    @JoinColumn(name = "franchisee_id")
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "franchisee_id")
     private Franchisee franchisee;
 
     @Column
