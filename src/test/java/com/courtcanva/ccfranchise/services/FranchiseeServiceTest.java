@@ -105,7 +105,6 @@ class FranchiseeServiceTest {
     void shouldThrowSelectedOrders() {
         OrderListPostDto orderListPostDto = OrderTestHelper.createEmptyOrderListPostDto();
 
-
     }
 
     @Test
@@ -175,11 +174,7 @@ class FranchiseeServiceTest {
     @Test
     void shouldThrowAcceptOrders() {
         OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
-    }
 
-    @Test
-    void shouldThrowOrdersFindById() {
-        OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
 
     }
 }
