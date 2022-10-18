@@ -14,12 +14,12 @@ import static com.courtcanva.ccfranchise.jwts.JwtUsernameAndPasswordAuthenticati
 @Slf4j
 public class Guard {
 
-    public boolean checkFranchiseeAccess(Authentication authentication, Long franchiseeId){
-        return ifNotAnonymousAuthentication(authentication) && ifStaffBelongsToFranchisee(authentication,franchiseeId);
+    public boolean checkFranchiseeAccess(Authentication authentication, Long franchiseeId) {
+        return ifNotAnonymousAuthentication(authentication) && ifStaffBelongsToFranchisee(authentication, franchiseeId);
     }
 
-    private boolean ifNotAnonymousAuthentication(Authentication authentication){
-        if(authentication.getPrincipal().equals("anonymousUser")){
+    private boolean ifNotAnonymousAuthentication(Authentication authentication) {
+        if (authentication.getPrincipal().equals("anonymousUser")) {
             log.debug("Anonymous user, access denied");
             return false;
         }
@@ -27,10 +27,10 @@ public class Guard {
 
     }
 
-    private boolean ifStaffBelongsToFranchisee(Authentication authentication, Long franchiseeId){
-        Map<String,Long> details = (Map<String, Long>) authentication.getDetails();
+    private boolean ifStaffBelongsToFranchisee(Authentication authentication, Long franchiseeId) {
+        Map<String, Long> details = (Map<String, Long>) authentication.getDetails();
         Long franchiseeIds = details.get(FRANCHISEE_ID);
-        if(!franchiseeIds.equals(franchiseeId)){
+        if (!franchiseeIds.equals(franchiseeId)) {
             log.debug("Franchisee is not valid, access denied");
             return false;
         }

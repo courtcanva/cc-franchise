@@ -62,7 +62,7 @@ public class StaffDetail implements UserDetails {
         return id;
     }
 
-    public Long getFranchiseeId(){
+    public Long getFranchiseeId() {
         return franchiseeId;
     }
 
