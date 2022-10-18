@@ -5,6 +5,7 @@ import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
@@ -13,6 +14,7 @@ import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.exceptions.SelectNullOrder;
 import com.courtcanva.ccfranchise.mappers.*;
 import com.courtcanva.ccfranchise.models.Franchisee;
+import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.models.Suburb;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
@@ -59,6 +61,8 @@ class FranchiseeServiceTest {
     private PasswordEncoder passwordEncoder;
     @Mock
     private OrderRepository orderRepository;
+    @Mock
+    private OrderMapper orderMapper;
 
     @BeforeEach
     void setUp() {
@@ -81,7 +85,8 @@ class FranchiseeServiceTest {
                 passwordEncoder,
                 suburbService,
                 suburbMapper,
-                orderRepository
+                orderRepository,
+                orderMapper
         );
     }
 
@@ -100,12 +105,17 @@ class FranchiseeServiceTest {
         FranchiseeAndStaffDto franchiseeAndStaffDto = franchiseeService.createFranchiseeAndStaff(franchiseePostDto, staffPostDto);
         assertEquals(1234L, franchiseeAndStaffDto.getFranchiseeGetDto().getFranchiseeId());
     }
-
     @Test
-    void shouldThrowSelectedOrders() {
+    void shouldThrowOrderListGetDto() {
+        List<Order> orders=OrderTestHelper.OrderList();
+        List<Order> acceptedOrders=OrderTestHelper.AcceptedOrderList();
+        orderRepository.save(OrderTestHelper.Order1());
+        orderRepository.save(OrderTestHelper.Order2());
         OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
-
-
+        when(orderRepository.findAllById(any())).thenReturn(orders);
+        when(orderRepository.save(any())).thenReturn(acceptedOrders);
+        OrderListGetDto orderListGetDto=franchiseeService.acceptOrders(orderListPostDto);
+        assertEquals("ASSIGNED",orderListGetDto.getOrders().get(0).getStatus());
     }
 
     @Test
@@ -169,12 +179,7 @@ class FranchiseeServiceTest {
         when(orderRepository.findAllById(any()))
                 .thenReturn(new ArrayList<>());
         assertThrows(SelectNullOrder.class,
-                () -> franchiseeService.selectedOrders(orderListPostDto));
+                () -> franchiseeService.acceptOrders(orderListPostDto));
     }
 
-    @Test
-    void shouldThrowAcceptOrders() {
-        OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
-
-    }
 }

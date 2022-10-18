@@ -15,6 +15,7 @@ import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.exceptions.SelectNullOrder;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
+import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.mappers.SuburbMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
@@ -51,6 +52,7 @@ public class FranchiseeService {
 
     private final SuburbMapper suburbMapper;
     private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
 
     @Transactional
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
@@ -122,8 +124,17 @@ public class FranchiseeService {
 
     @Transactional
     public OrderListGetDto acceptOrders(OrderListPostDto orderListPostDto) {
+        List<Order> selectedOrders = orderRepository.findAllById(
+                orderListPostDto.getOrders()
+                        .stream().map(OrderPostDto::getId)
+                        .collect(Collectors.toList()));
 
-        List<Order> orders = selectedOrders(orderListPostDto)
+        if (selectedOrders.size() == 0) {
+
+            throw new SelectNullOrder("You have not select any order.");
+        }
+
+        List<Order> orders = selectedOrders
                 .stream()
                 .peek(order -> order.setStatus("ASSIGNED"))
                 .collect(Collectors.toList());
@@ -131,22 +142,22 @@ public class FranchiseeService {
         return OrderListGetDto.builder()
                 .orders(orderRepository.saveAll(orders)
                 .stream()
-                .map(order -> new OrderGetDto(order.getId(),order.getOrderId(),order.getStatus(),order.getContactInformation()))
+                .map(orderMapper::orderToGetDto)
                 .collect(Collectors.toList())).build();
     }
 
-    public List<Order> selectedOrders(OrderListPostDto orderListPostDto){
-
-        List<Order> Orders = orderRepository.findAllById(
-                orderListPostDto.getOrders()
-                        .stream().map(OrderPostDto::getId)
-                        .collect(Collectors.toList()));
-
-        if (Orders.size() == 0) {
-
-            throw new SelectNullOrder("You have not select any order.");
-        }
-
-        return Orders;
-    }
+//    public List<Order> selectedOrders(OrderListPostDto orderListPostDto){
+//
+//        List<Order> selectedOrders = orderRepository.findAllById(
+//                orderListPostDto.getOrders()
+//                        .stream().map(OrderPostDto::getId)
+//                        .collect(Collectors.toList()));
+//
+//        if (selectedOrders.size() == 0) {
+//
+//            throw new SelectNullOrder("You have not select any order.");
+//        }
+//
+//        return Orders;
+//    }
 }
