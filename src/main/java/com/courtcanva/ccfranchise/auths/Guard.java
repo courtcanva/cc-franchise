@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.courtcanva.ccfranchise.jwts.JwtUsernameAndPasswordAuthenticationFilter.FRANCHISEE_ID;
 

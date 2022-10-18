@@ -22,7 +22,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 
 import javax.crypto.SecretKey;
-import java.util.Arrays;
 import java.util.List;
 
 @Setter
@@ -44,7 +43,6 @@ public class SecurityConfig {
     private List<String> allowedOrigins;
     private List<String> allowedMethods;
     private List<String> allowedHeaders;
-
     private List<String> exposedHeaders;
 
     @Bean
