@@ -1,10 +1,18 @@
 package com.courtcanva.ccfranchise.controllers;
 
+import com.courtcanva.ccfranchise.dtos.StaffVerifyEmailPostDto;
 import com.courtcanva.ccfranchise.services.StaffService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @Slf4j
 @RestController
@@ -23,8 +31,8 @@ public class StaffController {
 
     @PostMapping("/verify-email")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void verifyEmail(@RequestParam Long id, @RequestParam String token) {
+    public void verifyEmail(@RequestBody @Valid StaffVerifyEmailPostDto staffVerifyEmailPostDto) {
         log.info("Received request to verify email of staff.");
-        staffService.verifyEmail(id, token);
+        staffService.verifyEmail(staffVerifyEmailPostDto);
     }
 }

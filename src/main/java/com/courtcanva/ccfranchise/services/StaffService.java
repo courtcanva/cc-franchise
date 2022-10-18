@@ -2,6 +2,7 @@ package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.constants.StaffStatus;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
+import com.courtcanva.ccfranchise.dtos.StaffVerifyEmailPostDto;
 import com.courtcanva.ccfranchise.exceptions.NoSuchElementException;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.models.Staff;
@@ -41,8 +42,9 @@ public class StaffService {
         mailingService.sendVerificationEmail(staff.getEmail(), verificationToken);
     }
 
-    public void verifyEmail(Long id, String verificationToken) {
-        Staff staff = staffRepository.findByIdAndVerificationToken(id, verificationToken)
+    public void verifyEmail(StaffVerifyEmailPostDto staffVerifyEmailPostDto) {
+        Staff verifyEmailDto = staffMapper.verifyEmailPostDtoToStaff(staffVerifyEmailPostDto);
+        Staff staff = staffRepository.findByIdAndVerificationToken(verifyEmailDto.getId(), verifyEmailDto.getVerificationToken())
                 .orElseThrow(() -> new NoSuchElementException("Cannot find staff with given id or verification token"));
         staff.setStatus(StaffStatus.VERIFIED);
         staffRepository.save(staff);
