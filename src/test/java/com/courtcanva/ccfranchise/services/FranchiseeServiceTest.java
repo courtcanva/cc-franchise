@@ -103,7 +103,8 @@ class FranchiseeServiceTest {
 
     @Test
     void shouldThrowSelectedOrders() {
-        OrderListPostDto orderListPostDto = OrderTestHelper.createEmptyOrderListPostDto();
+        OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
+
 
     }
 
@@ -163,7 +164,7 @@ class FranchiseeServiceTest {
 
     }
     @Test
-    void shouldThrowNotSelectOrder(){
+    void shouldThrowSelectNullOrder(){
         OrderListPostDto orderListPostDto = OrderTestHelper.createEmptyOrderListPostDto();
         when(orderRepository.findAllById(any()))
                 .thenReturn(new ArrayList<>());
@@ -174,7 +175,6 @@ class FranchiseeServiceTest {
     @Test
     void shouldThrowAcceptOrders() {
         OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
-
 
     }
 }

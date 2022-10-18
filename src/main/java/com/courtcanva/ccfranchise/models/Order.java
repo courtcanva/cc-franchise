@@ -16,6 +16,7 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @Table(name = "`order`")
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
