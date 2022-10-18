@@ -29,7 +29,7 @@ import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "order")
+@Table(name = "`order`")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Order {
     @Id

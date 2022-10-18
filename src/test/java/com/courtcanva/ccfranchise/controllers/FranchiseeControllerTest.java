@@ -13,7 +13,7 @@ import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
 import com.courtcanva.ccfranchise.utils.FranchiseeAndStaffTestHelper;
-import com.courtcanva.ccfranchise.utils.OpenOrderTestHelper;
+import com.courtcanva.ccfranchise.utils.OrderTestHelper;
 import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +31,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @SpringBootTest
@@ -98,6 +97,7 @@ class FranchiseeControllerTest {
     }
 
     @Test
+    @WithMockUser
     void test() throws Exception {
         // 1. 新建franchisee和staff
         Long mockFranchiseeId = franchiseeController.signUpFranchiseeAndStaff(new FranchiseeAndStaffPostDto(
@@ -105,25 +105,11 @@ class FranchiseeControllerTest {
                 new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd")))
                                     .getFranchiseeGetDto().getFranchiseeId();
         // 得到IdDto   id -> IdDto
-        IdDto idDto = OpenOrderTestHelper.createIdDto(mockFranchiseeId);
+        IdDto idDto = OrderTestHelper.createIdDto(mockFranchiseeId);
         // 得到franchisee对象
         List<Franchisee> franchisees = franchiseeRepository.findAll();
         // 2.新建几个open order
-        Order order = Order.builder()
-                          .orderId("101")
-                          .customerId("101")
-                          .contactInformation("""
-                              {"name": "Adam", "phone": "0404123456", "address": "Unit 1, 10 Queen Street, Richmond 3121"}""")
-                          .designInformation("""
-                              {"name": "draft version 1"}""")
-                          .postcode("3000")
-                          .totalAmount(new BigDecimal(3000L))
-                          .paidAmount(new BigDecimal(1000L))
-                          .unpaidAmount(new BigDecimal(2000L))
-                          .status("UNASSIGNED")
-                          .franchisee(franchisees.get(0))
-                          .invoiceLink("http://link.co")
-                          .build();
+        Order order = OrderTestHelper.getOrder1(franchisees.get(0));
 
 
         orderRepository.save(order);
@@ -136,9 +122,9 @@ class FranchiseeControllerTest {
                             .contentType(MediaType.APPLICATION_JSON))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$[0].customerId").value("xxx"))
-            .andExpect(jsonPath("$[0].postcode").value("xxx"))
-            .andExpect(jsonPath("$[0].totalAmount").value("xxx"));
+            .andExpect(jsonPath("$[0].customerId").value("101"))
+            .andExpect(jsonPath("$[0].postcode").value("3000"))
+            .andExpect(jsonPath("$[0].totalAmount").value("3000.0"));
 
 
 
