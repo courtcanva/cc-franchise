@@ -3,7 +3,6 @@ package com.courtcanva.ccfranchise.utils;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
 import com.courtcanva.ccfranchise.models.Order;
-import com.courtcanva.ccfranchise.models.Suburb;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

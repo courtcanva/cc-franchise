@@ -92,6 +92,7 @@ class FranchiseeControllerTest {
     }
 
     @Test
+    @WithMockUser
     void shouldReturnAcceptOrders() throws Exception {
         orderRepository.save(OrderTestHelper.Order1());
         OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();

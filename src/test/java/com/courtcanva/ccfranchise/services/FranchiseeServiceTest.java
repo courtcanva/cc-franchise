@@ -61,14 +61,17 @@ class FranchiseeServiceTest {
     private PasswordEncoder passwordEncoder;
     @Mock
     private OrderRepository orderRepository;
-    @Mock
-    private OrderMapper orderMapper;
 
     @BeforeEach
     void setUp() {
         franchiseeRepository.save(FranchiseeTestHelper.createFranchiseeWithId());
         suburbRepository.save(SuburbTestHelper.suburb1());
         suburbRepository.save(SuburbTestHelper.suburb2());
+    }
+    @BeforeEach
+    void setOrderRepositoryUp() {
+        orderRepository.save(OrderTestHelper.Order1());
+        orderRepository.save(OrderTestHelper.Order2());
     }
 
     @BeforeEach
@@ -85,8 +88,7 @@ class FranchiseeServiceTest {
                 passwordEncoder,
                 suburbService,
                 suburbMapper,
-                orderRepository,
-                orderMapper
+                orderRepository
         );
     }
 
@@ -104,18 +106,6 @@ class FranchiseeServiceTest {
 
         FranchiseeAndStaffDto franchiseeAndStaffDto = franchiseeService.createFranchiseeAndStaff(franchiseePostDto, staffPostDto);
         assertEquals(1234L, franchiseeAndStaffDto.getFranchiseeGetDto().getFranchiseeId());
-    }
-    @Test
-    void shouldThrowOrderListGetDto() {
-        List<Order> orders=OrderTestHelper.OrderList();
-        List<Order> acceptedOrders=OrderTestHelper.AcceptedOrderList();
-        orderRepository.save(OrderTestHelper.Order1());
-        orderRepository.save(OrderTestHelper.Order2());
-        OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
-        when(orderRepository.findByIdIn(any())).thenReturn(orders);
-        when(orderRepository.saveAll(any())).thenReturn(acceptedOrders);
-        OrderListGetDto orderListGetDto=franchiseeService.acceptOrders(orderListPostDto);
-        assertEquals("ASSIGNED",orderListGetDto.getOrders().get(0).getStatus());
     }
 
     @Test
@@ -173,10 +163,22 @@ class FranchiseeServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> franchiseeService.addDutyAreas(suburbListPostDto, 6L));
 
     }
+
+    @Test
+    void shouldThrowOrderListGetDto() {
+        List<Order> orders=OrderTestHelper.OrderList();
+        List<Order> acceptedOrders=OrderTestHelper.AcceptedOrderList();
+        OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
+        when(orderRepository.findByIdIn(any())).thenReturn(orders);
+        when(orderRepository.saveAll(any())).thenReturn(acceptedOrders);
+        OrderListGetDto orderListGetDto=franchiseeService.acceptOrders(orderListPostDto);
+        assertEquals("ASSIGNED",orderListGetDto.getOrders().get(0).getStatus());
+    }
+
     @Test
     void shouldThrowSelectNullOrder(){
         OrderListPostDto orderListPostDto = OrderTestHelper.createEmptyOrderListPostDto();
-        when(orderRepository.findAllById(any()))
+        when(orderRepository.findByIdIn(any()))
                 .thenReturn(new ArrayList<>());
         assertThrows(SelectNullOrder.class,
                 () -> franchiseeService.acceptOrders(orderListPostDto));

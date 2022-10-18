@@ -15,7 +15,6 @@ import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.exceptions.SelectNullOrder;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
-import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.mappers.SuburbMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
@@ -52,7 +51,6 @@ public class FranchiseeService {
 
     private final SuburbMapper suburbMapper;
     private final OrderRepository orderRepository;
-    private final OrderMapper orderMapper;
 
     @Transactional
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
@@ -143,9 +141,7 @@ public class FranchiseeService {
         return OrderListGetDto.builder()
                 .orders(orderList
                         .stream()
-                        .map(order -> {
-                            return new OrderGetDto(order.getId(), order.getOrderId(), order.getStatus(), order.getContactInformation());
-                        })
+                        .map(order -> new OrderGetDto(order.getId(), order.getOrderId(), order.getStatus(), order.getContactInformation()))
                         .collect(Collectors.toList())).build();
     }
 }
