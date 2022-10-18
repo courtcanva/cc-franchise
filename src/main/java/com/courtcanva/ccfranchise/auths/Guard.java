@@ -31,10 +31,10 @@ public class Guard {
     }
 
     private boolean ifStaffBelongsToFranchisee(Authentication authentication, Long franchiseeId){
-        Map<String,Set<Long>> details = (Map<String, Set<Long>>) authentication.getDetails();
-        Set<Long> franchiseeIds = details.get(FRANCHISEE_ID);
-        if(!franchiseeIds.contains(franchiseeId)){
-            log.debug("Staff is not belongs to franchisee, access denied");
+        Map<String,Long> details = (Map<String, Long>) authentication.getDetails();
+        Long franchiseeIds = details.get(FRANCHISEE_ID);
+        if(!franchiseeIds.equals(franchiseeId)){
+            log.debug("Franchisee is not valid, access denied");
             return false;
         }
         return true;

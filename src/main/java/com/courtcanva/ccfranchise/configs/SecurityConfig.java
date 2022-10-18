@@ -22,9 +22,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 
 import javax.crypto.SecretKey;
+import java.util.Arrays;
 import java.util.List;
-
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Setter
 @Configuration
@@ -46,6 +45,8 @@ public class SecurityConfig {
     private List<String> allowedMethods;
     private List<String> allowedHeaders;
 
+    private List<String> exposedHeaders;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -54,31 +55,24 @@ public class SecurityConfig {
                     cors.setAllowedMethods(allowedMethods);
                     cors.setAllowedOrigins(allowedOrigins);
                     cors.setAllowedHeaders(allowedHeaders);
+                    cors.setExposedHeaders(exposedHeaders);
                     return cors;
                 })
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-//                .authorizeRequests(authorize ->
-//                        authorize.antMatchers(AUTH_URL_WHITELIST).permitAll()
-//                                .antMatchers("/franchisee/{franchiseeId:^[1-9]\\d*$}/service_areas")
-//                                .access("@guard.checkFranchiseeAccess(authentication, #franchiseeId)")
-//                                .anyRequest().authenticated()
-//
-//                )
-
+                .authorizeRequests(authorize ->
+                        authorize.antMatchers(AUTH_URL_WHITELIST).permitAll()
+                                .antMatchers("/franchisee/{franchiseeId:^[1-9]\\d*$}/service_areas")
+                                .access("@guard.checkFranchiseeAccess(authentication, #franchiseeId)")
+                                .anyRequest().authenticated()
+                )
                 .addFilter(
                         new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(),
                                 secretKey,
                                 jwtConfig))
                 .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtUsernameAndPasswordAuthenticationFilter.class)
-                .authorizeRequests()
-                .antMatchers("/franchisee/{franchiseeId:^[0-9]*$}/service_areas")
-                .access("@guard.checkFranchiseeAccess(authentication,#franchiseeId)")
-                .antMatchers(AUTH_URL_WHITELIST)
-                .permitAll()
-                .and()
                 .exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint())
         ;
 

@@ -1,5 +1,6 @@
 package com.courtcanva.ccfranchise.jwts;
 
+import com.courtcanva.ccfranchise.auths.FranchiseeAuthenticationToken;
 import com.google.common.base.Strings;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -54,6 +55,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
                 .parseClaimsJws(token);
         Claims body = claimsJws.getBody();
         String username = body.getSubject();
+        Long franchiseeId = ((Number) body.get("FranchiseeId")).longValue();
 
         List<Map<String, String>> authorities = (List<Map<String, String>>) body.get(AUTHORITIES);
 
@@ -61,13 +63,14 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
                 .map(map -> new SimpleGrantedAuthority(map.get(AUTHORITY)))
                 .collect(Collectors.toSet());
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
+        Authentication authentication = new FranchiseeAuthenticationToken(
+                franchiseeId,
                 username,
                 null,
                 grantedAuthorities
+
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        authentication.getDetails();
 
         filterChain.doFilter(request, response);
 

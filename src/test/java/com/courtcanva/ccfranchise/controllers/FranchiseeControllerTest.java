@@ -1,14 +1,17 @@
 package com.courtcanva.ccfranchise.controllers;
 
+import com.courtcanva.ccfranchise.auths.FranchiseeAuthenticationToken;
 import com.courtcanva.ccfranchise.constants.AUState;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
+import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
 import com.courtcanva.ccfranchise.utils.FranchiseeAndStaffTestHelper;
+import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
 import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,11 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -75,14 +81,30 @@ class FranchiseeControllerTest {
         suburbRepository.save(SuburbTestHelper.suburb2());
 
         SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDto();
-
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/" + mockFranchiseeId.toString() + "/service_areas")
                         .content(objectMapper.writeValueAsString(suburbListPostDto))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(jsonPath("$.suburbs[0].sscCode").value(11344L))
                 .andExpect(jsonPath("$.suburbs[1].sscCode").value(12287L));
+
+    }
+
+    @Test
+    @WithMockUser
+    void shouldForbiddenUnknownedFranchisee() throws Exception {
+
+        suburbRepository.save(SuburbTestHelper.suburb1());
+        suburbRepository.save(SuburbTestHelper.suburb2());
+
+        SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDto();
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/frnachisee/11/service_areas)")
+                        .content(objectMapper.writeValueAsString(suburbListPostDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+
 
     }
 }
