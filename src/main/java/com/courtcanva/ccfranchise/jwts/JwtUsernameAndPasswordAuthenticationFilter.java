@@ -23,7 +23,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
     private static final String LOGIN_URL = "/staff/signin";
     private static final String BEARER = "Bearer ";
-
+    private static final String AUTHORITIES = "authorities";
     private static final String STAFF_ID = "StaffId";
     private final AuthenticationManager authenticationManager;
     private final SecretKey secretKey;
@@ -60,7 +60,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
         String token = Jwts.builder()
                 .setSubject(authResult.getName())
-                .claim(jwtConfig.getAuthorization(), authResult.getAuthorities())
+                .claim(AUTHORITIES, authResult.getAuthorities())
                 .claim(STAFF_ID, ((StaffDetail) authResult.getPrincipal()).getId())
                 .setIssuedAt(new Date())
                 .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(1)))

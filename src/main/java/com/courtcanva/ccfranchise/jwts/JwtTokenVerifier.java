@@ -28,6 +28,8 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
 
     private static final String BEARER = "Bearer ";
     private static final String AUTHORITY = "authority";
+    private static final String AUTHORITIES = "authorities";
+
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
 
@@ -53,7 +55,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
         Claims body = claimsJws.getBody();
         String username = body.getSubject();
 
-        List<Map<String, String>> authorities = (List<Map<String, String>>) body.get(AUTHORITY);
+        List<Map<String, String>> authorities = (List<Map<String, String>>) body.get(AUTHORITIES);
 
         Set<SimpleGrantedAuthority> grantedAuthorities = authorities.stream()
                 .map(map -> new SimpleGrantedAuthority(map.get(AUTHORITY)))
