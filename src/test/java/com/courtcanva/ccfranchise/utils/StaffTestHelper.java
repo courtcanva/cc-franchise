@@ -20,6 +20,7 @@ public class StaffTestHelper {
                 .phoneNumber("123456789")
                 .email("666@gmail.com")
                 .residentialAddress("fsdfsdafa")
+                .verificationToken("y9BJK1mec5cg6RZCW3XOrTZ2WbyxGIG6")
                 .build();
     }
 
@@ -52,7 +53,7 @@ public class StaffTestHelper {
     public static StaffVerifyEmailPostDto createStaffVerifyEmailPostDto() {
 
         return StaffVerifyEmailPostDto.builder()
-                .id("1232L")
+                .id("1")
                 .verificationToken("y9BJK1mec5cg6RZCW3XOrTZ2WbyxGIG6")
                 .build();
 

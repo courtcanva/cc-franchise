@@ -1,6 +1,5 @@
 package com.courtcanva.ccfranchise.services;
 
-import com.courtcanva.ccfranchise.constants.StaffStatus;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffVerifyEmailPostDto;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
@@ -10,7 +9,6 @@ import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.utils.RandomGenerator;
 import com.courtcanva.ccfranchise.utils.StaffTestHelper;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -76,14 +74,12 @@ class StaffServiceTest {
     }
 
     @Test
-    @Disabled
     void shouldVerifyEmail() {
         StaffVerifyEmailPostDto staffVerifyEmailPostDto = StaffTestHelper.createStaffVerifyEmailPostDto();
         Staff staff = staffMapper.verifyEmailPostDtoToStaff(staffVerifyEmailPostDto);
 
         when(staffRepository.findByIdAndVerificationToken(any(), any())).thenReturn(Optional.ofNullable(staff));
         staffService.verifyEmail(staffVerifyEmailPostDto);
-        staff.setStatus(StaffStatus.VERIFIED);
 
         verify(staffRepository, times(1)).save(staff);
     }
