@@ -30,7 +30,7 @@ import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "`order`")
-@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+// @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,12 +42,14 @@ public class Order {
     @Column(nullable = false)
     private String customerId;
 
-    @Type(type = "jsonb")
-    @Column(nullable = false, columnDefinition = "jsonb")
+    // @Type(type = "jsonb")
+    // @Column(nullable = false, columnDefinition = "jsonb")
+    @Column(nullable = false)
     private String contactInformation;
 
-    @Type(type = "jsonb")
-    @Column(nullable = false, columnDefinition = "jsonb")
+    // @Type(type = "jsonb")
+    // @Column(nullable = false, columnDefinition = "jsonb")
+    @Column(nullable = false)
     private String designInformation;
 
     @Column(nullable = false)
