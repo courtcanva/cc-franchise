@@ -20,8 +20,16 @@ class FranchiseeRepositoryTest {
     @Autowired
     private FranchiseeRepository franchiseeRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private StaffRepository staffRepository;
+
     @BeforeEach
     void setUp() {
+        orderRepository.deleteAll();
+        staffRepository.deleteAll();
         franchiseeRepository.deleteAll();
     }
 
@@ -44,6 +52,6 @@ class FranchiseeRepositoryTest {
         Franchisee franchisee = FranchiseeTestHelper.createFranchisee();
         franchiseeRepository.save(franchisee);
 
-        assertEquals(franchisee.getAbn(), Objects.requireNonNull(franchiseeRepository.findFranchiseeById(franchiseeId).orElse(null)).getAbn());
+        assertEquals(franchisee.getAbn(), Objects.requireNonNull(franchiseeRepository.findFranchiseeById(franchisee.getId()).orElse(null)).getAbn());
     }
 }

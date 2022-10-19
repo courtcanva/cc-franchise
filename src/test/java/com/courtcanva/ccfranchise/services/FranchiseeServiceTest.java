@@ -1,6 +1,13 @@
 package com.courtcanva.ccfranchise.services;
 
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
@@ -11,8 +18,8 @@ import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapperImpl;
-import com.courtcanva.ccfranchise.mappers.OrderDisplayMapper;
-import com.courtcanva.ccfranchise.mappers.OrderDisplayMapperImpl;
+import com.courtcanva.ccfranchise.mappers.OrderMapper;
+import com.courtcanva.ccfranchise.mappers.OrderMapperImpl;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapperImpl;
 import com.courtcanva.ccfranchise.mappers.SuburbMapper;
@@ -20,7 +27,6 @@ import com.courtcanva.ccfranchise.mappers.SuburbMapperImpl;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Suburb;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
-import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
 import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
 import com.courtcanva.ccfranchise.utils.StaffTestHelper;
@@ -31,16 +37,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -50,7 +48,7 @@ class FranchiseeServiceTest {
     private FranchiseeRepository franchiseeRepository;
 
     @Mock
-    private OrderRepository orderRepository;
+    private OrderService orderService;
 
 
     @Mock
@@ -79,17 +77,16 @@ class FranchiseeServiceTest {
         FranchiseeMapper franchiseeMapper = new FranchiseeMapperImpl();
         StaffMapper staffMapper = new StaffMapperImpl();
         SuburbMapper suburbMapper = new SuburbMapperImpl();
-        OrderDisplayMapper orderDisplayMapper = new OrderDisplayMapperImpl();
+        OrderMapper orderMapper = new OrderMapperImpl();
         franchiseeService = new FranchiseeService(
-                franchiseeRepository,
-                orderRepository,
-                franchiseeMapper,
-                staffMapper,
-                orderDisplayMapper,
-                staffService,
-                passwordEncoder,
-                suburbService,
-                suburbMapper
+            franchiseeRepository,
+            franchiseeMapper,
+            staffMapper,
+            staffService,
+            passwordEncoder,
+            suburbService,
+            suburbMapper,
+            orderService
         );
     }
 
@@ -135,7 +132,7 @@ class FranchiseeServiceTest {
         String franchiseeAbn = "124";
 
         when(franchiseeRepository.existsFranchiseeByAbn(franchiseeAbn))
-                .thenReturn(true);
+            .thenReturn(true);
 
         assertTrue(franchiseeService.franchiseeExists(franchiseeAbn));
     }
@@ -148,10 +145,10 @@ class FranchiseeServiceTest {
         StaffPostDto staffPostDto = StaffTestHelper.createStaffPostDto();
 
         when(franchiseeRepository.existsFranchiseeByAbn(any()))
-                .thenReturn(true);
+            .thenReturn(true);
 
         assertThrows(ResourceAlreadyExistException.class,
-                () -> franchiseeService.createFranchiseeAndStaff(franchiseePostDto, staffPostDto));
+            () -> franchiseeService.createFranchiseeAndStaff(franchiseePostDto, staffPostDto));
 
     }
 
@@ -160,7 +157,7 @@ class FranchiseeServiceTest {
         SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDto();
 
         when(franchiseeRepository.findFranchiseeById(any()))
-                .thenReturn(Optional.empty());
+            .thenReturn(Optional.empty());
         assertThrows(ResourceNotFoundException.class, () -> franchiseeService.addDutyAreas(suburbListPostDto, 6L));
 
     }

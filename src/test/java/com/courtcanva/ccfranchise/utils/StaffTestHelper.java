@@ -3,23 +3,28 @@ package com.courtcanva.ccfranchise.utils;
 import com.courtcanva.ccfranchise.constants.AUState;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
+import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Staff;
 
 public class StaffTestHelper {
     public static Staff createStaff() {
+        return createStaff(FranchiseeTestHelper.createFranchiseeWithId());
+    }
 
+    public static Staff createStaff(Franchisee franchisee) {
         return Staff.builder()
-                .id(1232L)
-                .isVerified(false)
-                .firstName("ll")
-                .lastName("ff")
-                .password("Brfasfsad12331")
-                .state(AUState.ACT)
-                .postcode(1234)
-                .phoneNumber("123456789")
-                .email("666@gmail.com")
-                .residentialAddress("fsdfsdafa")
-                .build();
+                   .id(1232L)
+                   .isVerified(false)
+                   .firstName("ll")
+                   .lastName("ff")
+                   .password("Brfasfsad12331")
+                   .state(AUState.ACT)
+                   .postcode(1234)
+                   .phoneNumber("123456789")
+                   .email("666@gmail.com")
+                   .residentialAddress("fsdfsdafa")
+                   .franchisee(franchisee)
+                   .build();
     }
 
     public static StaffGetDto createStaffGetDto() {

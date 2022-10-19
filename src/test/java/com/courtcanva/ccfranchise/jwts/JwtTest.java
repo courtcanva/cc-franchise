@@ -1,6 +1,7 @@
 package com.courtcanva.ccfranchise.jwts;
 
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
 import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
@@ -34,11 +35,13 @@ class JwtTest {
     @Autowired
     private StaffRepository staffRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
     @BeforeEach
     public void clear() {
-
+        orderRepository.deleteAll();
         staffRepository.deleteAll();
-
         franchiseeRepository.deleteAll();
 
     }

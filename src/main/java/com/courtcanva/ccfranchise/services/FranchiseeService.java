@@ -12,15 +12,12 @@ import com.courtcanva.ccfranchise.exceptions.NoAvailableOrderException;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
-import com.courtcanva.ccfranchise.mappers.OrderDisplayMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.mappers.SuburbMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
-import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.models.Suburb;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
-import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,11 +34,9 @@ import java.util.stream.Collectors;
 public class FranchiseeService {
     private final FranchiseeRepository franchiseeRepository;
 
-    private final OrderRepository orderRepository;
     private final FranchiseeMapper franchiseeMapper;
 
     private final StaffMapper staffMapper;
-    private final OrderDisplayMapper orderDisplayMapper;
 
     private final StaffService staffService;
 
@@ -50,6 +45,8 @@ public class FranchiseeService {
     private final SuburbService suburbService;
 
     private final SuburbMapper suburbMapper;
+
+    private final OrderService orderService;
 
 
     @Transactional
@@ -125,12 +122,7 @@ public class FranchiseeService {
     public List<OpenOrderResponseDto> getOpenOrders(Long id) {
         Optional<Franchisee> franchiseeFromDatabase = franchiseeRepository.findById(id);
         Franchisee franchisee = franchiseeFromDatabase.orElseThrow(() -> new NoAvailableOrderException("no available orders because of invalid franchisee"));
-
-        List<Order> ordersFirst10 = orderRepository.findFirst10ByFranchiseeId(franchisee.getId());
-        if (ordersFirst10.size() == 0) {
-            throw new NoAvailableOrderException("no available orders");
-        }
-            return ordersFirst10.stream().map(orderDisplayMapper::orderToDto).toList();
+        return orderService.getOpenOrdersByFranchiseeId(franchisee.getId());
 
     }
 }
