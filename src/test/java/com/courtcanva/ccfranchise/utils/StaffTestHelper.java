@@ -6,6 +6,8 @@ import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.dtos.StaffVerifyEmailPostDto;
 import com.courtcanva.ccfranchise.models.Staff;
 
+import java.time.OffsetDateTime;
+
 public class StaffTestHelper {
     public static Staff createStaff() {
 
@@ -21,6 +23,7 @@ public class StaffTestHelper {
                 .email("666@gmail.com")
                 .residentialAddress("fsdfsdafa")
                 .verificationToken("y9BJK1mec5cg6RZCW3XOrTZ2WbyxGIG6")
+                .verificationTokenCreatedTime(OffsetDateTime.now())
                 .build();
     }
 

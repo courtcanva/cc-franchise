@@ -1,6 +1,7 @@
 package com.courtcanva.ccfranchise.controllers;
 
 import com.courtcanva.ccfranchise.dtos.StaffVerifyEmailPostDto;
+import com.courtcanva.ccfranchise.exceptions.ExpiredVerificationTokenException;
 import com.courtcanva.ccfranchise.services.StaffService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,7 @@ public class StaffController {
 
     @PostMapping("/verify-email")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void verifyEmail(@RequestBody @Valid StaffVerifyEmailPostDto staffVerifyEmailPostDto) {
+    public void verifyEmail(@RequestBody @Valid StaffVerifyEmailPostDto staffVerifyEmailPostDto) throws ExpiredVerificationTokenException {
         log.info("Received request to verify email of staff.");
         staffService.verifyEmail(staffVerifyEmailPostDto);
     }

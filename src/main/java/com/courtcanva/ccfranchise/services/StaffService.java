@@ -3,6 +3,7 @@ package com.courtcanva.ccfranchise.services;
 import com.courtcanva.ccfranchise.constants.StaffStatus;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffVerifyEmailPostDto;
+import com.courtcanva.ccfranchise.exceptions.ExpiredVerificationTokenException;
 import com.courtcanva.ccfranchise.exceptions.NoSuchElementException;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.models.Staff;
@@ -12,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 
 
 @Slf4j
@@ -38,18 +42,29 @@ public class StaffService {
 
         String verificationToken = randomGenerator.string(32);
         staff.setVerificationToken(verificationToken);
+        staff.setVerificationTokenCreatedTime(OffsetDateTime.now());
         staffRepository.save(staff);
         log.info("Verification token saved to database, preparing to send verification email...");
 
         mailingService.sendVerificationEmail(staff.getEmail(), verificationToken);
     }
 
-    public void verifyEmail(StaffVerifyEmailPostDto staffVerifyEmailPostDto) {
+    public void verifyEmail(StaffVerifyEmailPostDto staffVerifyEmailPostDto) throws ExpiredVerificationTokenException {
         Staff verifyEmailDto = staffMapper.verifyEmailPostDtoToStaff(staffVerifyEmailPostDto);
         Staff staff = staffRepository.findByIdAndVerificationToken(verifyEmailDto.getId(), verifyEmailDto.getVerificationToken())
                 .orElseThrow(() -> new NoSuchElementException("Cannot find staff with given id or verification token"));
-        staff.setStatus(StaffStatus.VERIFIED);
+
+        OffsetDateTime verificationTokenCreatedTime = staff.getVerificationTokenCreatedTime();
+        if (verificationTokenCreatedTime.isAfter(OffsetDateTime.now().minus(24, ChronoUnit.HOURS))) {
+            log.info("Verification token is valid, staff is verified");
+            staff.setStatus(StaffStatus.VERIFIED);
+        } else {
+            throw new ExpiredVerificationTokenException("This verification token has expired.");
+        }
+
+        staff.setVerificationToken(null);
+        staff.setVerificationTokenCreatedTime(null);
         staffRepository.save(staff);
-        log.info("Staff verified.");
+
     }
 }

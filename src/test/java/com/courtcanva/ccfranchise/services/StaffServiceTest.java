@@ -76,11 +76,9 @@ class StaffServiceTest {
     @Test
     void shouldVerifyEmail() {
         StaffVerifyEmailPostDto staffVerifyEmailPostDto = StaffTestHelper.createStaffVerifyEmailPostDto();
-        Staff staff = staffMapper.verifyEmailPostDtoToStaff(staffVerifyEmailPostDto);
-
-        when(staffRepository.findByIdAndVerificationToken(any(), any())).thenReturn(Optional.ofNullable(staff));
+        when(staffRepository.findByIdAndVerificationToken(any(), any())).thenReturn(Optional.ofNullable(StaffTestHelper.createStaff()));
         staffService.verifyEmail(staffVerifyEmailPostDto);
 
-        verify(staffRepository, times(1)).save(staff);
+        verify(staffRepository, times(1)).save(any());
     }
 }

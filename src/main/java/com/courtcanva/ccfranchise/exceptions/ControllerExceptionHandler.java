@@ -65,6 +65,16 @@ public class ControllerExceptionHandler {
                 .build();
     }
 
+    @ExceptionHandler(value = ExpiredVerificationTokenException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorDto handleExpiredVerificationTokenException(ExpiredVerificationTokenException ex) {
+        log.error(ex.getMessage());
+        return ErrorDto.builder()
+                .errorCode(HttpStatus.UNAUTHORIZED.value())
+                .details(ex.getMessage())
+                .build();
+    }
+
     @ExceptionHandler(value = Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorDto handleAllException(Exception e) {

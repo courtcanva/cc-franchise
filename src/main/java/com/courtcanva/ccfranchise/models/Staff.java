@@ -79,6 +79,9 @@ public class Staff {
     @Column
     private String verificationToken;
 
+    @Column(name = "verification_token_created_at")
+    private OffsetDateTime verificationTokenCreatedTime;
+
     @Column(nullable = false, updatable = false, name = "created_at")
     @CreationTimestamp
     private OffsetDateTime createdTime;
