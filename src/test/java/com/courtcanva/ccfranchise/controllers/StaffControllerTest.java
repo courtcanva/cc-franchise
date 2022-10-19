@@ -1,6 +1,8 @@
 package com.courtcanva.ccfranchise.controllers;
 
 import com.courtcanva.ccfranchise.dtos.StaffVerifyEmailPostDto;
+import com.courtcanva.ccfranchise.exceptions.MailingClientException;
+import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.utils.MailingClient;
 import com.courtcanva.ccfranchise.utils.StaffTestHelper;
@@ -16,12 +18,16 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 public class StaffControllerTest {
 
@@ -43,12 +49,23 @@ public class StaffControllerTest {
 
     @Test
     void whenSendVerificationToken_shouldReturnCreated() throws Exception {
+        Staff staff = staffRepository.findByEmail(StaffTestHelper.createStaffForRepository().getEmail()).orElseThrow();
         doNothing().when(mailingClient).sendEmail(any(), any(), any(), any());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/staff/send-verification-email")
+                        .param("id", String.valueOf(staff.getId()))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void givenInvalidMailingClientConfig_whenSendVerificationEmail_shouldThrowMailingClientException() throws Exception {
+        doThrow(new MailingClientException("Invalid Mailing Client Configuration")).when(mailingClient).sendEmail(any(), any(), any(), any());
 
         mockMvc.perform(MockMvcRequestBuilders.post("/staff/send-verification-email")
                         .param("id", "1")
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isCreated());
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -59,5 +76,26 @@ public class StaffControllerTest {
                         .content(objectMapper.writeValueAsString(staffVerifyEmailPostDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isAccepted());
+    }
+
+    @Test
+    void givenNoneExistVerificationToken_whenVerifyEmail_shouldThrowNoSuchElementException() throws Exception {
+        StaffVerifyEmailPostDto staffVerifyEmailPostDto = StaffTestHelper.createStaffVerifyEmailPostDto("i-dont-exist");
+        mockMvc.perform(MockMvcRequestBuilders.post("/staff/verify-email")
+                        .content(objectMapper.writeValueAsString(staffVerifyEmailPostDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void givenExpiredVerificationToken_whenVerifyEmail_shouldThrowExpiredVerificationTokenException() throws Exception {
+        Staff staff = StaffTestHelper.createStaffForRepository("tester+staff-controller-test@courtcanva.com", OffsetDateTime.now().minus(2, ChronoUnit.DAYS));
+        staffRepository.save(staff);
+
+        StaffVerifyEmailPostDto staffVerifyEmailPostDto = StaffTestHelper.createStaffVerifyEmailPostDto(staff.getVerificationToken());
+        mockMvc.perform(MockMvcRequestBuilders.post("/staff/verify-email")
+                        .content(objectMapper.writeValueAsString(staffVerifyEmailPostDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
     }
 }
