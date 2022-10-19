@@ -22,9 +22,24 @@ public class StaffTestHelper {
                 .phoneNumber("123456789")
                 .email("666@gmail.com")
                 .residentialAddress("fsdfsdafa")
-                .verificationToken("y9BJK1mec5cg6RZCW3XOrTZ2WbyxGIG6")
+                .build();
+    }
+
+    public static Staff createStaffForRepository() {
+        return Staff.builder()
+                .isVerified(false)
+                .firstName("Court")
+                .lastName("Canva")
+                .password("Brfasfsad12331")
+                .state(AUState.NSW)
+                .postcode(2000)
+                .phoneNumber("123456789")
+                .email("666@gmail.com")
+                .residentialAddress("fsdfsdafa")
+                .verificationToken("3ab3014e-cce3-44b1-9a58-abde53455ccf")
                 .verificationTokenCreatedTime(OffsetDateTime.now())
                 .build();
+
     }
 
     public static StaffGetDto createStaffGetDto() {
@@ -56,8 +71,7 @@ public class StaffTestHelper {
     public static StaffVerifyEmailPostDto createStaffVerifyEmailPostDto() {
 
         return StaffVerifyEmailPostDto.builder()
-                .id("1")
-                .verificationToken("y9BJK1mec5cg6RZCW3XOrTZ2WbyxGIG6")
+                .verificationToken("3ab3014e-cce3-44b1-9a58-abde53455ccf")
                 .build();
 
     }

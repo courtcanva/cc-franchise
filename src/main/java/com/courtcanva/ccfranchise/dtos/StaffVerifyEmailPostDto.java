@@ -12,9 +12,6 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @Builder
 public class StaffVerifyEmailPostDto {
-    @NotBlank(message = "Staff ID is mandatory")
-    private String id;
-
     @NotBlank(message = "Verification token is mandatory")
     private String verificationToken;
 }
