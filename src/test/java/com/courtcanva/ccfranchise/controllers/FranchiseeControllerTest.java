@@ -9,6 +9,7 @@ import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
 import com.courtcanva.ccfranchise.utils.FranchiseeAndStaffTestHelper;
+import com.courtcanva.ccfranchise.utils.MailingClient;
 import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -23,6 +25,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -43,6 +47,8 @@ class FranchiseeControllerTest {
     private FranchiseeController franchiseeController;
     @Autowired
     private SuburbRepository suburbRepository;
+    @MockBean
+    private MailingClient mailingClient;
 
     @BeforeEach
     public void clear() {
@@ -56,6 +62,7 @@ class FranchiseeControllerTest {
     @Test
     void shouldReturnStaffAndFranchise() throws Exception {
 
+        doNothing().when(mailingClient).sendEmail(any(), any(), any(), any());
         FranchiseeAndStaffPostDto franchiseeAndStaffPostDto = FranchiseeAndStaffTestHelper.createFranchiseeAndStaffPostDto();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/signup")

@@ -4,6 +4,7 @@ import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
 import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
+import com.courtcanva.ccfranchise.utils.MailingClient;
 import com.courtcanva.ccfranchise.utils.StaffTestHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,11 +12,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -33,6 +37,8 @@ class JwtTest {
     private FranchiseeRepository franchiseeRepository;
     @Autowired
     private StaffRepository staffRepository;
+    @MockBean
+    private MailingClient mailingClient;
 
     @BeforeEach
     public void clear() {
@@ -46,6 +52,7 @@ class JwtTest {
 
     @Test
     public void ShouldReturnOKSuccessfullyWhenLogin() throws Exception {
+        doNothing().when(mailingClient).sendEmail(any(), any(), any(), any());
         franchiseeService
                 .createFranchiseeAndStaff(FranchiseeTestHelper.createFranchiseePostDto(), StaffTestHelper.createStaffPostDto());
 

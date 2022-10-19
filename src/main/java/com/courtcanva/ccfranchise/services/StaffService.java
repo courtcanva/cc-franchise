@@ -26,7 +26,9 @@ public class StaffService {
 
     @Transactional
     public StaffGetDto createStaff(Staff staff) {
-        return staffMapper.staffToGetDto(staffRepository.save(staff));
+        Staff savedStaff = staffRepository.save(staff);
+        this.sendVerificationEmail(savedStaff.getId());
+        return staffMapper.staffToGetDto(savedStaff);
     }
 
     public void sendVerificationEmail(Long id) {

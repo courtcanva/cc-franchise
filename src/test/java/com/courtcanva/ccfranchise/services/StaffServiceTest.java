@@ -20,6 +20,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -50,10 +52,14 @@ class StaffServiceTest {
 
     @Test
     void shouldCreatedStaffSuccessful() {
+        StaffService spyStaffService = spy(staffService);
         Staff staff = StaffTestHelper.createStaff();
         when(staffRepository.save(any())).thenReturn(staff);
-        StaffGetDto staffResult = staffService.createStaff(staff);
+        doNothing().when(spyStaffService).sendVerificationEmail(any());
+
+        StaffGetDto staffResult = spyStaffService.createStaff(staff);
         assertEquals(1232L, staffResult.getStaffId());
+        verify(spyStaffService, times(1)).sendVerificationEmail(staff.getId());
     }
 
     @Test
