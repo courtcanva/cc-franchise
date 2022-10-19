@@ -39,8 +39,24 @@ public class StaffTestHelper {
                 .verificationToken("3ab3014e-cce3-44b1-9a58-abde53455ccf")
                 .verificationTokenCreatedTime(OffsetDateTime.now())
                 .build();
-
     }
+
+    public static Staff createStaffForRepository(String email, OffsetDateTime verificationTokenCreatedTime) {
+        return Staff.builder()
+                .isVerified(false)
+                .firstName("Court")
+                .lastName("Canva")
+                .password("Brfasfsad12331")
+                .state(AUState.NSW)
+                .postcode(2000)
+                .phoneNumber("123456789")
+                .email(email)
+                .residentialAddress("fsdfsdafa")
+                .verificationToken("a6d45993-7372-4b22-aaf5-9fd7b0101786")
+                .verificationTokenCreatedTime(verificationTokenCreatedTime)
+                .build();
+    }
+
 
     public static StaffGetDto createStaffGetDto() {
 
@@ -69,9 +85,14 @@ public class StaffTestHelper {
     }
 
     public static StaffVerifyEmailPostDto createStaffVerifyEmailPostDto() {
-
         return StaffVerifyEmailPostDto.builder()
                 .verificationToken("3ab3014e-cce3-44b1-9a58-abde53455ccf")
+                .build();
+    }
+
+    public static StaffVerifyEmailPostDto createStaffVerifyEmailPostDto(String verificationToken) {
+        return StaffVerifyEmailPostDto.builder()
+                .verificationToken(verificationToken)
                 .build();
 
     }
