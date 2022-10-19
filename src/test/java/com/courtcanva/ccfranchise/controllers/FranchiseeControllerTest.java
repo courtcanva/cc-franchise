@@ -94,10 +94,15 @@ class FranchiseeControllerTest {
     @Test
     @WithMockUser
     void shouldReturnAcceptOrders() throws Exception {
+        Long mockFranchiseeId = franchiseeController.signUpFranchiseeAndStaff(
+                new FranchiseeAndStaffPostDto(
+                        new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "23468290381", "Melbourne", AUState.VIC, 3000), new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd")))
+                .getFranchiseeGetDto().getFranchiseeId();
+
         orderRepository.save(OrderTestHelper.Order1());
         OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/accept-orders")
+        mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/"+ mockFranchiseeId.toString() +"/accept-orders")
                         .content(objectMapper.writeValueAsString(orderListPostDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())

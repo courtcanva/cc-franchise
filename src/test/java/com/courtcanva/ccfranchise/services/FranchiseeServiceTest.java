@@ -11,7 +11,6 @@ import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
-import com.courtcanva.ccfranchise.exceptions.SelectNullOrder;
 import com.courtcanva.ccfranchise.mappers.*;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
@@ -176,11 +175,11 @@ class FranchiseeServiceTest {
     }
 
     @Test
-    void shouldThrowSelectNullOrder(){
+    void shouldThrowOrderNotFoundException(){
         OrderListPostDto orderListPostDto = OrderTestHelper.createEmptyOrderListPostDto();
         when(orderRepository.findByIdIn(any()))
                 .thenReturn(new ArrayList<>());
-        assertThrows(SelectNullOrder.class,
+        assertThrows(ResourceNotFoundException.class,
                 () -> franchiseeService.acceptOrders(orderListPostDto));
     }
 

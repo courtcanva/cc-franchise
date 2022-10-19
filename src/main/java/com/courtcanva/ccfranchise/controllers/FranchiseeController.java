@@ -41,10 +41,10 @@ public class FranchiseeController {
         return franchiseeService.addDutyAreas(suburbListPostDto, franchiseeId);
     }
 
-    @PostMapping("/accept-orders")
+    @PostMapping("/{franchiseeId}/accept-orders")
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderListGetDto acceptOrders(@RequestBody @Valid OrderListPostDto orderListPostDto) {
+    public OrderListGetDto acceptOrders(@RequestBody @Valid OrderListPostDto orderListPostDto,
+                                        @PathVariable(value = "franchiseeId") Long franchiseeId) {
         return franchiseeService.acceptOrders(orderListPostDto);
     }
-
 }

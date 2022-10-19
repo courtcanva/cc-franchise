@@ -13,7 +13,6 @@ import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
-import com.courtcanva.ccfranchise.exceptions.SelectNullOrder;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.mappers.SuburbMapper;
@@ -130,7 +129,8 @@ public class FranchiseeService {
 
         if (selectedOrders.size() == 0) {
 
-            throw new SelectNullOrder("You have not select any order.");
+            log.debug("selected order id: {} is empty",orderListPostDto.getOrders());
+            throw new ResourceNotFoundException("You have not select any order.");
         }
 
         List<Order> orders = selectedOrders
