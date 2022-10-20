@@ -4,7 +4,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 public class FranchiseeAuthenticationToken extends UsernamePasswordAuthenticationToken {
