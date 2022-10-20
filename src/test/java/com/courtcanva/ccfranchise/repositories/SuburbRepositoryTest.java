@@ -26,7 +26,7 @@ public class SuburbRepositoryTest {
     }
 
     @Test
-    public void shouldReturnSuburbListIfSuburbIsExist() {
+    public void givenSuburbSSCCode_whenFindSuburbBySSCCode_shouldReturnSuburb() {
 
         assertEquals(12287L, suburbRepository.findBySscCodeIn(SuburbTestHelper.createSuburbListPostDto().getSuburbs()
                         .stream()

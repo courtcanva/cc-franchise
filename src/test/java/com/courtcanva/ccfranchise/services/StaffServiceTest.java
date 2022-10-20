@@ -49,7 +49,7 @@ class StaffServiceTest {
     }
 
     @Test
-    void shouldCreatedStaffSuccessful() {
+    void givenStaffPostDto_whenCreateStaff_shouldNotThrowError() {
         StaffService spyStaffService = spy(staffService);
         Staff staff = StaffTestHelper.createStaff();
         when(staffRepository.save(any())).thenReturn(staff);
@@ -61,7 +61,7 @@ class StaffServiceTest {
     }
 
     @Test
-    void shouldSendVerificationEmail() {
+    void givenStaffIde_whenRequestToSendVerificationEmail_shouldNotThrowError() {
         Staff staff = StaffTestHelper.createStaff();
         when(staffRepository.findById(staff.getId())).thenReturn(Optional.ofNullable(staff));
         staffService.sendVerificationEmail(staff.getId());
@@ -74,7 +74,7 @@ class StaffServiceTest {
     }
 
     @Test
-    void shouldVerifyEmail() {
+    void givenVerificationTokenAndEncodedEmail_whenVerifyEmail_shouldNotThrowError() {
         Staff staff = StaffTestHelper.createStaffForRepository();
         when(staffRepository.findOneByVerificationTokenAndEmail(any(), any())).thenReturn(Optional.ofNullable(staff));
         staffService.verifyEmail(UUID.randomUUID().toString(), Base64.encodeAsString(staff.getEmail().getBytes()));

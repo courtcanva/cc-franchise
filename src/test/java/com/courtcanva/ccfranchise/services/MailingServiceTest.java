@@ -27,7 +27,7 @@ public class MailingServiceTest {
     }
 
     @Test
-    void shouldSendVerificationEmail() {
+    void givenEmailAndVerificationToken_whenSendVerificationEmail_shouldNotThrowError() {
         doNothing().when(mailingClient).sendEmail(any(), any(), any(), any());
         mailingService.sendVerificationEmail("some@one.com", "random generated token");
 

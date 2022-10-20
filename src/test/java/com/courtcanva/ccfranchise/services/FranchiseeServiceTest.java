@@ -84,7 +84,7 @@ class FranchiseeServiceTest {
     }
 
     @Test
-    void shouldCreateStaffAndFranchiseeGetDto() {
+    void givenFranchiseeAndStaffPostDto_whenCreateFranchiseeAndStaff_shouldReturnStaffAndFranchiseeGetDto() {
 
         Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
         StaffGetDto staffGetDto = StaffTestHelper.createStaffGetDto();

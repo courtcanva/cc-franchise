@@ -49,7 +49,7 @@ public class StaffControllerTest {
     }
 
     @Test
-    void whenSendVerificationToken_shouldReturnCreated() throws Exception {
+    void givenValidStaffId_whenSendVerificationToken_shouldReturnCreated() throws Exception {
         Staff staff = staffRepository.findByEmail(StaffTestHelper.createStaffForRepository().getEmail()).orElseThrow();
         doNothing().when(mailingClient).sendEmail(any(), any(), any(), any());
 
@@ -70,7 +70,7 @@ public class StaffControllerTest {
     }
 
     @Test
-    void whenVerifyEmail_shouldReturnAccepted() throws Exception {
+    void givenValidVerificationToken_whenVerifyEmail_shouldReturnAccepted() throws Exception {
         Staff staff = StaffTestHelper.createStaffForRepository();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/staff/verify-email")

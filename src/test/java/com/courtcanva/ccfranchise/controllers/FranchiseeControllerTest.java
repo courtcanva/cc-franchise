@@ -60,7 +60,7 @@ class FranchiseeControllerTest {
     }
 
     @Test
-    void shouldReturnStaffAndFranchise() throws Exception {
+    void givenFranchiseeAndStaffPostDto_whenSignUpFranchisee_shouldReturnStaffAndFranchise() throws Exception {
 
         doNothing().when(mailingClient).sendEmail(any(), any(), any(), any());
         FranchiseeAndStaffPostDto franchiseeAndStaffPostDto = FranchiseeAndStaffTestHelper.createFranchiseeAndStaffPostDto();
@@ -76,7 +76,7 @@ class FranchiseeControllerTest {
 
     @Test
     @WithMockUser
-    void shouldReturnSelectSuburbs() throws Exception {
+    void givenListOfServiceArea_whenAddDutyArea_shouldReturnSelectSuburbs() throws Exception {
         Long mockFranchiseeId = franchiseeController.signUpFranchiseeAndStaff(new FranchiseeAndStaffPostDto(new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "23468290381", "Melbourne", AUState.VIC, 3000), new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd"))).getFranchiseeGetDto().getFranchiseeId();
         suburbRepository.save(SuburbTestHelper.suburb1());
         suburbRepository.save(SuburbTestHelper.suburb2());

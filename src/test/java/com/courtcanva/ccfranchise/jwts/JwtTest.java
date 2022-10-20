@@ -51,7 +51,7 @@ class JwtTest {
 
 
     @Test
-    public void ShouldReturnOKSuccessfullyWhenLogin() throws Exception {
+    public void givenAValidStaffCredential_whenSignUp_shouldReturnOKSuccessfullyWhenLogin() throws Exception {
         doNothing().when(mailingClient).sendEmail(any(), any(), any(), any());
         franchiseeService
                 .createFranchiseeAndStaff(FranchiseeTestHelper.createFranchiseePostDto(), StaffTestHelper.createStaffPostDto());
