@@ -1,10 +1,10 @@
 package com.courtcanva.ccfranchise.services;
 
+import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
@@ -14,6 +14,7 @@ import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
+import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.mappers.SuburbMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
@@ -50,6 +51,7 @@ public class FranchiseeService {
 
     private final SuburbMapper suburbMapper;
     private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
 
     @Transactional
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
@@ -127,21 +129,20 @@ public class FranchiseeService {
                         .map(OrderPostDto::getId)
                         .collect(Collectors.toList()));
 
-        if (selectedOrders.size() == 0) {
+        if (selectedOrders.isEmpty()) {
 
-            log.debug("selected order id: {} is empty",orderListPostDto.getOrders());
+            log.debug("selected order id: {} is empty", orderListPostDto.getOrders());
             throw new ResourceNotFoundException("You have not select any order.");
         }
 
-        List<Order> orders = selectedOrders
-                .stream()
-                .peek(order -> order.setStatus("ASSIGNED"))
-                .collect(Collectors.toList());
-        List<Order> orderList = orderRepository.saveAll(orders);
+        selectedOrders.forEach(order -> order.setStatus(OrderStatus.ASSIGNED));
+
+        List<Order> orderList = orderRepository.saveAll(selectedOrders);
         return OrderListGetDto.builder()
                 .orders(orderList
                         .stream()
-                        .map(order -> new OrderGetDto(order.getId(), order.getOrderId(), order.getStatus(), order.getContactInformation()))
+                        .map(orderMapper::orderToGetDto)
                         .collect(Collectors.toList())).build();
     }
 }
+//order -> new OrderGetDto(order.getId(), order.getOrderId(), order.getStatus(), order.getContactInformation())

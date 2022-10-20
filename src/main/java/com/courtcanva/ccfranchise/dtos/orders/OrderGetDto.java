@@ -1,5 +1,6 @@
 package com.courtcanva.ccfranchise.dtos.orders;
 
+import com.courtcanva.ccfranchise.constants.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class OrderGetDto {
     private Long id;
     private String orderId;
-    private String status;
+    private OrderStatus status;
     private String contactInformation;
 
 }

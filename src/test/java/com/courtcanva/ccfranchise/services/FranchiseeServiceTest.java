@@ -1,6 +1,7 @@
 package com.courtcanva.ccfranchise.services;
 
 
+import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
@@ -60,6 +61,9 @@ class FranchiseeServiceTest {
     private PasswordEncoder passwordEncoder;
     @Mock
     private OrderRepository orderRepository;
+    @Mock
+    private OrderMapper orderMapper;
+
 
     @BeforeEach
     void setUp() {
@@ -67,6 +71,7 @@ class FranchiseeServiceTest {
         suburbRepository.save(SuburbTestHelper.suburb1());
         suburbRepository.save(SuburbTestHelper.suburb2());
     }
+
     @BeforeEach
     void setOrderRepositoryUp() {
         orderRepository.save(OrderTestHelper.Order1());
@@ -87,7 +92,8 @@ class FranchiseeServiceTest {
                 passwordEncoder,
                 suburbService,
                 suburbMapper,
-                orderRepository
+                orderRepository,
+                orderMapper
         );
     }
 
@@ -165,17 +171,17 @@ class FranchiseeServiceTest {
 
     @Test
     void shouldThrowOrderListGetDto() {
-        List<Order> orders=OrderTestHelper.OrderList();
-        List<Order> acceptedOrders=OrderTestHelper.AcceptedOrderList();
+        List<Order> orders = OrderTestHelper.OrderList();
+        List<Order> acceptedOrders = OrderTestHelper.AcceptedOrderList();
         OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
         when(orderRepository.findByIdIn(any())).thenReturn(orders);
         when(orderRepository.saveAll(any())).thenReturn(acceptedOrders);
-        OrderListGetDto orderListGetDto=franchiseeService.acceptOrders(orderListPostDto);
-        assertEquals("ASSIGNED",orderListGetDto.getOrders().get(0).getStatus());
+        OrderListGetDto orderListGetDto = franchiseeService.acceptOrders(orderListPostDto);
+        assertEquals(OrderStatus.ASSIGNED, orderListGetDto.getOrders().get(0).getStatus());
     }
 
     @Test
-    void shouldThrowOrderNotFoundException(){
+    void shouldThrowOrderNotFoundException() {
         OrderListPostDto orderListPostDto = OrderTestHelper.createEmptyOrderListPostDto();
         when(orderRepository.findByIdIn(any()))
                 .thenReturn(new ArrayList<>());
