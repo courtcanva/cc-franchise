@@ -52,6 +52,7 @@ public class FranchiseeService {
 
     private final SuburbMapper suburbMapper;
     private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
 
     @Transactional
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
@@ -123,6 +124,7 @@ public class FranchiseeService {
 
     @Transactional
     public OrderListGetDto acceptOrders(OrderListPostDto orderListPostDto) {
+
         List<Order> selectedOrders = orderRepository.findByIdIn(
                 orderListPostDto.getOrders()
                         .stream()
@@ -132,16 +134,17 @@ public class FranchiseeService {
         if (selectedOrders.isEmpty()) {
 
             log.debug("selected order id: {} is empty", orderListPostDto.getOrders());
-            throw new ResourceNotFoundException("You have not select any order.");
+            throw new ResourceNotFoundException("You have not selected any order.");
         }
 
-        selectedOrders.forEach(order -> order.setStatus(OrderStatus.ASSIGNED));
+        selectedOrders.forEach(order -> order.setStatus(OrderStatus.ACCEPTED));
 
-        List<Order> orderList = orderRepository.saveAll(selectedOrders);
+        List<Order> acceptedOrderList = orderRepository.saveAll(selectedOrders);
         return OrderListGetDto.builder()
-                .orders(orderList
+                .orders(acceptedOrderList
                         .stream()
-                        .map(order -> new OrderGetDto(order.getId(), order.getOrderId(), order.getStatus(), order.getContactInformation()))
+                        .map(orderMapper::orderToGetDto)
                         .collect(Collectors.toList())).build();
     }
 }
+

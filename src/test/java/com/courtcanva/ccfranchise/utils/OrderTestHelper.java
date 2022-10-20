@@ -65,7 +65,8 @@ public class OrderTestHelper {
                 .unpaidAmount(BigDecimal.valueOf(998.00))
                 .totalAmount(BigDecimal.valueOf(999.00))
                 .paidAmount(BigDecimal.valueOf(1.00))
-                .status(OrderStatus.UNASSIGNED)
+                .status(OrderStatus.ASSIGNED)
+                .franchisee(FranchiseeTestHelper.createFranchiseeWithId())
                 .build();
         Order order2 = Order.builder()
                 .id(2L)
@@ -77,7 +78,8 @@ public class OrderTestHelper {
                 .unpaidAmount(BigDecimal.valueOf(998.00))
                 .totalAmount(BigDecimal.valueOf(999.00))
                 .paidAmount(BigDecimal.valueOf(1.00))
-                .status(OrderStatus.UNASSIGNED)
+                .status(OrderStatus.ASSIGNED)
+                .franchisee(FranchiseeTestHelper.createFranchiseeWithId())
                 .build();
         orders.add(0, (order1));
         orders.add(1, (order2));
@@ -96,7 +98,8 @@ public class OrderTestHelper {
                 .unpaidAmount(BigDecimal.valueOf(998.00))
                 .totalAmount(BigDecimal.valueOf(999.00))
                 .paidAmount(BigDecimal.valueOf(1.00))
-                .status(OrderStatus.ASSIGNED)
+                .status(OrderStatus.ACCEPTED)
+                .franchisee(FranchiseeTestHelper.createFranchiseeWithId())
                 .build();
         Order order2 = Order.builder()
                 .id(2L)
@@ -108,7 +111,8 @@ public class OrderTestHelper {
                 .unpaidAmount(BigDecimal.valueOf(998.00))
                 .totalAmount(BigDecimal.valueOf(999.00))
                 .paidAmount(BigDecimal.valueOf(1.00))
-                .status(OrderStatus.ASSIGNED)
+                .status(OrderStatus.ACCEPTED)
+                .franchisee(FranchiseeTestHelper.createFranchiseeWithId())
                 .build();
         orders.add(0, (order1));
         orders.add(1, (order2));

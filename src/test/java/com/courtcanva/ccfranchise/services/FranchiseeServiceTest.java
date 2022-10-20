@@ -12,7 +12,14 @@ import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
-import com.courtcanva.ccfranchise.mappers.*;
+import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
+import com.courtcanva.ccfranchise.mappers.FranchiseeMapperImpl;
+import com.courtcanva.ccfranchise.mappers.OrderMapper;
+import com.courtcanva.ccfranchise.mappers.StaffMapper;
+import com.courtcanva.ccfranchise.mappers.SuburbMapper;
+import com.courtcanva.ccfranchise.mappers.StaffMapperImpl;
+import com.courtcanva.ccfranchise.mappers.SuburbMapperImpl;
+import com.courtcanva.ccfranchise.mappers.OrderMapperImpl;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.models.Suburb;
@@ -82,6 +89,7 @@ class FranchiseeServiceTest {
         FranchiseeMapper franchiseeMapper = new FranchiseeMapperImpl();
         StaffMapper staffMapper = new StaffMapperImpl();
         SuburbMapper suburbMapper = new SuburbMapperImpl();
+        OrderMapper orderMapper = new OrderMapperImpl();
         franchiseeService = new FranchiseeService(
                 franchiseeRepository,
                 franchiseeMapper,
@@ -90,7 +98,8 @@ class FranchiseeServiceTest {
                 passwordEncoder,
                 suburbService,
                 suburbMapper,
-                orderRepository
+                orderRepository,
+                orderMapper
         );
     }
 
@@ -174,7 +183,7 @@ class FranchiseeServiceTest {
         when(orderRepository.findByIdIn(any())).thenReturn(orders);
         when(orderRepository.saveAll(any())).thenReturn(acceptedOrders);
         OrderListGetDto orderListGetDto = franchiseeService.acceptOrders(orderListPostDto);
-        assertEquals(OrderStatus.ASSIGNED, orderListGetDto.getOrders().get(0).getStatus());
+        assertEquals(OrderStatus.ACCEPTED, orderListGetDto.getOrders().get(0).getStatus());
     }
 
     @Test

@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @ActiveProfiles("test")
 class OrderRepositoryTest {
@@ -25,11 +26,11 @@ class OrderRepositoryTest {
 
     @Test
     void findByIdIn() {
-        assertEquals(1L,orderRepository.findByIdIn(
-                OrderTestHelper.createOrderListPostDto().getOrders()
-                        .stream()
-                        .map(OrderPostDto::getId)
-                        .collect(Collectors.toList()))
+        assertEquals(1L, orderRepository.findByIdIn(
+                        OrderTestHelper.createOrderListPostDto().getOrders()
+                                .stream()
+                                .map(OrderPostDto::getId)
+                                .collect(Collectors.toList()))
                 .get(0).getId());
     }
 }

@@ -8,5 +8,4 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByIdIn(List<Long> ids);
-
 }
