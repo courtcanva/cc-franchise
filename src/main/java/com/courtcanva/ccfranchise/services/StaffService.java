@@ -58,13 +58,16 @@ public class StaffService {
         if (verificationTokenCreatedTime.isAfter(OffsetDateTime.now().minus(24, ChronoUnit.HOURS))) {
             log.info("Verification token is valid, staff is verified");
             staff.setStatus(StaffStatus.VERIFIED);
+
+            staff.setVerificationToken(null);
+            staff.setVerificationTokenCreatedTime(null);
+            staffRepository.save(staff);
         } else {
+            staff.setVerificationToken(null);
+            staff.setVerificationTokenCreatedTime(null);
+            staffRepository.save(staff);
+
             throw new ExpiredVerificationTokenException("This verification token has expired.");
         }
-
-        staff.setVerificationToken(null);
-        staff.setVerificationTokenCreatedTime(null);
-        staffRepository.save(staff);
-
     }
 }
