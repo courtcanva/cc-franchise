@@ -17,10 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
@@ -28,8 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc
 @ActiveProfiles("test")
+@AutoConfigureMockMvc(addFilters = false)
 class FranchiseeControllerTest {
 
     @Autowired
@@ -44,10 +42,6 @@ class FranchiseeControllerTest {
     private FranchiseeController franchiseeController;
     @Autowired
     private SuburbRepository suburbRepository;
-
-    private static final String BEARER = "Bearer ";
-
-    private static final String SIGNINBODY = "{\"username\":\"taylor.s@gmail.com\",\"password\":\"sdjkhsd\"}";
 
     @BeforeEach
     public void clear() {
@@ -78,18 +72,8 @@ class FranchiseeControllerTest {
         suburbRepository.save(SuburbTestHelper.suburb1());
         suburbRepository.save(SuburbTestHelper.suburb2());
 
-        MvcResult mockSignIn = mockMvc.perform(MockMvcRequestBuilders.post("/staff/signin")
-                        .content(SIGNINBODY))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String response = mockSignIn.getResponse().getHeader("Authorization");
-        assert response != null;
-        String token = response.replace(BEARER, "");
-
         SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDto();
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/" + mockFranchiseeId.toString() + "/service_areas")
-                        .header("Authorization", "Bearer " + token)
                         .content(objectMapper.writeValueAsString(suburbListPostDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -99,30 +83,5 @@ class FranchiseeControllerTest {
 
     }
 
-    @Test
-    @WithMockUser
-    void shouldForbiddenUnknownedFranchisee() throws Exception {
-        franchiseeController.signUpFranchiseeAndStaff(new FranchiseeAndStaffPostDto(new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "23468290381", "Melbourne", AUState.VIC, 3000), new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd")));
-        suburbRepository.save(SuburbTestHelper.suburb1());
-        suburbRepository.save(SuburbTestHelper.suburb2());
 
-        SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDto();
-
-        MvcResult mockSignIn = mockMvc.perform(MockMvcRequestBuilders.post("/staff/signin")
-                        .content(SIGNINBODY))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String response = mockSignIn.getResponse().getHeader("Authorization");
-        assert response != null;
-        String token = response.replace(BEARER, "");
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/11/service_areas")
-                        .header("Authorization", "Bearer " + token)
-                        .content(objectMapper.writeValueAsString(suburbListPostDto))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
-
-
-    }
 }
