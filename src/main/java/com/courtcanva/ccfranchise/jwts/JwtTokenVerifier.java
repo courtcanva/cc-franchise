@@ -7,7 +7,6 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,7 +54,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
                 .parseClaimsJws(token);
         Claims body = claimsJws.getBody();
         String username = body.getSubject();
-        Long franchiseeId = ((Number) body.get("FranchiseeId")).longValue();
+        long franchiseeId = (Integer) body.get("FranchiseeId");
 
         List<Map<String, String>> authorities = (List<Map<String, String>>) body.get(AUTHORITIES);
 

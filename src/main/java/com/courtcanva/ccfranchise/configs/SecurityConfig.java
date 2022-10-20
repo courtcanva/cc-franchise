@@ -62,7 +62,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests(authorize ->
                         authorize.antMatchers(AUTH_URL_WHITELIST).permitAll()
-                                .antMatchers("/franchisee/{franchiseeId:^[1-9]\\d*$}/service_areas")
+                                .antMatchers("/franchisee/{franchiseeId:^[1-9]\\d*$}/**")
                                 .access("@guard.checkFranchiseeAccess(authentication, #franchiseeId)")
                                 .anyRequest().authenticated()
                 )

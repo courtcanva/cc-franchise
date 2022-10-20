@@ -51,8 +51,6 @@ class JwtTest {
 
     private static final String BEARER = "Bearer ";
 
-    private static final String SIGNINBODY = "{\"username\":\"taylor.s@gmail.com\",\"password\":\"sdjkhsd\"}";
-
     @BeforeEach
     public void clear() {
 
@@ -91,8 +89,14 @@ class JwtTest {
 
         SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDto();
 
+        UsernameAndPasswordAuthenticationRequest user = new UsernameAndPasswordAuthenticationRequest();
+        user.setUsername("taylor.s@gmail.com");
+        user.setPassword("sdjkhsd");
+
+        String body = objectMapper.writeValueAsString(user);
+
         MvcResult mockSignIn = mockMvc.perform(MockMvcRequestBuilders.post("/staff/signin")
-                        .content(SIGNINBODY))
+                        .content(body))
                 .andExpect(status().isOk())
                 .andReturn();
 
