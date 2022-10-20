@@ -5,6 +5,7 @@ import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
@@ -51,7 +52,6 @@ public class FranchiseeService {
 
     private final SuburbMapper suburbMapper;
     private final OrderRepository orderRepository;
-    private final OrderMapper orderMapper;
 
     @Transactional
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
@@ -141,8 +141,7 @@ public class FranchiseeService {
         return OrderListGetDto.builder()
                 .orders(orderList
                         .stream()
-                        .map(orderMapper::orderToGetDto)
+                        .map(order -> new OrderGetDto(order.getId(), order.getOrderId(), order.getStatus(), order.getContactInformation()))
                         .collect(Collectors.toList())).build();
     }
 }
-//order -> new OrderGetDto(order.getId(), order.getOrderId(), order.getStatus(), order.getContactInformation())

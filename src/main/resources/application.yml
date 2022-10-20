@@ -1,5 +1,5 @@
 server:
-  port: 8000
+  port: 8080
   servlet:
     context-path: /api/v1
 
@@ -37,4 +37,3 @@ management:
 
 jwt:
   secretKey: "courtcanvasecurekeysecurekeysecurekeysecurekeysecurekeysecurekeysecurekeysecurekeysecurekeysecurekey"
-
