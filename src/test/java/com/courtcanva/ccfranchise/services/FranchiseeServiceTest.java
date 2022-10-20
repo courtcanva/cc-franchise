@@ -42,7 +42,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.util.Optional.empty;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -180,8 +182,10 @@ class FranchiseeServiceTest {
         List<Order> orders = OrderTestHelper.OrderList();
         List<Order> acceptedOrders = OrderTestHelper.AcceptedOrderList();
         OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
+
         when(orderRepository.findByIdIn(any())).thenReturn(orders);
         when(orderRepository.saveAll(any())).thenReturn(acceptedOrders);
+
         OrderListGetDto orderListGetDto = franchiseeService.acceptOrders(orderListPostDto);
         assertEquals(OrderStatus.ACCEPTED, orderListGetDto.getOrders().get(0).getStatus());
     }
@@ -189,8 +193,8 @@ class FranchiseeServiceTest {
     @Test
     void shouldThrowOrderNotFoundException() {
         OrderListPostDto orderListPostDto = OrderTestHelper.createEmptyOrderListPostDto();
-        when(orderRepository.findByIdIn(any()))
-                .thenReturn(new ArrayList<>());
+
+        when(orderRepository.findByIdIn(any())).thenReturn(new ArrayList<>());
         assertThrows(ResourceNotFoundException.class,
                 () -> franchiseeService.acceptOrders(orderListPostDto));
     }

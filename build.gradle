@@ -34,9 +34,6 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-// https://mvnrepository.com/artifact/com.vladmihalcea/hibernate-types-52
-    implementation 'com.vladmihalcea:hibernate-types-52:2.19.2'
-
     compileOnly 'org.projectlombok:lombok'
 
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
