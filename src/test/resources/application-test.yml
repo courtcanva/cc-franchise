@@ -1,16 +1,11 @@
 spring:
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=cc_test
-    username: postgres
-    password: admin
-  flyway:
-    enabled: true
-    schemas: cc_test
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
   jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
     properties:
       hibernate:
-        default_schema: cc_test
-        jdbc:
-          time_zone: UTC
-    show-sql: true
+        default_schema: PUBLIC
+  flyway:
+    enabled: false
