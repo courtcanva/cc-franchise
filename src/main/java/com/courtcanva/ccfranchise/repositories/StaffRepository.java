@@ -9,6 +9,6 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
 
     Optional<Staff> findByEmail(String email);
 
-    Optional<Staff> findByVerificationToken(String verificationToken);
+    Optional<Staff> findOneByVerificationTokenAndEmail(String verificationToken, String email);
 
 }

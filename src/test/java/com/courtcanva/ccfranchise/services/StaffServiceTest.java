@@ -1,7 +1,7 @@
 package com.courtcanva.ccfranchise.services;
 
+import com.amazonaws.util.Base64;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
-import com.courtcanva.ccfranchise.dtos.StaffVerifyEmailPostDto;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapperImpl;
 import com.courtcanva.ccfranchise.models.Staff;
@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -74,9 +75,9 @@ class StaffServiceTest {
 
     @Test
     void shouldVerifyEmail() {
-        StaffVerifyEmailPostDto staffVerifyEmailPostDto = StaffTestHelper.createStaffVerifyEmailPostDto();
-        when(staffRepository.findByVerificationToken(any())).thenReturn(Optional.ofNullable(StaffTestHelper.createStaffForRepository()));
-        staffService.verifyEmail(staffVerifyEmailPostDto);
+        Staff staff = StaffTestHelper.createStaffForRepository();
+        when(staffRepository.findOneByVerificationTokenAndEmail(any(), any())).thenReturn(Optional.ofNullable(staff));
+        staffService.verifyEmail(UUID.randomUUID().toString(), Base64.encodeAsString(staff.getEmail().getBytes()));
 
         verify(staffRepository, times(1)).save(any());
     }

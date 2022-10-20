@@ -1,8 +1,8 @@
 package com.courtcanva.ccfranchise.services;
 
+import com.amazonaws.util.Base64;
 import com.courtcanva.ccfranchise.constants.StaffStatus;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
-import com.courtcanva.ccfranchise.dtos.StaffVerifyEmailPostDto;
 import com.courtcanva.ccfranchise.exceptions.ExpiredVerificationTokenException;
 import com.courtcanva.ccfranchise.exceptions.NoSuchElementException;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
@@ -49,10 +49,10 @@ public class StaffService {
         mailingService.sendVerificationEmail(staff.getEmail(), verificationToken);
     }
 
-    public void verifyEmail(StaffVerifyEmailPostDto staffVerifyEmailPostDto) throws ExpiredVerificationTokenException {
-        Staff verifyEmailDto = staffMapper.verifyEmailPostDtoToStaff(staffVerifyEmailPostDto);
-        Staff staff = staffRepository.findByVerificationToken(verifyEmailDto.getVerificationToken())
-                .orElseThrow(() -> new NoSuchElementException("Cannot find staff with given id or verification token"));
+    public void verifyEmail(String token, String email) throws ExpiredVerificationTokenException {
+        log.info("Decoded string is " + new String(Base64.decode(email.getBytes())));
+        Staff staff = staffRepository.findOneByVerificationTokenAndEmail(token, new String(Base64.decode(email.getBytes())))
+                .orElseThrow(() -> new NoSuchElementException("Cannot find staff with given email or verification token"));
 
         OffsetDateTime verificationTokenCreatedTime = staff.getVerificationTokenCreatedTime();
         if (verificationTokenCreatedTime.isAfter(OffsetDateTime.now().minus(24, ChronoUnit.HOURS))) {

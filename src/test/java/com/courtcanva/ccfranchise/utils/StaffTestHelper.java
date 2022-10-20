@@ -3,7 +3,6 @@ package com.courtcanva.ccfranchise.utils;
 import com.courtcanva.ccfranchise.constants.AUState;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
-import com.courtcanva.ccfranchise.dtos.StaffVerifyEmailPostDto;
 import com.courtcanva.ccfranchise.models.Staff;
 
 import java.time.OffsetDateTime;
@@ -83,18 +82,4 @@ public class StaffTestHelper {
                 .lastName("last")
                 .build();
     }
-
-    public static StaffVerifyEmailPostDto createStaffVerifyEmailPostDto() {
-        return StaffVerifyEmailPostDto.builder()
-                .verificationToken("3ab3014e-cce3-44b1-9a58-abde53455ccf")
-                .build();
-    }
-
-    public static StaffVerifyEmailPostDto createStaffVerifyEmailPostDto(String verificationToken) {
-        return StaffVerifyEmailPostDto.builder()
-                .verificationToken(verificationToken)
-                .build();
-
-    }
-
 }

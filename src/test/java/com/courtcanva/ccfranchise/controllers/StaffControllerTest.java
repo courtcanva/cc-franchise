@@ -1,6 +1,6 @@
 package com.courtcanva.ccfranchise.controllers;
 
-import com.courtcanva.ccfranchise.dtos.StaffVerifyEmailPostDto;
+import com.amazonaws.util.Base64;
 import com.courtcanva.ccfranchise.exceptions.MailingClientException;
 import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -70,19 +71,22 @@ public class StaffControllerTest {
 
     @Test
     void whenVerifyEmail_shouldReturnAccepted() throws Exception {
-        StaffVerifyEmailPostDto staffVerifyEmailPostDto = StaffTestHelper.createStaffVerifyEmailPostDto();
+        Staff staff = StaffTestHelper.createStaffForRepository();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/staff/verify-email")
-                        .content(objectMapper.writeValueAsString(staffVerifyEmailPostDto))
+                        .param("token", staff.getVerificationToken())
+                        .param("i", Base64.encodeAsString(staff.getEmail().getBytes()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isAccepted());
     }
 
     @Test
     void givenNoneExistVerificationToken_whenVerifyEmail_shouldThrowNoSuchElementException() throws Exception {
-        StaffVerifyEmailPostDto staffVerifyEmailPostDto = StaffTestHelper.createStaffVerifyEmailPostDto("i-dont-exist");
+        Staff staff = StaffTestHelper.createStaffForRepository();
+
         mockMvc.perform(MockMvcRequestBuilders.post("/staff/verify-email")
-                        .content(objectMapper.writeValueAsString(staffVerifyEmailPostDto))
+                        .param("token", UUID.randomUUID().toString())
+                        .param("i", Base64.encodeAsString(staff.getEmail().getBytes()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -92,9 +96,9 @@ public class StaffControllerTest {
         Staff staff = StaffTestHelper.createStaffForRepository("tester+staff-controller-test@courtcanva.com", OffsetDateTime.now().minus(2, ChronoUnit.DAYS));
         staffRepository.save(staff);
 
-        StaffVerifyEmailPostDto staffVerifyEmailPostDto = StaffTestHelper.createStaffVerifyEmailPostDto(staff.getVerificationToken());
         mockMvc.perform(MockMvcRequestBuilders.post("/staff/verify-email")
-                        .content(objectMapper.writeValueAsString(staffVerifyEmailPostDto))
+                        .param("token", staff.getVerificationToken())
+                        .param("i", Base64.encodeAsString(staff.getEmail().getBytes()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
     }
