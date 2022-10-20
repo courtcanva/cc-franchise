@@ -17,8 +17,6 @@ public class FranchiseeAuthenticationToken extends UsernamePasswordAuthenticatio
 
     @Override
     public Map<String, Long> getDetails() {
-        Map<String, Long> details = new HashMap<>();
-        details.put("FranchiseeId", franchiseeId);
         return Map.of("FranchiseeId", franchiseeId);
     }
 }
