@@ -2,7 +2,7 @@ package com.courtcanva.ccfranchise.constants;
 
 public enum OrderStatus {
     UNASSIGNED,
-    ASSIGNED,
+    ASSIGNED_PENDING,
 
     ACCEPTED
 }
