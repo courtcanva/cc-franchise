@@ -1,6 +1,7 @@
 package com.courtcanva.ccfranchise.services;
 
 
+import com.courtcanva.ccfranchise.constants.DutyAreaFilterMode;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -105,7 +107,7 @@ class FranchiseeServiceTest {
         Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
         List<Suburb> suburbsListWithFranchisee = SuburbTestHelper.createSuburbsListWithFranchisee();
         Franchisee franchiseeWithDutyAreas = FranchiseeTestHelper.createFranchiseeWithDutyAreas();
-        SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDto();
+        SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDtoWithIncludeMode();
 
         Optional<Franchisee> optionalFranchisee = FranchiseeTestHelper.createOptionalFranchisee();
 
@@ -116,6 +118,16 @@ class FranchiseeServiceTest {
 
         SuburbListGetDto suburbListGetDto = franchiseeService.addDutyAreas(suburbListPostDto, franchisee.getId());
         assertEquals(12287L, suburbListGetDto.getSuburbs().get(1).getSscCode());
+        assertEquals(DutyAreaFilterMode.INCLUDE, suburbListGetDto.getFilterMode());
+    }
+
+    @Test
+    void shouldReturnNullWhenFilterModeIsNotInclude() {
+        Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
+        SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDtoWithExcludeMode();
+
+        SuburbListGetDto suburbListGetDto = franchiseeService.addDutyAreas(suburbListPostDto, franchisee.getId());
+        assertNull(suburbListGetDto);
     }
 
 
@@ -147,7 +159,7 @@ class FranchiseeServiceTest {
 
     @Test
     void shouldThrowResourceNotFoundExist() {
-        SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDto();
+        SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDtoWithIncludeMode();
 
         when(franchiseeRepository.findFranchiseeById(any()))
                 .thenReturn(Optional.empty());

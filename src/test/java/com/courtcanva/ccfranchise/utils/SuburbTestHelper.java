@@ -1,6 +1,7 @@
 package com.courtcanva.ccfranchise.utils;
 
 import com.courtcanva.ccfranchise.constants.AUState;
+import com.courtcanva.ccfranchise.constants.DutyAreaFilterMode;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
@@ -29,11 +30,18 @@ public class SuburbTestHelper {
     }
 
 
-    public static SuburbListPostDto createSuburbListPostDto() {
+    public static SuburbListPostDto createSuburbListPostDtoWithIncludeMode() {
         List<SuburbPostDto> suburbs = new ArrayList<>();
         suburbs.add(new SuburbPostDto(11344L));
         suburbs.add(new SuburbPostDto(12287L));
-        return SuburbListPostDto.builder().suburbs(suburbs).build();
+        return SuburbListPostDto.builder().filterMode(DutyAreaFilterMode.INCLUDE).suburbs(suburbs).build();
+    }
+
+    public static SuburbListPostDto createSuburbListPostDtoWithExcludeMode() {
+        List<SuburbPostDto> suburbs = new ArrayList<>();
+        suburbs.add(new SuburbPostDto(11344L));
+        suburbs.add(new SuburbPostDto(12287L));
+        return SuburbListPostDto.builder().filterMode(DutyAreaFilterMode.EXCLUDE).suburbs(suburbs).build();
     }
 
 

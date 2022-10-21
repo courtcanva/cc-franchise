@@ -74,7 +74,7 @@ class FranchiseeControllerTest {
         suburbRepository.save(SuburbTestHelper.suburb1());
         suburbRepository.save(SuburbTestHelper.suburb2());
 
-        SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDto();
+        SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDtoWithIncludeMode();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/" + mockFranchiseeId.toString() + "/service_areas")
                         .content(objectMapper.writeValueAsString(suburbListPostDto))

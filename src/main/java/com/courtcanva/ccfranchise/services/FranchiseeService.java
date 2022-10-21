@@ -1,5 +1,6 @@
 package com.courtcanva.ccfranchise.services;
 
+import com.courtcanva.ccfranchise.constants.DutyAreaFilterMode;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
@@ -43,7 +44,7 @@ public class FranchiseeService {
     private final SuburbService suburbService;
 
     private final SuburbMapper suburbMapper;
-    
+
 
     @Transactional
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
@@ -76,29 +77,35 @@ public class FranchiseeService {
     @Transactional
     public SuburbListGetDto addDutyAreas(SuburbListPostDto suburbListPostDto, Long franchiseeId) {
 
-        Optional<Franchisee> optionalFranchisee = findFranchiseeById(franchiseeId);
+        if (suburbListPostDto.getFilterMode().equals(DutyAreaFilterMode.INCLUDE)) {
+            Optional<Franchisee> optionalFranchisee = findFranchiseeById(franchiseeId);
 
-        Franchisee franchisee = optionalFranchisee.orElseThrow(() -> {
+            Franchisee franchisee = optionalFranchisee.orElseThrow(() -> {
 
-            log.debug("franchisee with id: {} is not exist", franchiseeId);
+                log.debug("franchisee with id: {} is not exist", franchiseeId);
 
-            return new ResourceNotFoundException("franchisee id is not exist");
+                return new ResourceNotFoundException("franchisee id is not exist");
 
-        });
+            });
 
-        List<Suburb> allSuburbs = suburbService.findSuburbBySscCodes(suburbListPostDto.getSuburbs()
-                .stream()
-                .map(SuburbPostDto::getSscCode)
-                .collect(Collectors.toList()));
+            List<Suburb> allSuburbs = suburbService.findSuburbBySscCodes(suburbListPostDto.getSuburbs()
+                    .stream()
+                    .map(SuburbPostDto::getSscCode)
+                    .collect(Collectors.toList()));
 
-        franchisee.addDutyAreas(allSuburbs);
-        franchiseeRepository.save(franchisee);
+            franchisee.addDutyAreas(allSuburbs);
+            franchiseeRepository.save(franchisee);
 
-        return SuburbListGetDto.builder().suburbs(allSuburbs
-                        .stream()
-                        .map(suburbMapper::suburbToGetDto)
-                        .collect(Collectors.toList()))
-                .build();
+            return SuburbListGetDto.builder()
+                    .filterMode(suburbListPostDto.getFilterMode())
+                    .suburbs(allSuburbs
+                            .stream()
+                            .map(suburbMapper::suburbToGetDto)
+                            .collect(Collectors.toList()))
+                    .build();
+        }
+        return null;
+
     }
 
 

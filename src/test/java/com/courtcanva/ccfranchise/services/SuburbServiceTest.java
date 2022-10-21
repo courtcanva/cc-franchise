@@ -58,7 +58,7 @@ public class SuburbServiceTest {
     @Test
     void shouldReturnSuburbListWhenSuburbIsExist() {
         List<Suburb> suburbList = SuburbTestHelper.createSuburbsListWithFranchisee();
-        SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDto();
+        SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDtoWithIncludeMode();
 
         when(suburbRepository.findBySscCodeIn(any())).thenReturn(suburbList);
 
