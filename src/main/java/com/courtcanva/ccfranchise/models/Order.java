@@ -1,6 +1,7 @@
 package com.courtcanva.ccfranchise.models;
 
 
+import com.courtcanva.ccfranchise.constants.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +15,8 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -65,7 +68,9 @@ public class Order {
     private BigDecimal unpaidAmount;
 
     @Column(nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private OrderStatus status = OrderStatus.UNASSIGNED;
 
     @Column(nullable = false, updatable = false, name = "created_at")
     @CreationTimestamp

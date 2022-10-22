@@ -33,6 +33,15 @@ public class ControllerExceptionHandler {
                 .build();
     }
 
+    @ExceptionHandler(value = OrderStatusInvalidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDto handleOrderStatusInvalidException(OrderStatusInvalidException e) {
+        return ErrorDto.builder()
+                   .errorCode(HttpStatus.BAD_REQUEST.value())
+                   .details(e.getMessage())
+                   .build();
+    }
+
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDto handleMethodArgumentNotValid(MethodArgumentNotValidException e) {

@@ -2,6 +2,7 @@ package com.courtcanva.ccfranchise.repositories;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
@@ -40,12 +41,12 @@ class OrderRepositoryTest {
             OrderTestHelper.createOrder("102", "4000", 4000L, franchiseeFromDb));
         orderRepository.saveAll(orders);
 
-        List<Order> ordersFromDb = orderRepository.findFirst10ByFranchiseeId(franchiseeFromDb.getId());
+        List<Order> ordersFromDb = orderRepository.findFirst10ByFranchiseeIdAndStatus(franchiseeFromDb.getId(), OrderStatus.ASSIGNED_PENDING);
         List<Long> ids = orders.stream().map(Order::getId).toList();
         ordersFromDb.forEach(order -> assertTrue(ids.contains(order.getId())));
 
         // should return 0 size List Order
-        List<Order> ordersOfOtherId = orderRepository.findFirst10ByFranchiseeId(franchiseeFromDb.getId() + 100);
+        List<Order> ordersOfOtherId = orderRepository.findFirst10ByFranchiseeIdAndStatus(franchiseeFromDb.getId() + 100,OrderStatus.ASSIGNED_PENDING);
         assertEquals(0,ordersOfOtherId.size());
 
     }

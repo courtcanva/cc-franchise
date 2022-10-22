@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.courtcanva.ccfranchise.constants.AUState;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
-import com.courtcanva.ccfranchise.dtos.IdDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
 import com.courtcanva.ccfranchise.models.Franchisee;
@@ -105,15 +104,13 @@ class FranchiseeControllerTest {
                 new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "23468290381", "Melbourne", AUState.VIC, 3000),
                 new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd")))
                                     .getFranchiseeGetDto().getFranchiseeId();
-        IdDto idDto = OrderTestHelper.createIdDto(mockFranchiseeId);
         List<Franchisee> franchisees = franchiseeRepository.findAll();
         List<Order> orders = List.of(OrderTestHelper.createOrder("101", "3000", 3000L, franchisees.get(0)),
             OrderTestHelper.createOrder("102", "4000", 4000L, franchisees.get(0)));
         orderRepository.saveAll(orders);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/my/orders/open")
-                            .content(objectMapper.writeValueAsString(idDto))
-                            .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.get("/franchisee/"+mockFranchiseeId.toString()+"/orders?status=open")
+                            )
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].customerId").value("101"))

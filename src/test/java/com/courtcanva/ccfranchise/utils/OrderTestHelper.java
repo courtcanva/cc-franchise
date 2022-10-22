@@ -1,6 +1,6 @@
 package com.courtcanva.ccfranchise.utils;
 
-import com.courtcanva.ccfranchise.dtos.IdDto;
+import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.OpenOrderResponseDto;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
@@ -8,9 +8,6 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 public class OrderTestHelper {
-    public static IdDto createIdDto(Long mockFranchiseeId) {
-        return new IdDto(mockFranchiseeId);
-    }
 
     public static Order createOrder(String customerId, String postcode, Long totalAmount, Franchisee franchisee) {
         return Order.builder()
@@ -24,7 +21,7 @@ public class OrderTestHelper {
                    .totalAmount(new BigDecimal(totalAmount))
                    .paidAmount(new BigDecimal(1000L))
                    .unpaidAmount(new BigDecimal(2000L))
-                   .status("UNASSIGNED")
+                   .status(OrderStatus.ASSIGNED_PENDING)
                    .franchisee(franchisee)
                    .invoiceLink("https://link.co")
                    .createdTime(OffsetDateTime.parse("2021-12-03T10:15:30+11:00"))

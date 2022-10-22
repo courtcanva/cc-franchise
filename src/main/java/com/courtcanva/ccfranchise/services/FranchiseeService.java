@@ -8,7 +8,6 @@ import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
-import com.courtcanva.ccfranchise.exceptions.NoAvailableOrderException;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
@@ -119,10 +118,11 @@ public class FranchiseeService {
     }
 
 
-    public List<OpenOrderResponseDto> getOpenOrders(Long id) {
+    public List<OpenOrderResponseDto> getFirst10OpenOrders(Long id) {
         Optional<Franchisee> franchiseeFromDatabase = franchiseeRepository.findById(id);
-        Franchisee franchisee = franchiseeFromDatabase.orElseThrow(() -> new NoAvailableOrderException("no available orders because of invalid franchisee"));
-        return orderService.getOpenOrdersByFranchiseeId(franchisee.getId());
+        Franchisee franchisee = franchiseeFromDatabase.orElseThrow(() -> new ResourceNotFoundException(
+            "Can't find franchisee id " + id));
+        return orderService.getFirst10OpenOrdersById(franchisee.getId());
 
     }
 }
