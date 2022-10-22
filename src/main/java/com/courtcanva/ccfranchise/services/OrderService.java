@@ -17,10 +17,6 @@ public class OrderService {
 
     public List<OpenOrderResponseDto> getFirst10OpenOrdersById(Long franchiseeId) {
         List<Order> ordersFirst10 = orderRepository.findFirst10ByFranchiseeIdAndStatus(franchiseeId, OrderStatus.ASSIGNED_PENDING);
-        // if (ordersFirst10.size() == 0) {
-        //     throw new NoAvailableOrderException("no available orders");
-        // }
         return ordersFirst10.stream().map(orderMapper::orderToDto).toList();
-
     }
 }

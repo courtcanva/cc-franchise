@@ -44,7 +44,6 @@ public class FranchiseeController {
         return franchiseeService.addDutyAreas(suburbListPostDto, franchiseeId);
     }
 
-    // TODO: <future function> use Spring Security to check if user is logged in
     @GetMapping("/{id}/orders")
     public List<OpenOrderResponseDto> getOpenOrders(@PathVariable Long id, @RequestParam @NotNull String status){
         if ("open".equals(status)) {

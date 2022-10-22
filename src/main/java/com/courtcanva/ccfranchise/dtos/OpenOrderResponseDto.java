@@ -19,7 +19,6 @@ public class OpenOrderResponseDto {
     private String customerId;
 
     private String contactInformation;
-    // TODO: <future function> get customerName, address, phone no. from final database (cc-admin repository).
 
     private String postcode;
 
