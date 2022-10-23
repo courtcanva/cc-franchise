@@ -1,7 +1,6 @@
 package com.courtcanva.ccfranchise.controllers;
 
 import com.courtcanva.ccfranchise.exceptions.ExpiredVerificationTokenException;
-import com.courtcanva.ccfranchise.exceptions.MailingClientException;
 import com.courtcanva.ccfranchise.services.StaffService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,7 @@ public class StaffController {
 
     @PostMapping("/verification")
     @ResponseStatus(HttpStatus.CREATED)
-    public void sendVerificationEmail(@RequestParam Long id) throws MailingClientException {
+    public void sendVerificationEmail(@RequestParam Long id) {
         staffService.sendVerificationEmail(id);
     }
 
