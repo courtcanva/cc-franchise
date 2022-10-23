@@ -11,7 +11,6 @@ import com.amazonaws.services.simpleemail.model.Content;
 import com.amazonaws.services.simpleemail.model.Destination;
 import com.amazonaws.services.simpleemail.model.Message;
 import com.amazonaws.services.simpleemail.model.SendEmailRequest;
-import com.amazonaws.services.simpleemail.model.SendEmailResult;
 import com.courtcanva.ccfranchise.configs.MailingConfig;
 import com.courtcanva.ccfranchise.exceptions.MailingClientException;
 import lombok.extern.slf4j.Slf4j;
@@ -41,10 +40,8 @@ public class MailingClient {
                                                         .withData(content))
                                 )
                 ).withSource(from);
-
         try {
-            SendEmailResult result = sesClient.sendEmail(sendEmailRequest);
-            log.info("Send email request completed with result of " + result.getMessageId());
+            sesClient.sendEmail(sendEmailRequest);
         } catch (Exception ex) {
             throw new MailingClientException("Failed to send email via AWS SES. (" + ex.getMessage() + ")");
         }

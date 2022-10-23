@@ -22,14 +22,12 @@ public class StaffController {
     @PostMapping("/send-verification-email")
     @ResponseStatus(HttpStatus.CREATED)
     public void sendVerificationEmail(@RequestParam Long id) {
-        log.info("Received request to send verification email to staff.");
         staffService.sendVerificationEmail(id);
     }
 
     @PostMapping("/verify-email")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void verifyEmail(@RequestParam String token, @RequestParam(name = "i") String email) throws ExpiredVerificationTokenException {
-        log.info("Received request to verify email of staff.");
         staffService.verifyEmail(token, email);
     }
 }

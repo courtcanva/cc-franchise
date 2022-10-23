@@ -36,27 +36,24 @@ public class StaffService {
 
     public void sendVerificationEmail(Long id) {
         Staff staff = staffRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Cannot find staff with given id"));
-        log.info("Found requested staff to send verification email to, generating verification token...");
+                .orElseThrow(() -> new NoSuchElementException("Cannot find staff with given id " + id));
 
         String verificationToken = UUID.randomUUID().toString();
 
         staff.setVerificationToken(verificationToken);
         staff.setVerificationTokenCreatedTime(OffsetDateTime.now());
         staffRepository.save(staff);
-        log.info("Verification token saved to database, preparing to send verification email...");
 
         mailingService.sendVerificationEmail(staff.getEmail(), verificationToken);
     }
 
     public void verifyEmail(String token, String email) throws ExpiredVerificationTokenException {
-        log.info("Decoded string is " + new String(Base64.decode(email.getBytes())));
-        Staff staff = staffRepository.findOneByVerificationTokenAndEmail(token, new String(Base64.decode(email.getBytes())))
-                .orElseThrow(() -> new NoSuchElementException("Cannot find staff with given email or verification token"));
+        String decodedEmail = new String(Base64.decode(email.getBytes()));
+        Staff staff = staffRepository.findOneByVerificationTokenAndEmail(token, decodedEmail)
+                .orElseThrow(() -> new NoSuchElementException("Cannot find staff with given email " + decodedEmail + "or verification token"));
 
         OffsetDateTime verificationTokenCreatedTime = staff.getVerificationTokenCreatedTime();
         if (verificationTokenCreatedTime.isAfter(OffsetDateTime.now().minus(24, ChronoUnit.HOURS))) {
-            log.info("Verification token is valid, staff is verified");
             staff.setStatus(StaffStatus.VERIFIED);
 
             staff.setVerificationToken(null);
