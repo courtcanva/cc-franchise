@@ -46,6 +46,7 @@ public class FranchiseeController {
     }
 
     @GetMapping("/{franchiseeId}/orders")
+    @ResponseStatus(HttpStatus.OK)
     public List<OpenOrderGetDto> getFirst10OpenOrders(@PathVariable Long franchiseeId, @RequestParam @NotNull String status){
         if (OrderStatus.ASSIGNED_PENDING.getStatus().equals(status)) {
             return franchiseeService.getFirst10OpenOrders(franchiseeId);
