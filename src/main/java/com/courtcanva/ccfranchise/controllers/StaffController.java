@@ -20,13 +20,13 @@ public class StaffController {
 
     private final StaffService staffService;
 
-    @PostMapping("/send-verification-email")
+    @PostMapping("/verification")
     @ResponseStatus(HttpStatus.CREATED)
     public void sendVerificationEmail(@RequestParam Long id) throws MailingClientException {
         staffService.sendVerificationEmail(id);
     }
 
-    @PostMapping("/verify-email")
+    @PostMapping("/verify")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void verifyEmail(@RequestParam String token, @RequestParam(name = "i") String email) throws ExpiredVerificationTokenException {
         staffService.verifyEmail(token, email);

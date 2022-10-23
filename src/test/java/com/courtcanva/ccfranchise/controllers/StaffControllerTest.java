@@ -30,8 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 public class StaffControllerTest {
-    private static final String STAFF_REQUEST_VERIFICATION_URI = "/staff/send-verification-email";
-    private static final String STAFF_VERIFICATION_URI = "/staff/verify-email";
+    private static final String STAFF_REQUEST_VERIFICATION_URI = "/staff/verification";
+    private static final String STAFF_VERIFICATION_URI = "/staff/verify";
 
     @Autowired
     private ObjectMapper objectMapper;
