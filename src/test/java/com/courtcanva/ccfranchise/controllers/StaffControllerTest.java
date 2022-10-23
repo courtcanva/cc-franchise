@@ -23,7 +23,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,6 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 public class StaffControllerTest {
+    private static final String STAFF_REQUEST_VERIFICATION_URI = "/staff/send-verification-email";
+    private static final String STAFF_VERIFICATION_URI = "/staff/verify-email";
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -38,7 +39,6 @@ public class StaffControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private StaffRepository staffRepository;
-
     @MockBean
     private MailingClient mailingClient;
 
@@ -51,9 +51,8 @@ public class StaffControllerTest {
     @Test
     void givenValidStaffId_whenSendVerificationToken_shouldReturnCreated() throws Exception {
         Staff staff = staffRepository.findByEmail(StaffTestHelper.createStaffForRepository().getEmail()).orElseThrow();
-        doNothing().when(mailingClient).sendEmail(any(), any(), any(), any());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/staff/send-verification-email")
+        mockMvc.perform(MockMvcRequestBuilders.post(STAFF_REQUEST_VERIFICATION_URI)
                         .param("id", String.valueOf(staff.getId()))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated());
@@ -63,7 +62,7 @@ public class StaffControllerTest {
     void givenInvalidMailingClientConfig_whenSendVerificationEmail_shouldThrowMailingClientException() throws Exception {
         doThrow(new MailingClientException("Invalid Mailing Client Configuration")).when(mailingClient).sendEmail(any(), any(), any(), any());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/staff/send-verification-email")
+        mockMvc.perform(MockMvcRequestBuilders.post(STAFF_REQUEST_VERIFICATION_URI)
                         .param("id", "1")
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isInternalServerError());
@@ -73,7 +72,7 @@ public class StaffControllerTest {
     void givenValidVerificationToken_whenVerifyEmail_shouldReturnAccepted() throws Exception {
         Staff staff = StaffTestHelper.createStaffForRepository();
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/staff/verify-email")
+        mockMvc.perform(MockMvcRequestBuilders.post(STAFF_VERIFICATION_URI)
                         .param("token", staff.getVerificationToken())
                         .param("i", Base64.encodeAsString(staff.getEmail().getBytes()))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -84,7 +83,7 @@ public class StaffControllerTest {
     void givenNoneExistVerificationToken_whenVerifyEmail_shouldThrowNoSuchElementException() throws Exception {
         Staff staff = StaffTestHelper.createStaffForRepository();
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/staff/verify-email")
+        mockMvc.perform(MockMvcRequestBuilders.post(STAFF_VERIFICATION_URI)
                         .param("token", UUID.randomUUID().toString())
                         .param("i", Base64.encodeAsString(staff.getEmail().getBytes()))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -96,10 +95,12 @@ public class StaffControllerTest {
         Staff staff = StaffTestHelper.createStaffForRepository("tester+staff-controller-test@courtcanva.com", OffsetDateTime.now().minus(2, ChronoUnit.DAYS));
         staffRepository.save(staff);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/staff/verify-email")
+        mockMvc.perform(MockMvcRequestBuilders.post(STAFF_VERIFICATION_URI)
                         .param("token", staff.getVerificationToken())
                         .param("i", Base64.encodeAsString(staff.getEmail().getBytes()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
     }
+
+
 }

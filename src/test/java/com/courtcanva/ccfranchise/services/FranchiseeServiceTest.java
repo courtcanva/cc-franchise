@@ -7,6 +7,7 @@ import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
+import com.courtcanva.ccfranchise.exceptions.MailingClientException;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
@@ -84,7 +85,7 @@ class FranchiseeServiceTest {
     }
 
     @Test
-    void givenFranchiseeAndStaffPostDto_whenCreateFranchiseeAndStaff_shouldReturnStaffAndFranchiseeGetDto() {
+    void givenFranchiseeAndStaffPostDto_whenCreateFranchiseeAndStaff_shouldReturnStaffAndFranchiseeGetDto() throws MailingClientException {
 
         Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
         StaffGetDto staffGetDto = StaffTestHelper.createStaffGetDto();

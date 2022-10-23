@@ -25,8 +25,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -61,8 +59,6 @@ class FranchiseeControllerTest {
 
     @Test
     void givenFranchiseeAndStaffPostDto_whenSignUpFranchisee_shouldReturnStaffAndFranchise() throws Exception {
-
-        doNothing().when(mailingClient).sendEmail(any(), any(), any(), any());
         FranchiseeAndStaffPostDto franchiseeAndStaffPostDto = FranchiseeAndStaffTestHelper.createFranchiseeAndStaffPostDto();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/signup")
