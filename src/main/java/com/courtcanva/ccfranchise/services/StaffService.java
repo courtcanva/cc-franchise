@@ -31,7 +31,7 @@ public class StaffService {
     @Transactional
     public StaffGetDto createStaff(Staff staff) throws MailingClientException {
         Staff savedStaff = staffRepository.save(staff);
-        this.sendVerificationEmail(savedStaff.getId());
+        sendVerificationEmail(savedStaff.getId());
         return staffMapper.staffToGetDto(savedStaff);
     }
 
