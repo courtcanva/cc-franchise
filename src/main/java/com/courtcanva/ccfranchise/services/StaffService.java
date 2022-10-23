@@ -4,6 +4,7 @@ import com.amazonaws.util.Base64;
 import com.courtcanva.ccfranchise.constants.StaffStatus;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.exceptions.ExpiredVerificationTokenException;
+import com.courtcanva.ccfranchise.exceptions.MailingClientException;
 import com.courtcanva.ccfranchise.exceptions.NoSuchElementException;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.models.Staff;
@@ -28,13 +29,13 @@ public class StaffService {
     private final MailingService mailingService;
 
     @Transactional
-    public StaffGetDto createStaff(Staff staff) {
+    public StaffGetDto createStaff(Staff staff) throws MailingClientException {
         Staff savedStaff = staffRepository.save(staff);
         this.sendVerificationEmail(savedStaff.getId());
         return staffMapper.staffToGetDto(savedStaff);
     }
 
-    public void sendVerificationEmail(Long id) {
+    public void sendVerificationEmail(Long id) throws MailingClientException {
         Staff staff = staffRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Cannot find staff with given id " + id));
 

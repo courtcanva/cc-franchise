@@ -27,7 +27,7 @@ public class MailingClient {
         sesClient = generateSESClient();
     }
 
-    public void sendEmail(String from, String to, String subject, String content) {
+    public void sendEmail(String from, String to, String subject, String content) throws MailingClientException {
         SendEmailRequest sendEmailRequest = new SendEmailRequest()
                 .withDestination(new Destination().withToAddresses(to))
                 .withMessage(
