@@ -1,9 +1,19 @@
 package com.courtcanva.ccfranchise.constants;
 
 public enum OrderStatus {
-    UNASSIGNED,
-    ASSIGNED_PENDING,
-    ACCEPTED,
-    COMPLETED,
-    CANCELED
+    UNASSIGNED("unassigned"),
+    ASSIGNED_PENDING("open"),
+    ACCEPTED("accepted"),
+    COMPLETED("complete"),
+    CANCELED("canceled");
+
+    final String status;
+
+    OrderStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
 }

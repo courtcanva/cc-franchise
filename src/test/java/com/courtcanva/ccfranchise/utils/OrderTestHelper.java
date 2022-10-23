@@ -1,7 +1,7 @@
 package com.courtcanva.ccfranchise.utils;
 
 import com.courtcanva.ccfranchise.constants.OrderStatus;
-import com.courtcanva.ccfranchise.dtos.OpenOrderResponseDto;
+import com.courtcanva.ccfranchise.dtos.OpenOrderGetDto;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
 import java.math.BigDecimal;
@@ -29,8 +29,8 @@ public class OrderTestHelper {
                    .build();
     }
 
-    public static OpenOrderResponseDto createOrderResponseDto(String customerId, String postcode, Long totalAmount) {
-        return OpenOrderResponseDto.builder()
+    public static OpenOrderGetDto createOrderResponseDto(String customerId, String postcode, Long totalAmount) {
+        return OpenOrderGetDto.builder()
                    .customerId(customerId)
                    .contactInformation("""
                        {"name": "Adam", "phone": "0404123456", "address": "Unit 1, 10 Queen Street, Richmond 3121"}""")

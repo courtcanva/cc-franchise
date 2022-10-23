@@ -99,7 +99,7 @@ class FranchiseeControllerTest {
 
     @Test
     @WithMockUser
-    void shouldReturnOpenOrders() throws Exception {
+    void shouldReturnFirst10OpenOrders() throws Exception {
         Long mockFranchiseeId = franchiseeController.signUpFranchiseeAndStaff(new FranchiseeAndStaffPostDto(
                 new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "23468290381", "Melbourne", AUState.VIC, 3000),
                 new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd")))

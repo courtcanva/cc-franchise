@@ -2,7 +2,7 @@ package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
-import com.courtcanva.ccfranchise.dtos.OpenOrderResponseDto;
+import com.courtcanva.ccfranchise.dtos.OpenOrderGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
@@ -118,7 +118,7 @@ public class FranchiseeService {
     }
 
 
-    public List<OpenOrderResponseDto> getFirst10OpenOrders(Long id) {
+    public List<OpenOrderGetDto> getFirst10OpenOrders(Long id) {
         Optional<Franchisee> franchiseeFromDatabase = franchiseeRepository.findById(id);
         Franchisee franchisee = franchiseeFromDatabase.orElseThrow(() -> new ResourceNotFoundException(
             "Can't find franchisee id " + id));

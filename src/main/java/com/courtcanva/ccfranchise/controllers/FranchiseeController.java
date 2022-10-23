@@ -1,8 +1,9 @@
 package com.courtcanva.ccfranchise.controllers;
 
+import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
-import com.courtcanva.ccfranchise.dtos.OpenOrderResponseDto;
+import com.courtcanva.ccfranchise.dtos.OpenOrderGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
 import com.courtcanva.ccfranchise.exceptions.OrderStatusInvalidException;
@@ -44,10 +45,10 @@ public class FranchiseeController {
         return franchiseeService.addDutyAreas(suburbListPostDto, franchiseeId);
     }
 
-    @GetMapping("/{id}/orders")
-    public List<OpenOrderResponseDto> getOpenOrders(@PathVariable Long id, @RequestParam @NotNull String status){
-        if ("open".equals(status)) {
-            return franchiseeService.getFirst10OpenOrders(id);
+    @GetMapping("/{franchiseeId}/orders")
+    public List<OpenOrderGetDto> getFirst10OpenOrders(@PathVariable Long franchiseeId, @RequestParam @NotNull String status){
+        if (OrderStatus.ASSIGNED_PENDING.getStatus().equals(status)) {
+            return franchiseeService.getFirst10OpenOrders(franchiseeId);
         } else {
             throw new OrderStatusInvalidException("order status invalid");
         }
