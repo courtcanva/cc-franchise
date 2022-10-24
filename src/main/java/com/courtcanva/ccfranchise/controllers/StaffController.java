@@ -27,7 +27,7 @@ public class StaffController {
 
     @PostMapping("/verify")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void verifyEmail(@RequestParam String token, @RequestParam(name = "i") String email) throws ExpiredVerificationTokenException {
+    public void verifyEmail(@RequestParam String token, @RequestParam(name = "email") String email) throws ExpiredVerificationTokenException {
         staffService.verifyEmail(token, email);
     }
 }

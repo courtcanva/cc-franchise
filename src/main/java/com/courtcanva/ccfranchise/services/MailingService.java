@@ -22,7 +22,7 @@ public class MailingService {
     @Async
     public void sendVerificationEmail(String to, String verificationToken) {
         String from = mailingConfig.getSender();
-        String verificationUrl = mailingConfig.getClientSideBaseUrl() + VERIFICATION_PAGE_URL + "?token=" + verificationToken + "&i=" + Base64.encodeAsString(to.getBytes());
+        String verificationUrl = mailingConfig.getClientSideBaseUrl() + VERIFICATION_PAGE_URL + "?token=" + verificationToken + "&email=" + Base64.encodeAsString(to.getBytes());
         String content = "<a target=\"_blank\" href=\"" + verificationUrl + "\">" + verificationUrl + "</a>";
 
         mailingClient.sendEmail(from, to, VERIFICATION_EMAIL_SUBJECT, content);

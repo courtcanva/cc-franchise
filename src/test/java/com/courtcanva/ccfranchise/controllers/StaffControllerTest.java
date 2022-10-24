@@ -54,14 +54,14 @@ public class StaffControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated());
     }
-    
+
     @Test
     void givenValidVerificationToken_whenVerifyEmail_shouldReturnAccepted() throws Exception {
         Staff staff = StaffTestHelper.createStaffForRepository();
 
         mockMvc.perform(MockMvcRequestBuilders.post(STAFF_VERIFICATION_URI)
                         .param("token", staff.getVerificationToken())
-                        .param("i", Base64.encodeAsString(staff.getEmail().getBytes()))
+                        .param("email", Base64.encodeAsString(staff.getEmail().getBytes()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isAccepted());
     }
@@ -72,7 +72,7 @@ public class StaffControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post(STAFF_VERIFICATION_URI)
                         .param("token", UUID.randomUUID().toString())
-                        .param("i", Base64.encodeAsString(staff.getEmail().getBytes()))
+                        .param("email", Base64.encodeAsString(staff.getEmail().getBytes()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -84,7 +84,7 @@ public class StaffControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post(STAFF_VERIFICATION_URI)
                         .param("token", staff.getVerificationToken())
-                        .param("i", Base64.encodeAsString(staff.getEmail().getBytes()))
+                        .param("email", Base64.encodeAsString(staff.getEmail().getBytes()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
     }
