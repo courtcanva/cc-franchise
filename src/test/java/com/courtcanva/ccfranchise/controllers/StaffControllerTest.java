@@ -1,7 +1,6 @@
 package com.courtcanva.ccfranchise.controllers;
 
 import com.amazonaws.util.Base64;
-import com.courtcanva.ccfranchise.exceptions.MailingClientException;
 import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.utils.MailingClient;
@@ -22,8 +21,6 @@ import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -57,17 +54,7 @@ public class StaffControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated());
     }
-
-    @Test
-    void givenInvalidMailingClientConfig_whenSendVerificationEmail_shouldThrowMailingClientException() throws Exception {
-        doThrow(new MailingClientException("Invalid Mailing Client Configuration")).when(mailingClient).sendEmail(any(), any(), any(), any());
-
-        mockMvc.perform(MockMvcRequestBuilders.post(STAFF_REQUEST_VERIFICATION_URI)
-                        .param("id", "1")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isInternalServerError());
-    }
-
+    
     @Test
     void givenValidVerificationToken_whenVerifyEmail_shouldReturnAccepted() throws Exception {
         Staff staff = StaffTestHelper.createStaffForRepository();

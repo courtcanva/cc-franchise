@@ -11,7 +11,6 @@ import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
@@ -27,7 +26,6 @@ public class StaffService {
     private final StaffMapper staffMapper;
     private final MailingService mailingService;
 
-    @Transactional
     public StaffGetDto createStaff(Staff staff) {
         Staff savedStaff = staffRepository.save(staff);
         sendVerificationEmail(savedStaff.getId());

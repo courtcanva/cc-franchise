@@ -7,6 +7,7 @@ import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
+import com.courtcanva.ccfranchise.exceptions.MailingClientException;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
@@ -43,9 +44,9 @@ public class FranchiseeService {
     private final SuburbService suburbService;
 
     private final SuburbMapper suburbMapper;
-    
 
-    @Transactional
+
+    @Transactional(noRollbackFor = MailingClientException.class)
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
 
         if (franchiseeExists(franchiseePostDto.getAbn())) {

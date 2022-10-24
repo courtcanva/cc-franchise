@@ -5,6 +5,7 @@ import com.courtcanva.ccfranchise.configs.MailingConfig;
 import com.courtcanva.ccfranchise.utils.MailingClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -18,6 +19,7 @@ public class MailingService {
     private final MailingClient mailingClient;
     private final MailingConfig mailingConfig;
 
+    @Async
     public void sendVerificationEmail(String to, String verificationToken) {
         String from = mailingConfig.getSender();
         String verificationUrl = mailingConfig.getClientSideBaseUrl() + VERIFICATION_PAGE_URL + "?token=" + verificationToken + "&i=" + Base64.encodeAsString(to.getBytes());
