@@ -126,7 +126,7 @@ class FranchiseeServiceTest {
         Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
         SuburbListAndFilterModePostDto suburbListAndFilterModePostDto = SuburbTestHelper.createSuburbListPostDtoWithExcludeMode();
 
-        SuburbListAndFilterModeGetDto suburbListAndFilterModeGetDto = franchiseeService.addDutyAreas(suburbListAndFilterModePostDto, franchisee.getId());
+        SuburbListAndFilterModeGetDto suburbListAndFilterModeGetDto = franchiseeService.dutyAreas(suburbListAndFilterModePostDto, franchisee.getId());
         assertNull(suburbListAndFilterModeGetDto);
     }
 

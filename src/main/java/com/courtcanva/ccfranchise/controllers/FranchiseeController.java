@@ -35,7 +35,7 @@ public class FranchiseeController {
     @PostMapping("/{franchiseeId}/service_areas")
     @ResponseStatus(HttpStatus.OK)
     public SuburbListAndFilterModeGetDto addDutyAreas(@RequestBody @Valid SuburbListAndFilterModePostDto suburbListAndFilterModePostDto, @PathVariable(value = "franchiseeId") Long franchiseeId) {
-        return franchiseeService.addDutyAreas(suburbListAndFilterModePostDto, franchiseeId);
+        return franchiseeService.dutyAreas(suburbListAndFilterModePostDto, franchiseeId);
     }
 
 }
