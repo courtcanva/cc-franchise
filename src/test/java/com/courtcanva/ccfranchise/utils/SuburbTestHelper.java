@@ -3,8 +3,8 @@ package com.courtcanva.ccfranchise.utils;
 import com.courtcanva.ccfranchise.constants.AUState;
 import com.courtcanva.ccfranchise.constants.DutyAreaFilterMode;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbGetDto;
+import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
-import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
 import com.courtcanva.ccfranchise.models.Suburb;
 
@@ -14,34 +14,19 @@ import java.util.List;
 import java.util.Set;
 
 public class SuburbTestHelper {
-    public static SuburbPostDto createSuburbPostDto() {
-        return SuburbPostDto.builder()
-                .sscCode(11344L)
-                .build();
-    }
 
-    public static SuburbGetDto createSuburbGetDto() {
-        return SuburbGetDto.builder()
-                .sscCode(11344L)
-                .suburbName("East Albury")
-                .postcode(2640)
-                .state(AUState.NSW)
-                .build();
-    }
-
-
-    public static SuburbListPostDto createSuburbListPostDtoWithIncludeMode() {
+    public static SuburbListAndFilterModePostDto createSuburbListPostDtoWithIncludeMode() {
         List<SuburbPostDto> suburbs = new ArrayList<>();
         suburbs.add(new SuburbPostDto(11344L));
         suburbs.add(new SuburbPostDto(12287L));
-        return SuburbListPostDto.builder().filterMode(DutyAreaFilterMode.INCLUDE).suburbs(suburbs).build();
+        return SuburbListAndFilterModePostDto.builder().filterMode(DutyAreaFilterMode.INCLUDE).suburbs(suburbs).build();
     }
 
-    public static SuburbListPostDto createSuburbListPostDtoWithExcludeMode() {
+    public static SuburbListAndFilterModePostDto createSuburbListPostDtoWithExcludeMode() {
         List<SuburbPostDto> suburbs = new ArrayList<>();
         suburbs.add(new SuburbPostDto(11344L));
         suburbs.add(new SuburbPostDto(12287L));
-        return SuburbListPostDto.builder().filterMode(DutyAreaFilterMode.EXCLUDE).suburbs(suburbs).build();
+        return SuburbListAndFilterModePostDto.builder().filterMode(DutyAreaFilterMode.EXCLUDE).suburbs(suburbs).build();
     }
 
 

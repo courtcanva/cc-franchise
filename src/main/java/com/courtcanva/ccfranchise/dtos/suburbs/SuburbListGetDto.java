@@ -1,7 +1,5 @@
 package com.courtcanva.ccfranchise.dtos.suburbs;
 
-
-import com.courtcanva.ccfranchise.constants.DutyAreaFilterMode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,8 +13,5 @@ import java.util.List;
 @Builder
 public class SuburbListGetDto {
 
-    private DutyAreaFilterMode filterMode;
-
     private List<SuburbGetDto> suburbs;
-
 }

@@ -5,8 +5,8 @@ import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
-import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
-import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
+import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
+import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
@@ -75,9 +75,9 @@ public class FranchiseeService {
 
 
     @Transactional
-    public SuburbListGetDto addDutyAreas(SuburbListPostDto suburbListPostDto, Long franchiseeId) {
+    public SuburbListAndFilterModeGetDto addDutyAreas(SuburbListAndFilterModePostDto suburbListAndFilterModePostDto, Long franchiseeId) {
 
-        if (suburbListPostDto.getFilterMode().equals(DutyAreaFilterMode.INCLUDE)) {
+        if (suburbListAndFilterModePostDto.getFilterMode().equals(DutyAreaFilterMode.INCLUDE)) {
             Optional<Franchisee> optionalFranchisee = findFranchiseeById(franchiseeId);
 
             Franchisee franchisee = optionalFranchisee.orElseThrow(() -> {
@@ -88,7 +88,7 @@ public class FranchiseeService {
 
             });
 
-            List<Suburb> allSuburbs = suburbService.findSuburbBySscCodes(suburbListPostDto.getSuburbs()
+            List<Suburb> allSuburbs = suburbService.findSuburbBySscCodes(suburbListAndFilterModePostDto.getSuburbs()
                     .stream()
                     .map(SuburbPostDto::getSscCode)
                     .collect(Collectors.toList()));
@@ -96,8 +96,8 @@ public class FranchiseeService {
             franchisee.addDutyAreas(allSuburbs);
             franchiseeRepository.save(franchisee);
 
-            return SuburbListGetDto.builder()
-                    .filterMode(suburbListPostDto.getFilterMode())
+            return SuburbListAndFilterModeGetDto.builder()
+                    .filterMode(suburbListAndFilterModePostDto.getFilterMode())
                     .suburbs(allSuburbs
                             .stream()
                             .map(suburbMapper::suburbToGetDto)
