@@ -12,15 +12,17 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MailingService {
 
+    private static final String VERIFICATION_EMAIL_SUBJECT = "Verify your CourtCanva credential!";
+    private static final String VERIFICATION_PAGE_URL = "/staff/verify-email";
+
     private final MailingClient mailingClient;
     private final MailingConfig mailingConfig;
 
     public void sendVerificationEmail(String to, String verificationToken) {
         String from = mailingConfig.getSender();
-        String subject = "Verify your CourtCanva credential!";
-        String verificationUrl = mailingConfig.getClientSideBaseUrl() + "/staff/verify-email?token=" + verificationToken + "&i=" + Base64.encodeAsString(to.getBytes());
+        String verificationUrl = mailingConfig.getClientSideBaseUrl() + VERIFICATION_PAGE_URL + "?token=" + verificationToken + "&i=" + Base64.encodeAsString(to.getBytes());
         String content = "<a target=\"_blank\" href=\"" + verificationUrl + "\">" + verificationUrl + "</a>";
 
-        mailingClient.sendEmail(from, to, subject, content);
+        mailingClient.sendEmail(from, to, VERIFICATION_EMAIL_SUBJECT, content);
     }
 }
