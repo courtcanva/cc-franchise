@@ -82,3 +82,45 @@ public class Order {
     @Column
     private String invoiceLink;
 }
+
+
+
+//        courts: [{
+//        quotation: string,
+//        constructionDraw: string(url),
+//        isNeedLevelGround: boolean,
+//        design: {
+//        designName: string,
+//        tileColor: [{
+//        location: string,
+//        color: string
+//        }],
+//        courtSize: {
+//        name: string,
+//        length: number,
+//        width: number,
+//        centreCircleRadius: number,
+//        threePointRadius: number,
+//        threePointLine: number,
+//        lengthOfCorner: number,
+//        restrictedAreaLength: number,
+//        restrictedAreaWidth: number,
+//        sideBorderWidth: number,
+//        lineBorderWidth: number,
+//        }
+//        }
+//        quotationDetails: [{
+//        color: string,
+//        quantity: number
+//        }],
+//        constructionAddress: {
+//        country: string,
+//        state: string,
+//        city: string,
+//        line1: string,
+//        ?line2: string,
+//        postal_code: string,
+//        }
+//        }],
+//
+//
