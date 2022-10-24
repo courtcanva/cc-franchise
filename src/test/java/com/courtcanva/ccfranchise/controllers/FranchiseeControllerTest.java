@@ -29,8 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc
 @ActiveProfiles("test")
+@AutoConfigureMockMvc(addFilters = false)
 class FranchiseeControllerTest {
 
     @Autowired
@@ -78,14 +78,15 @@ class FranchiseeControllerTest {
         suburbRepository.save(SuburbTestHelper.suburb2());
 
         SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDto();
-
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/" + mockFranchiseeId.toString() + "/service_areas")
                         .content(objectMapper.writeValueAsString(suburbListPostDto))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(jsonPath("$.suburbs[0].sscCode").value(11344L))
                 .andExpect(jsonPath("$.suburbs[1].sscCode").value(12287L));
 
     }
+
+
 }

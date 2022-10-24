@@ -25,7 +25,8 @@ class StaffDetailServiceTest {
 
     @Test
     public void givenStaffUsername_whenLoadUserByUsername_shouldReturnStaffDetailsSuccessfully() {
-        Staff mockStaff = StaffTestHelper.createStaff();
+        Staff mockStaff = StaffTestHelper.createStaffWithFranchisee();
+
         when(staffRepository.findByEmail(any()))
                 .thenReturn(Optional.ofNullable(mockStaff));
 

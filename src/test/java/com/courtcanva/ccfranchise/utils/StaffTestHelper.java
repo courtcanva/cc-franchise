@@ -8,6 +8,7 @@ import com.courtcanva.ccfranchise.models.Staff;
 import java.time.OffsetDateTime;
 
 public class StaffTestHelper {
+
     public static Staff createStaff() {
 
         return Staff.builder()
@@ -21,6 +22,22 @@ public class StaffTestHelper {
                 .phoneNumber("123456789")
                 .email("666@gmail.com")
                 .residentialAddress("fsdfsdafa")
+                .build();
+    }
+    public static Staff createStaffWithFranchisee() {
+
+        return Staff.builder()
+                .id(1232L)
+                .isVerified(false)
+                .firstName("ll")
+                .lastName("ff")
+                .password("Brfasfsad12331")
+                .state(AUState.ACT)
+                .postcode(1234)
+                .phoneNumber("123456789")
+                .email("666@gmail.com")
+                .residentialAddress("fsdfsdafa")
+                .franchisee(FranchiseeTestHelper.createFranchiseeWithId())
                 .build();
     }
 
