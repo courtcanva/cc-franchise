@@ -43,6 +43,7 @@ public class SecurityConfig {
     private List<String> allowedOrigins;
     private List<String> allowedMethods;
     private List<String> allowedHeaders;
+    private List<String> exposedHeaders;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -52,6 +53,7 @@ public class SecurityConfig {
                     cors.setAllowedMethods(allowedMethods);
                     cors.setAllowedOrigins(allowedOrigins);
                     cors.setAllowedHeaders(allowedHeaders);
+                    cors.setExposedHeaders(exposedHeaders);
                     return cors;
                 })
                 .and()
@@ -60,6 +62,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests(authorize ->
                         authorize.antMatchers(AUTH_URL_WHITELIST).permitAll()
+                                .antMatchers("/franchisee/{franchiseeId:^[1-9]\\d*$}/**")
+                                .access("@guard.checkFranchiseeAccess(authentication, #franchiseeId)")
                                 .anyRequest().authenticated()
                 )
                 .addFilter(
