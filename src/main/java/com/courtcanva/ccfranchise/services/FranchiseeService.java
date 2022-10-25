@@ -51,6 +51,10 @@ public class FranchiseeService {
 
     private final SuburbMapper suburbMapper;
 
+    private final OrderMapper orderMapper;
+
+    private final OrderRepository orderRepository;
+
     @Transactional
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
 

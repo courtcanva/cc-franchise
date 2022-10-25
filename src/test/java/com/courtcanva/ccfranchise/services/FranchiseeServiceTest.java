@@ -100,8 +100,8 @@ class FranchiseeServiceTest {
                 passwordEncoder,
                 suburbService,
                 suburbMapper,
-                orderRepository,
-                orderMapper
+                orderMapper,
+                orderRepository
         );
     }
 

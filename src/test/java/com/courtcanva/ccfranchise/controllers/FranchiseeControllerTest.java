@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -85,6 +86,26 @@ class FranchiseeControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(jsonPath("$.suburbs[0].sscCode").value(11344L))
                 .andExpect(jsonPath("$.suburbs[1].sscCode").value(12287L));
+
+    }
+
+    @Test
+    void shouldReturnAcceptOrders() throws Exception {
+        Long mockFranchiseeId = franchiseeController.signUpFranchiseeAndStaff(
+                        new FranchiseeAndStaffPostDto(
+                                new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "23468290381", "Melbourne", AUState.VIC, 3000),
+                                new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd")))
+                .getFranchiseeGetDto().getFranchiseeId();
+
+        orderRepository.save(OrderTestHelper.Order1());
+        OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/" + mockFranchiseeId.toString() + "/accept_orders")
+                        .content(objectMapper.writeValueAsString(orderListPostDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.orders[0].status")
+                        .value("ACCEPTED"));
 
     }
 }
