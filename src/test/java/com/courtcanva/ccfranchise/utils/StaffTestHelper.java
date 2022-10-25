@@ -1,8 +1,10 @@
 package com.courtcanva.ccfranchise.utils;
 
+import com.amazonaws.util.Base64;
 import com.courtcanva.ccfranchise.constants.AUState;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
+import com.courtcanva.ccfranchise.dtos.StaffVerifyEmailPostDto;
 import com.courtcanva.ccfranchise.models.Staff;
 
 import java.time.OffsetDateTime;
@@ -97,6 +99,13 @@ public class StaffTestHelper {
                 .phoneNumber("0466277688")
                 .firstName("first")
                 .lastName("last")
+                .build();
+    }
+
+    public static StaffVerifyEmailPostDto createStaffVerifyEmailPostDto(String token, String email) {
+        return StaffVerifyEmailPostDto.builder()
+                .token(token)
+                .email(Base64.encodeAsString(email.getBytes()))
                 .build();
     }
 }

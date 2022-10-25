@@ -48,7 +48,7 @@ public class StaffService {
     public void verifyEmail(String token, String email) throws ExpiredVerificationTokenException {
         String decodedEmail = new String(Base64.decode(email.getBytes()));
         Staff staff = staffRepository.findOneByVerificationTokenAndEmail(token, decodedEmail)
-                .orElseThrow(() -> new NoSuchElementException("Cannot find staff with given email " + decodedEmail + "or verification token"));
+                .orElseThrow(() -> new NoSuchElementException("Cannot find staff with given email [" + decodedEmail + "] or verification token [" + token + "]"));
 
         OffsetDateTime verificationTokenCreatedTime = staff.getVerificationTokenCreatedTime();
         if (verificationTokenCreatedTime.isAfter(OffsetDateTime.now().minus(24, ChronoUnit.HOURS))) {

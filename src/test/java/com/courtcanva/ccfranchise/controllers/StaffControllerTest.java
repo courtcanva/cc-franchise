@@ -1,6 +1,6 @@
 package com.courtcanva.ccfranchise.controllers;
 
-import com.amazonaws.util.Base64;
+import com.courtcanva.ccfranchise.dtos.StaffVerifyEmailPostDto;
 import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.utils.MailingClient;
@@ -58,10 +58,10 @@ public class StaffControllerTest {
     @Test
     void givenValidVerificationToken_whenVerifyEmail_shouldReturnAccepted() throws Exception {
         Staff staff = StaffTestHelper.createStaffForRepository();
+        StaffVerifyEmailPostDto staffVerifyEmailPostDto = StaffTestHelper.createStaffVerifyEmailPostDto(staff.getVerificationToken(), staff.getEmail());
 
         mockMvc.perform(MockMvcRequestBuilders.post(STAFF_VERIFICATION_URI)
-                        .param("token", staff.getVerificationToken())
-                        .param("email", Base64.encodeAsString(staff.getEmail().getBytes()))
+                        .content(objectMapper.writeValueAsString(staffVerifyEmailPostDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isAccepted());
     }
@@ -69,10 +69,10 @@ public class StaffControllerTest {
     @Test
     void givenNoneExistVerificationToken_whenVerifyEmail_shouldThrowNoSuchElementException() throws Exception {
         Staff staff = StaffTestHelper.createStaffForRepository();
+        StaffVerifyEmailPostDto staffVerifyEmailPostDto = StaffTestHelper.createStaffVerifyEmailPostDto(UUID.randomUUID().toString(), staff.getEmail());
 
         mockMvc.perform(MockMvcRequestBuilders.post(STAFF_VERIFICATION_URI)
-                        .param("token", UUID.randomUUID().toString())
-                        .param("email", Base64.encodeAsString(staff.getEmail().getBytes()))
+                        .content(objectMapper.writeValueAsString(staffVerifyEmailPostDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -81,10 +81,10 @@ public class StaffControllerTest {
     void givenExpiredVerificationToken_whenVerifyEmail_shouldThrowExpiredVerificationTokenException() throws Exception {
         Staff staff = StaffTestHelper.createStaffForRepository("tester+staff-controller-test@courtcanva.com", OffsetDateTime.now().minus(2, ChronoUnit.DAYS));
         staffRepository.save(staff);
+        StaffVerifyEmailPostDto staffVerifyEmailPostDto = StaffTestHelper.createStaffVerifyEmailPostDto(staff.getVerificationToken(), staff.getEmail());
 
         mockMvc.perform(MockMvcRequestBuilders.post(STAFF_VERIFICATION_URI)
-                        .param("token", staff.getVerificationToken())
-                        .param("email", Base64.encodeAsString(staff.getEmail().getBytes()))
+                        .content(objectMapper.writeValueAsString(staffVerifyEmailPostDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
     }
