@@ -4,6 +4,7 @@ import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
@@ -114,5 +115,8 @@ public class FranchiseeService {
 
     }
 
+    public OrderListGetDto findFranchiseeAcceptedOrders (Long franchiseeId) {
+        return OrderListGetDto.builder().build();
+    }
 
 }
