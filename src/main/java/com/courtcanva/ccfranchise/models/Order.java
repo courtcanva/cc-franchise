@@ -12,6 +12,7 @@ import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -84,43 +85,42 @@ public class Order {
 }
 
 
-
+// from node team
 //        courts: [{
-//        quotation: string,
-//        constructionDraw: string(url),
-//        isNeedLevelGround: boolean,
-//        design: {
-//        designName: string,
-//        tileColor: [{
-//        location: string,
-//        color: string
-//        }],
-//        courtSize: {
-//        name: string,
-//        length: number,
-//        width: number,
-//        centreCircleRadius: number,
-//        threePointRadius: number,
-//        threePointLine: number,
-//        lengthOfCorner: number,
-//        restrictedAreaLength: number,
-//        restrictedAreaWidth: number,
-//        sideBorderWidth: number,
-//        lineBorderWidth: number,
-//        }
-//        }
-//        quotationDetails: [{
-//        color: string,
-//        quantity: number
-//        }],
-//        constructionAddress: {
-//        country: string,
-//        state: string,
-//        city: string,
-//        line1: string,
-//        ?line2: string,
-//        postal_code: string,
-//        }
-//        }],
-//
-//
+//            quotation: string,
+//            constructionDraw: string(url),
+//            isNeedLevelGround: boolean,
+//            design: {
+//                designName: string,
+//                tileColor: [{
+//                    location: string,
+//                    color: string
+//                }],
+//                courtSize: {
+//                    name: string,
+//                    length: number,
+//                    width: number,
+//                    centreCircleRadius: number,
+//                    threePointRadius: number,
+//                    threePointLine: number,
+//                    lengthOfCorner: number,
+//                    restrictedAreaLength: number,
+//                    restrictedAreaWidth: number,
+//                    sideBorderWidth: number,
+//                    lineBorderWidth: number,
+//                }
+//            }
+//            quotationDetails: [{
+//                color: string,
+//                quantity: number
+//            }],
+//            constructionAddress: {
+//                country: string,
+//                state: string,
+//                city: string,
+//                line1: string,
+//                ?line2: string,
+//                postal_code: string,
+//            }
+//        }]
+
