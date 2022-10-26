@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -119,9 +120,8 @@ public class FranchiseeService {
 
 
     public List<OpenOrderGetDto> getFirst10OpenOrders(Long id) {
-        Optional<Franchisee> franchiseeFromDatabase = franchiseeRepository.findById(id);
-        Franchisee franchisee = franchiseeFromDatabase.orElseThrow(() -> new ResourceNotFoundException(
-            "Can't find franchisee id " + id));
+        Franchisee franchisee = franchiseeRepository.findById(id)
+                                    .orElseThrow(() -> new ResourceNotFoundException("Can't find franchisee id " + id));
         return orderService.getFirst10OpenOrdersById(franchisee.getId());
 
     }
