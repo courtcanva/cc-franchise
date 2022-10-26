@@ -65,7 +65,6 @@ public class Order {
     @Builder.Default
     private OrderStatus status = OrderStatus.UNASSIGNED;
 
-
     @Column(nullable = false, updatable = false, name = "created_at")
     @CreationTimestamp
     private OffsetDateTime createdTime;
