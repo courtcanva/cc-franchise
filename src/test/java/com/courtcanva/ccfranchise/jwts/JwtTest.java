@@ -5,7 +5,7 @@ import com.courtcanva.ccfranchise.controllers.FranchiseeController;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
-import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
+import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
@@ -94,7 +94,7 @@ class JwtTest {
         suburbRepository.save(SuburbTestHelper.suburb1());
         suburbRepository.save(SuburbTestHelper.suburb2());
 
-        SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDto();
+        SuburbListAndFilterModePostDto suburbListAndFilterModePostDto = SuburbTestHelper.createSuburbListPostDtoWithIncludeMode();
 
         UsernameAndPasswordAuthenticationRequest user = new UsernameAndPasswordAuthenticationRequest();
         user.setUsername("taylor.s@gmail.com");
@@ -113,7 +113,7 @@ class JwtTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/11/service_areas")
                         .header("Authorization", "Bearer " + token)
-                        .content(objectMapper.writeValueAsString(suburbListPostDto))
+                        .content(objectMapper.writeValueAsString(suburbListAndFilterModePostDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
