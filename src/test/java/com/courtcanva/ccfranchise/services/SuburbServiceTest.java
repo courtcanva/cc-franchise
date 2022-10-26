@@ -1,7 +1,7 @@
 package com.courtcanva.ccfranchise.services;
 
+import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
-import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
 import com.courtcanva.ccfranchise.mappers.SuburbMapper;
 import com.courtcanva.ccfranchise.mappers.SuburbMapperImpl;
@@ -58,11 +58,11 @@ public class SuburbServiceTest {
     @Test
     void shouldReturnSuburbListWhenSuburbIsExist() {
         List<Suburb> suburbList = SuburbTestHelper.createSuburbsListWithFranchisee();
-        SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDto();
+        SuburbListAndFilterModePostDto suburbListAndFilterModePostDto = SuburbTestHelper.createSuburbListPostDtoWithIncludeMode();
 
         when(suburbRepository.findBySscCodeIn(any())).thenReturn(suburbList);
 
-        List<Suburb> getSuburbList = suburbService.findSuburbBySscCodes(suburbListPostDto.getSuburbs().stream().map(SuburbPostDto::getSscCode).collect(Collectors.toList()));
+        List<Suburb> getSuburbList = suburbService.findSuburbBySscCodes(suburbListAndFilterModePostDto.getSuburbs().stream().map(SuburbPostDto::getSscCode).collect(Collectors.toList()));
 
         assertEquals(SuburbTestHelper.createSuburbsListWithFranchisee().get(1).getSscCode(), getSuburbList.get(1).getSscCode());
     }

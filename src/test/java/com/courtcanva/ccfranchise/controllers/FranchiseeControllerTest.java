@@ -4,7 +4,7 @@ import com.courtcanva.ccfranchise.constants.AUState;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
-import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
+import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
@@ -72,9 +72,10 @@ class FranchiseeControllerTest {
         suburbRepository.save(SuburbTestHelper.suburb1());
         suburbRepository.save(SuburbTestHelper.suburb2());
 
-        SuburbListPostDto suburbListPostDto = SuburbTestHelper.createSuburbListPostDto();
+        SuburbListAndFilterModePostDto suburbListAndFilterModePostDto = SuburbTestHelper.createSuburbListPostDtoWithIncludeMode();
+
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/" + mockFranchiseeId.toString() + "/service_areas")
-                        .content(objectMapper.writeValueAsString(suburbListPostDto))
+                        .content(objectMapper.writeValueAsString(suburbListAndFilterModePostDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print())
