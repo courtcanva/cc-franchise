@@ -38,3 +38,12 @@ management:
 
 jwt:
   secretKey: "courtcanvasecurekeysecurekeysecurekeysecurekeysecurekeysecurekeysecurekeysecurekeysecurekeysecurekey"
+
+cloud-resources:
+  aws:
+    region: ""
+    ses:
+      sender: ""
+      client-side-base-url: ""
+      access-key: ""
+      secret-key: ""
