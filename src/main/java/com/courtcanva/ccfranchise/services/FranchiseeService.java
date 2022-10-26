@@ -16,6 +16,7 @@ import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.mappers.SuburbMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
+import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.models.Suburb;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
@@ -129,7 +130,9 @@ public class FranchiseeService {
     }
 
     public OrderListGetDto findFranchiseeAcceptedOrders (Long franchiseeId) {
+        Franchisee franchisee = findFranchiseeById(franchiseeId).orElseThrow();
         return OrderListGetDto.builder().build();
     }
+
 
 }
