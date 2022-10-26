@@ -67,7 +67,7 @@ public class StaffControllerTest {
     }
 
     @Test
-    void givenNoneExistVerificationToken_whenVerifyEmail_shouldThrowNoSuchElementException() throws Exception {
+    void givenNoneExistVerificationToken_whenVerifyEmail_shouldThrowResourceNotFoundException() throws Exception {
         Staff staff = StaffTestHelper.createStaffForRepository();
         StaffVerifyEmailPostDto staffVerifyEmailPostDto = StaffTestHelper.createStaffVerifyEmailPostDto(UUID.randomUUID().toString(), staff.getEmail());
 

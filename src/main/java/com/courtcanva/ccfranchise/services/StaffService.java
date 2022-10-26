@@ -4,7 +4,7 @@ import com.amazonaws.util.Base64;
 import com.courtcanva.ccfranchise.constants.StaffStatus;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.exceptions.ExpiredVerificationTokenException;
-import com.courtcanva.ccfranchise.exceptions.NoSuchElementException;
+import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
@@ -34,7 +34,7 @@ public class StaffService {
 
     public void sendVerificationEmail(Long id) {
         Staff staff = staffRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Cannot find staff with given id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find staff with given id " + id));
 
         String verificationToken = UUID.randomUUID().toString();
 
@@ -48,7 +48,7 @@ public class StaffService {
     public void verifyEmail(String token, String email) throws ExpiredVerificationTokenException {
         String decodedEmail = new String(Base64.decode(email.getBytes()));
         Staff staff = staffRepository.findOneByVerificationTokenAndEmail(token, decodedEmail)
-                .orElseThrow(() -> new NoSuchElementException("Cannot find staff with given email [" + decodedEmail + "] or verification token [" + token + "]"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find staff with given email [" + decodedEmail + "] or verification token [" + token + "]"));
 
         OffsetDateTime verificationTokenCreatedTime = staff.getVerificationTokenCreatedTime();
         if (verificationTokenCreatedTime.isAfter(OffsetDateTime.now().minus(24, ChronoUnit.HOURS))) {
