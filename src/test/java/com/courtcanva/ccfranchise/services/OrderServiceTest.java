@@ -31,29 +31,29 @@ class OrderServiceTest {
     @Mock
     private Franchisee franchisee;
 
+    List<Order> orders = List.of(
+        OrderTestHelper.createOrder("101", "3000", 3000L, franchisee),
+        OrderTestHelper.createOrder("102", "4000", 4000L, franchisee));
+
     @BeforeEach
     void setUp() {
-        List<Order> orders = List.of(
-            OrderTestHelper.createOrder("101", "3000", 3000L, franchisee),
-            OrderTestHelper.createOrder("102", "4000", 4000L, franchisee));
         orderRepository.saveAll(orders);
         orderService = new OrderService(orderRepository, new OrderMapperImpl());
     }
 
     @Test
-    void getOpenOrdersByFranchiseeIdTest() {
-        // should return OpenOrderGetDto if id exists in order table
-        List<Order> orders = List.of(OrderTestHelper.createOrder("101", "3000", 3000L, franchisee),
-            OrderTestHelper.createOrder("102", "4000", 4000L, franchisee));
+    void givenFranchieeId_whenIdExist_shouldReturnListOfOrders() {
         when(orderRepository.findFirst10ByFranchiseeIdAndStatus(0L, OrderStatus.ASSIGNED_PENDING)).thenReturn(orders);
-        when(orderRepository.findFirst10ByFranchiseeIdAndStatus(999L, OrderStatus.ASSIGNED_PENDING)).thenReturn(new ArrayList<>());
         List<OpenOrderGetDto> first10OpenOrdersResponseDto = orderService.getFirst10OpenOrdersById(franchisee.getId());
         assertTrue(first10OpenOrdersResponseDto.stream().map(OpenOrderGetDto::getCustomerId).toList().containsAll(List.of("101", "102")));
         assertTrue(first10OpenOrdersResponseDto.stream().map(OpenOrderGetDto::getPostcode).toList().containsAll(List.of("3000", "4000")));
         assertTrue(first10OpenOrdersResponseDto.stream().map(OpenOrderGetDto::getTotalAmount).toList()
                        .containsAll(List.of(BigDecimal.valueOf(3000L), BigDecimal.valueOf(4000L))));
-
-        // should return empty list if open orders number is 0
+    }
+    @Test
+    void givenFranchieeId_whenIdNotExist_shouldReturnEmptyList() {
+        when(orderRepository.findFirst10ByFranchiseeIdAndStatus(999L, OrderStatus.ASSIGNED_PENDING)).thenReturn(new ArrayList<>());
         assertEquals(0, orderService.getFirst10OpenOrdersById(franchisee.getId() + 999).size());
     }
+
 }
