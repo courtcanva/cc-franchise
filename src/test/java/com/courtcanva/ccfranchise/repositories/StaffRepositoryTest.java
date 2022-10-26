@@ -15,7 +15,7 @@ class StaffRepositoryTest {
     private StaffRepository staffRepository;
 
     @Test
-    public void shouldReturnStaffSuccessfully() {
+    public void givenStaffObject_whenSaveToRepository_shouldReturnStaffSuccessfully() {
         staffRepository.save(
                 StaffTestHelper.createStaff());
 
