@@ -49,7 +49,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(value = MailingClientException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorDto handleMailingClientException(MailingClientException ex) {
-        log.error(ex.getMessage());
+        log.debug(ex.getMessage());
         return ErrorDto.builder()
                 .errorCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .details(ex.getMessage())
@@ -59,7 +59,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(value = ExpiredVerificationTokenException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorDto handleExpiredVerificationTokenException(ExpiredVerificationTokenException ex) {
-        log.error(ex.getMessage());
+        log.debug(ex.getMessage());
         return ErrorDto.builder()
                 .errorCode(HttpStatus.UNAUTHORIZED.value())
                 .details(ex.getMessage())
