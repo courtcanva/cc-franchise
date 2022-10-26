@@ -63,7 +63,8 @@ public class Order {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private OrderStatus status= OrderStatus.UNASSIGNED;
+
+    private OrderStatus status = OrderStatus.UNASSIGNED;
 
     @Column(nullable = false, updatable = false, name = "created_at")
     @CreationTimestamp
@@ -79,4 +80,6 @@ public class Order {
 
     @Column
     private String invoiceLink;
+
 }
+
