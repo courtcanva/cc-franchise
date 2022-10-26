@@ -24,11 +24,11 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorDto handleResourceNotFoundException(ResourceNotFoundException e) {
 
         return ErrorDto.builder()
-                .errorCode(HttpStatus.BAD_REQUEST.value())
+                .errorCode(HttpStatus.NOT_FOUND.value())
                 .details(e.getMessage())
                 .build();
     }
