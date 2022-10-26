@@ -17,6 +17,4 @@ public enum OrderStatus {
         return status;
     }
 
-//    写一个service试一下是否能够写入数据
-//    model是否一致
 }
