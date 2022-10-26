@@ -45,7 +45,7 @@ public class SuburbServiceTest {
     }
 
     @Test
-    void shouldGetSuburbListDtoWhenGetAllSuburbs() {
+    void whenGetAllSuburbs_shouldGetSuburbListDto() {
         List<Suburb> suburbList = SuburbTestHelper.createSuburbsListWithFranchisee();
 
         when(suburbRepository.findAll()).thenReturn(suburbList);
@@ -56,7 +56,7 @@ public class SuburbServiceTest {
     }
 
     @Test
-    void shouldReturnSuburbListWhenSuburbIsExist() {
+    void givenSSCCodeAndSuburbExists_whenFindSuburbBySSCCode_shouldReturnSuburbList() {
         List<Suburb> suburbList = SuburbTestHelper.createSuburbsListWithFranchisee();
         SuburbListAndFilterModePostDto suburbListAndFilterModePostDto = SuburbTestHelper.createSuburbListPostDtoWithIncludeMode();
 

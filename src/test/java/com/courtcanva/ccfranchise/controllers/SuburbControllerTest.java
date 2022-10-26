@@ -33,7 +33,7 @@ class SuburbControllerTest {
     }
 
     @Test
-    void shouldReturn200AndSuburbDtoWhenGetSuburbDto() throws Exception {
+    void giveRequestingListOfSuburbs_whenFindAllSuburb_shouldReturn200AndSuburbDtoWhenGetSuburbDto() throws Exception {
         mockMvc.perform(get("/suburbs"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.suburbs", hasSize(2)))
