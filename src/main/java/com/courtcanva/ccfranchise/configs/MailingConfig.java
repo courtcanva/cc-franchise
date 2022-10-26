@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 @Configuration
 public class MailingConfig {
+    
     @Value("${cloud-resources.aws.region}")
     private String region;
 
