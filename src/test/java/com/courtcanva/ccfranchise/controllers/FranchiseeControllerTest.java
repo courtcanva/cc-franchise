@@ -4,12 +4,15 @@ import com.courtcanva.ccfranchise.constants.AUState;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
 import com.courtcanva.ccfranchise.utils.FranchiseeAndStaffTestHelper;
 import com.courtcanva.ccfranchise.utils.MailingClient;
+import com.courtcanva.ccfranchise.utils.OrderTestHelper;
 import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,6 +50,8 @@ class FranchiseeControllerTest {
     private SuburbRepository suburbRepository;
     @MockBean
     private MailingClient mailingClient;
+    @Autowired
+    private OrderRepository orderRepository;
 
     @BeforeEach
     public void clear() {
@@ -89,5 +94,23 @@ class FranchiseeControllerTest {
 
     }
 
+    @Test
+    void shouldReturnAcceptOrders() throws Exception {
+        Long mockFranchiseeId = franchiseeController.signUpFranchiseeAndStaff(
+                        new FranchiseeAndStaffPostDto(
+                                new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "23468290381", "Melbourne", AUState.VIC, 3000),
+                                new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd")))
+                .getFranchiseeGetDto().getFranchiseeId();
 
+        orderRepository.save(OrderTestHelper.Order1());
+        OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/" + mockFranchiseeId.toString() + "/accept_orders")
+                        .content(objectMapper.writeValueAsString(orderListPostDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.orders[0].status")
+                        .value("ACCEPTED"));
+
+    }
 }
