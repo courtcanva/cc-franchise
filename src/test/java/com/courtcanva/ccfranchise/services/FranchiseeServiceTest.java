@@ -2,25 +2,33 @@ package com.courtcanva.ccfranchise.services;
 
 
 import com.courtcanva.ccfranchise.constants.DutyAreaFilterMode;
+import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapperImpl;
+import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
-import com.courtcanva.ccfranchise.mappers.StaffMapperImpl;
 import com.courtcanva.ccfranchise.mappers.SuburbMapper;
+import com.courtcanva.ccfranchise.mappers.StaffMapperImpl;
 import com.courtcanva.ccfranchise.mappers.SuburbMapperImpl;
+import com.courtcanva.ccfranchise.mappers.OrderMapperImpl;
 import com.courtcanva.ccfranchise.models.Franchisee;
+import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.models.Suburb;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
 import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
+import com.courtcanva.ccfranchise.utils.OrderTestHelper;
 import com.courtcanva.ccfranchise.utils.StaffTestHelper;
 import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +38,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,6 +69,8 @@ class FranchiseeServiceTest {
     private SuburbRepository suburbRepository;
     @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private OrderRepository orderRepository;
 
     @BeforeEach
     void setUp() {
@@ -69,11 +80,18 @@ class FranchiseeServiceTest {
     }
 
     @BeforeEach
+    void setOrderRepositoryUp() {
+        orderRepository.save(OrderTestHelper.Order1());
+        orderRepository.save(OrderTestHelper.Order2());
+    }
+
+    @BeforeEach
     public void setFranchiseeServiceUp() {
 
         FranchiseeMapper franchiseeMapper = new FranchiseeMapperImpl();
         StaffMapper staffMapper = new StaffMapperImpl();
         SuburbMapper suburbMapper = new SuburbMapperImpl();
+        OrderMapper orderMapper = new OrderMapperImpl();
         franchiseeService = new FranchiseeService(
                 franchiseeRepository,
                 franchiseeMapper,
@@ -81,7 +99,9 @@ class FranchiseeServiceTest {
                 staffService,
                 passwordEncoder,
                 suburbService,
-                suburbMapper
+                suburbMapper,
+                orderMapper,
+                orderRepository
         );
     }
 
@@ -165,6 +185,28 @@ class FranchiseeServiceTest {
                 .thenReturn(Optional.empty());
         assertThrows(ResourceNotFoundException.class, () -> franchiseeService.addDutyAreas(suburbListAndFilterModePostDto, 6L));
 
+    }
+
+    @Test
+    void shouldThrowOrderListGetDto() {
+        List<Order> orders = OrderTestHelper.OrderList();
+        List<Order> acceptedOrders = OrderTestHelper.AcceptedOrderList();
+        OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
+
+        when(orderRepository.findByIdIn(any())).thenReturn(orders);
+        when(orderRepository.saveAll(any())).thenReturn(acceptedOrders);
+
+        OrderListGetDto orderListGetDto = franchiseeService.acceptOrders(orderListPostDto);
+        assertEquals(OrderStatus.ACCEPTED, orderListGetDto.getOrders().get(0).getStatus());
+    }
+
+    @Test
+    void shouldThrowOrderNotFoundException() {
+        OrderListPostDto orderListPostDto = OrderTestHelper.createEmptyOrderListPostDto();
+
+        when(orderRepository.findByIdIn(any())).thenReturn(new ArrayList<>());
+        assertThrows(ResourceNotFoundException.class,
+                () -> franchiseeService.acceptOrders(orderListPostDto));
     }
 
 }

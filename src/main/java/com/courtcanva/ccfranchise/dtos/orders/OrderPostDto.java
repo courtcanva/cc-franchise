@@ -5,14 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class OrderListGetDto {
-    private List<OrderGetDto> orders;
-
+public class OrderPostDto {
+    private Long id;
 }
