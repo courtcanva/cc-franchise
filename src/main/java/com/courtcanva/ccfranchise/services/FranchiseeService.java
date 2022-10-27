@@ -58,7 +58,8 @@ public class FranchiseeService {
     private final OrderMapper orderMapper;
 
     private final OrderRepository orderRepository;
-    
+
+    private final OrderService orderService;
 
     @Transactional(noRollbackFor = MailingClientException.class)
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
@@ -142,7 +143,7 @@ public class FranchiseeService {
 
     public OrderListGetDto findFranchiseeAcceptedOrders (Long franchiseeId) {
         Franchisee franchisee = findFranchiseeById(franchiseeId).orElseThrow();
-        return OrderListGetDto.builder().build();
+        return orderService.getAcceptedOrders(franchisee);
     }
 
 
