@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.List;
 
 @SpringBootTest
@@ -27,16 +29,26 @@ class OrderRepositoryTest {
     private OrderRepository orderRepository;
 
     @BeforeEach
-    void setUp() {
+    void setOrderRepositoryUp() {
         orderRepository.deleteAll();
         staffRepository.deleteAll();
         franchiseeRepository.deleteAll();
     }
 
     @Test
-        // findFirst10ByFranchiseeIdTest
+    void findByIdIn() {
+        Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
+        Franchisee franchiseeFromDb = franchiseeRepository.save(franchisee);
+        List<Order> orderList = List.of(OrderTestHelper.createOrder("101", "3000", 3000L, franchiseeFromDb),
+            OrderTestHelper.createOrder("102", "4000", 4000L, franchiseeFromDb));
+        List<Order> ordersSave = orderRepository.saveAll(orderList);
+        List<Long> orderIds = ordersSave.stream().map(Order::getId).toList();
+        List<Order> ordersGetFromDb = orderRepository.findByIdIn(orderIds);
+        ordersGetFromDb.forEach(order -> assertTrue(orderIds.contains(order.getId())));
+    }
+
+    @Test
     void givenFranchieeId_whenIdExist_shouldReturnFirst10ListOfOrders() {
-        // should return first 10 orders if franchisee id exists
         Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
         Franchisee franchiseeFromDb = franchiseeRepository.save(franchisee);
         List<Order> orders = List.of(OrderTestHelper.createOrder("101", "3000", 3000L, franchiseeFromDb),
@@ -47,9 +59,6 @@ class OrderRepositoryTest {
             orderRepository.findFirst10ByFranchiseeIdAndStatus(franchiseeFromDb.getId(), OrderStatus.ASSIGNED_PENDING);
         List<Long> ids = orders.stream().map(Order::getId).toList();
         ordersFromDb.forEach(order -> assertTrue(ids.contains(order.getId())));
-
-        // should return 0 size List Order
-
     }
 
     @Test

@@ -1,11 +1,15 @@
 package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.constants.DutyAreaFilterMode;
+import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.OpenOrderGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
@@ -13,12 +17,15 @@ import com.courtcanva.ccfranchise.exceptions.MailingClientException;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
+import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.mappers.SuburbMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
+import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.models.Suburb;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,7 +34,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -48,8 +54,11 @@ public class FranchiseeService {
 
     private final SuburbMapper suburbMapper;
 
-    private final OrderService orderService;
+    private final OrderMapper orderMapper;
 
+    private final OrderRepository orderRepository;
+
+    private final OrderService orderService;
 
     @Transactional(noRollbackFor = MailingClientException.class)
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
@@ -83,7 +92,6 @@ public class FranchiseeService {
         return suburbListAndFilterModePostDto.getFilterMode().equals(DutyAreaFilterMode.INCLUDE) ? addDutyAreas(suburbListAndFilterModePostDto, franchiseeId) : null;
 
     }
-
 
     @Transactional
     public SuburbListAndFilterModeGetDto addDutyAreas(SuburbListAndFilterModePostDto suburbListAndFilterModePostDto, Long franchiseeId) {
@@ -129,6 +137,31 @@ public class FranchiseeService {
 
     }
 
+    @Transactional
+    public OrderListGetDto acceptOrders(OrderListPostDto orderListPostDto) {
+
+        List<Order> selectedOrders = orderRepository.findByIdIn(
+                orderListPostDto.getOrders()
+                        .stream()
+                        .map(OrderPostDto::getId)
+                        .collect(Collectors.toList()));
+
+        if (selectedOrders.isEmpty()) {
+
+            log.debug("selected order id: {} is empty", orderListPostDto.getOrders());
+            throw new ResourceNotFoundException("You have not selected any order.");
+        }
+
+
+        selectedOrders.forEach(order -> order.setStatus(OrderStatus.ACCEPTED));
+
+        List<Order> acceptedOrderList = orderRepository.saveAll(selectedOrders);
+        return OrderListGetDto.builder()
+                .orders(acceptedOrderList
+                        .stream()
+                        .map(orderMapper::orderToGetDto)
+                        .collect(Collectors.toList())).build();
+    }
 
     public List<OpenOrderGetDto> getFirst10OpenOrders(Long id) {
         Franchisee franchisee = franchiseeRepository.findById(id)
@@ -137,3 +170,4 @@ public class FranchiseeService {
 
     }
 }
+

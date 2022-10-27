@@ -7,6 +7,7 @@ import com.courtcanva.ccfranchise.constants.AUState;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
@@ -97,6 +98,25 @@ class FranchiseeControllerTest {
     }
 
     @Test
+    void shouldReturnAcceptOrders() throws Exception {
+        Long mockFranchiseeId = franchiseeController.signUpFranchiseeAndStaff(
+                        new FranchiseeAndStaffPostDto(
+                                new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "23468290381", "Melbourne", AUState.VIC, 3000),
+                                new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd")))
+                .getFranchiseeGetDto().getFranchiseeId();
+
+        orderRepository.save(OrderTestHelper.Order1());
+        OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
+        mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/" + mockFranchiseeId.toString() + "/accept_orders")
+                            .content(objectMapper.writeValueAsString(orderListPostDto))
+                            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.orders[0].status")
+                           .value("ACCEPTED"));
+
+    }
+
+    @Test
     @WithMockUser
     void givenFranchiseeId_whenQueryOpenOrders_shouldReturnOpenOrders() throws Exception {
         Long mockFranchiseeId = franchiseeController.signUpFranchiseeAndStaff(new FranchiseeAndStaffPostDto(
@@ -119,5 +139,6 @@ class FranchiseeControllerTest {
             .andExpect(jsonPath("$[1].postcode").value("4000"))
             .andExpect(jsonPath("$[1].totalAmount").value("4000.0"));
     }
+
 
 }
