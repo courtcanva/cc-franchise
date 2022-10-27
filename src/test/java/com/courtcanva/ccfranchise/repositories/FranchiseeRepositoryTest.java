@@ -34,7 +34,7 @@ class FranchiseeRepositoryTest {
     }
 
     @Test
-    public void shouldReturnTureWhenAbnAlreadyExist() {
+    public void givenAbnAlreadyExists_whenSaveToRepository_shouldReturnTrue() {
 
         franchiseeRepository.save(
                 FranchiseeTestHelper.createFranchisee());
@@ -45,7 +45,7 @@ class FranchiseeRepositoryTest {
     }
 
     @Test
-    public void shouldReturnFranchiseeWhenFranchiseeIdIsExist() {
+    public void givenFranchiseIdAlreadyExists_whenSaveToRepository_shouldReturnFranchisee() {
 
         Long franchiseeId = 1L;
 

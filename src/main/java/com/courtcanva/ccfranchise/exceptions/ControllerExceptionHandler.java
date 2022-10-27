@@ -24,11 +24,11 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorDto handleResourceNotFoundException(ResourceNotFoundException e) {
 
         return ErrorDto.builder()
-                .errorCode(HttpStatus.BAD_REQUEST.value())
+                .errorCode(HttpStatus.NOT_FOUND.value())
                 .details(e.getMessage())
                 .build();
     }
@@ -53,6 +53,26 @@ public class ControllerExceptionHandler {
                 .details(e.getMessage())
                 .build();
 
+    }
+
+    @ExceptionHandler(value = MailingClientException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorDto handleMailingClientException(MailingClientException ex) {
+        log.debug(ex.getMessage());
+        return ErrorDto.builder()
+                .errorCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .details(ex.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(value = ExpiredVerificationTokenException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorDto handleExpiredVerificationTokenException(ExpiredVerificationTokenException ex) {
+        log.debug(ex.getMessage());
+        return ErrorDto.builder()
+                .errorCode(HttpStatus.UNAUTHORIZED.value())
+                .details(ex.getMessage())
+                .build();
     }
 
     @ExceptionHandler(value = Exception.class)
