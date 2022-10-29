@@ -17,10 +17,10 @@ class StaffRepositoryTest {
     @Test
     public void givenStaffObject_whenSaveToRepository_shouldReturnStaffSuccessfully() {
         staffRepository.save(
-            StaffTestHelper.createStaff());
+                StaffTestHelper.createStaff());
 
         assertEquals("ff",
-            staffRepository.findByEmail("666@gmail.com").get().getLastName());
+                staffRepository.findByEmail("666@gmail.com").get().getLastName());
 
     }
 
