@@ -1,14 +1,12 @@
 package com.courtcanva.ccfranchise.controllers;
 
-import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
-import com.courtcanva.ccfranchise.dtos.OpenOrderGetDto;
-import com.courtcanva.ccfranchise.exceptions.OrderStatusInvalidException;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -56,12 +54,8 @@ public class FranchiseeController {
 
     @GetMapping("/{franchiseeId}/orders")
     @ResponseStatus(HttpStatus.OK)
-    public List<OpenOrderGetDto> getOrders(@PathVariable Long franchiseeId, @RequestParam @NotNull String status){
-        if (OrderStatus.ASSIGNED_PENDING.getStatus().equals(status)) {
-            return franchiseeService.getFirst10OpenOrders(franchiseeId);
-        } else {
-            throw new OrderStatusInvalidException("order status invalid");
-        }
+    public List<OrderGetDto> getOrders(@PathVariable Long franchiseeId, @RequestParam @NotNull String status){
+        return franchiseeService.getOrders(franchiseeId, status);
     }
 
 }

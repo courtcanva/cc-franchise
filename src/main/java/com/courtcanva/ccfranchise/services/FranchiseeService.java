@@ -4,9 +4,9 @@ import com.courtcanva.ccfranchise.constants.DutyAreaFilterMode;
 import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
-import com.courtcanva.ccfranchise.dtos.OpenOrderGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
@@ -14,6 +14,7 @@ import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
 import com.courtcanva.ccfranchise.exceptions.MailingClientException;
+import com.courtcanva.ccfranchise.exceptions.OrderStatusInvalidException;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
@@ -163,11 +164,21 @@ public class FranchiseeService {
                         .collect(Collectors.toList())).build();
     }
 
-    public List<OpenOrderGetDto> getFirst10OpenOrders(Long id) {
-        Franchisee franchisee = franchiseeRepository.findById(id)
-                                    .orElseThrow(() -> new ResourceNotFoundException("Can't find franchisee id " + id));
-        return orderService.getFirst10OpenOrdersById(franchisee.getId());
+    public List<OrderGetDto> getOrders(Long franchiseeId, String status) {
+        if (OrderStatus.ASSIGNED_PENDING.value.equals(status)) {
+            return getFirst10OpenOrders(franchiseeId);
+        } else {
+            throw new OrderStatusInvalidException("order status invalid");
+        }
+    }
 
+    public List<OrderGetDto> getFirst10OpenOrders(Long id) {
+        Franchisee franchisee = franchiseeRepository.findById(id).orElseThrow(() ->
+        {
+            log.debug("franchisee with id: {} doesn't exist", id);
+            return new ResourceNotFoundException("Can't find franchisee id " + id);
+        });
+        return orderService.getFirst10OpenOrdersById(franchisee.getId());
     }
 }
 

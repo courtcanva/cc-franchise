@@ -7,13 +7,10 @@ public enum OrderStatus {
     COMPLETED("complete"),
     CANCELED("canceled");
 
-    final String status;
+    public final String value;
 
-    OrderStatus(String status) {
-        this.status = status;
+    OrderStatus(final String value) {
+        this.value = value;
     }
 
-    public String getStatus() {
-        return status;
-    }
 }

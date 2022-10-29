@@ -1,11 +1,11 @@
 package com.courtcanva.ccfranchise.utils;
 
 import com.courtcanva.ccfranchise.constants.OrderStatus;
+import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
 import com.courtcanva.ccfranchise.models.Order;
 
-import com.courtcanva.ccfranchise.dtos.OpenOrderGetDto;
 import com.courtcanva.ccfranchise.models.Franchisee;
 
 import java.math.BigDecimal;
@@ -146,8 +146,8 @@ public class OrderTestHelper {
                    .build();
     }
 
-    public static OpenOrderGetDto createOrderResponseDto(String customerId, String postcode, Long totalAmount) {
-        return OpenOrderGetDto.builder()
+    public static OrderGetDto createOrderResponseDto(String customerId, String postcode, Long totalAmount) {
+        return OrderGetDto.builder()
                    .customerId(customerId)
                    .contactInformation("""
                        {"name": "Adam", "phone": "0404123456", "address": "Unit 1, 10 Queen Street, Richmond 3121"}""")
@@ -157,6 +157,10 @@ public class OrderTestHelper {
                    .build();
 
     }
+
+    public static List<Order> orders = List.of(
+        OrderTestHelper.createOrder("101", "3000", 3000L, FranchiseeTestHelper.createFranchiseeWithId()),
+        OrderTestHelper.createOrder("102", "4000", 4000L, FranchiseeTestHelper.createFranchiseeWithId()));
 
 
 }

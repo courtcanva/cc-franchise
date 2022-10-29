@@ -1,7 +1,9 @@
 package com.courtcanva.ccfranchise.services;
 
 
+import static com.courtcanva.ccfranchise.utils.OrderUtil.statusValid;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -19,6 +21,7 @@ import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
+import com.courtcanva.ccfranchise.exceptions.OrderStatusInvalidException;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
@@ -211,6 +214,20 @@ class FranchiseeServiceTest {
         when(orderRepository.findByIdIn(any())).thenReturn(new ArrayList<>());
         assertThrows(ResourceNotFoundException.class,
                 () -> franchiseeService.acceptOrders(orderListPostDto));
+    }
+
+    @Test
+    void whenStatusParameterInvalidShouldThrowOrderStatusInvalidException() {
+        String invalidStatusValue = "invalidValue";
+        assertFalse(statusValid(invalidStatusValue));
+        assertThrows(OrderStatusInvalidException.class,()->franchiseeService.getOrders(1L,invalidStatusValue));
+    }
+
+    @Test
+    void whenIdInValid_shouldThrowResourceNotFoundException() {
+        Long invalidId = 999L;
+        when(franchiseeRepository.findById(invalidId)).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class,()->franchiseeService.getFirst10OpenOrders(invalidId));
     }
 
 }

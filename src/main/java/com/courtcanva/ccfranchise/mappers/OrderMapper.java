@@ -2,7 +2,6 @@ package com.courtcanva.ccfranchise.mappers;
 
 import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
-import com.courtcanva.ccfranchise.dtos.OpenOrderGetDto;
 import com.courtcanva.ccfranchise.models.Order;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -13,5 +12,4 @@ public interface OrderMapper {
 
     OrderGetDto orderToGetDto(Order order);
 
-    OpenOrderGetDto orderToDto(Order order);
 }

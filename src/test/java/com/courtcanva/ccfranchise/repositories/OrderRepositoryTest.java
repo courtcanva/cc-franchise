@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.List;
 
 @SpringBootTest
@@ -51,10 +50,10 @@ class OrderRepositoryTest {
     void givenFranchieeId_whenIdExist_shouldReturnFirst10ListOfOrders() {
         Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
         Franchisee franchiseeFromDb = franchiseeRepository.save(franchisee);
-        List<Order> orders = List.of(OrderTestHelper.createOrder("101", "3000", 3000L, franchiseeFromDb),
+        List<Order> orders = List.of(
+            OrderTestHelper.createOrder("101", "3000", 3000L, franchiseeFromDb),
             OrderTestHelper.createOrder("102", "4000", 4000L, franchiseeFromDb));
         orderRepository.saveAll(orders);
-
         List<Order> ordersFromDb =
             orderRepository.findFirst10ByFranchiseeIdAndStatus(franchiseeFromDb.getId(), OrderStatus.ASSIGNED_PENDING);
         List<Long> ids = orders.stream().map(Order::getId).toList();
@@ -63,13 +62,10 @@ class OrderRepositoryTest {
 
     @Test
     void givenFranchieeId_whenIdNotExist_shouldReturnEmptyList() {
-        Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
-        Franchisee franchiseeFromDb = franchiseeRepository.save(franchisee);
-        List<Order> orders = List.of(OrderTestHelper.createOrder("101", "3000", 3000L, franchiseeFromDb),
-            OrderTestHelper.createOrder("102", "4000", 4000L, franchiseeFromDb));
-        List<Order> ordersOfOtherId =
-            orderRepository.findFirst10ByFranchiseeIdAndStatus(franchiseeFromDb.getId() + 100, OrderStatus.ASSIGNED_PENDING);
-        assertEquals(0, ordersOfOtherId.size());
+        Long invalidId = 999L;
+        List<Order> ordersOfInvalidId =
+            orderRepository.findFirst10ByFranchiseeIdAndStatus(/*franchiseeFromDb.getId() +*/ invalidId, OrderStatus.ASSIGNED_PENDING);
+        assertEquals(0, ordersOfInvalidId.size());
     }
 
 }
