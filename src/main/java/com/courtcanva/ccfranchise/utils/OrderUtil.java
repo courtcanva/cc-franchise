@@ -7,9 +7,9 @@ public class OrderUtil {
     private OrderUtil() {
     }
 
-    public static boolean statusValid(String test) {
+    public static boolean statusValid(String statusFromFrontend) {
         for (OrderStatus orderStatus : OrderStatus.values()) {
-            if (orderStatus.value.equals(test)) {
+            if (orderStatus.value.equals(statusFromFrontend)) {
                 return true;
             }
         }
