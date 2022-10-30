@@ -143,8 +143,14 @@ public class FranchiseeService {
 
 
     public OrderAcceptedListGetDto findFranchiseeAcceptedOrders (Long franchiseeId, int pageNumber) {
-        Franchisee franchisee = findFranchiseeById(franchiseeId).orElseThrow();
-        return orderService.getAcceptedOrders(franchisee, pageNumber);
+        Franchisee franchisee = franchiseeRepository.findFranchiseeById(franchiseeId).orElseThrow(() -> {
+
+            log.debug("franchisee with id: {} is not exist", franchiseeId);
+
+            return new ResourceNotFoundException("franchisee id is not exist");
+
+        });
+        return orderService.findAcceptedOrdersByFranchisee(franchisee, pageNumber);
     }
 
 

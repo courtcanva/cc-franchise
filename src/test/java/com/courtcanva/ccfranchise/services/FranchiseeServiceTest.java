@@ -47,8 +47,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -210,6 +209,16 @@ class FranchiseeServiceTest {
         when(orderRepository.findByIdIn(any())).thenReturn(new ArrayList<>());
         assertThrows(ResourceNotFoundException.class,
                 () -> franchiseeService.acceptOrders(orderListPostDto));
+    }
+
+    @Test
+    void shouldReturnAcceptedOrdersSuccessfully() {
+        lenient().when(orderService.findAcceptedOrdersByFranchisee(any(),
+                anyInt())).thenReturn(OrderTestHelper.mockAcceptedListDto());
+        lenient().when(franchiseeRepository.findFranchiseeById(1L)).
+                thenReturn(Optional.ofNullable(FranchiseeTestHelper.createFranchiseeWithId()));
+        assertEquals("802", franchiseeService.findFranchiseeAcceptedOrders(1L, 1).getAcceptedOrders().get(0).getOrderId());
+
     }
 
 }

@@ -21,6 +21,10 @@ public class FranchiseeTestHelper {
                 .businessName("AAAAA")
                 .businessAddress("zetland NSWssss")
                 .abn("12312123111")
+                .businessName("AAAAA")
+                .postcode(1234)
+                .state(AUState.ACT)
+                .legalEntityName("COUNTCANVA")
                 .build();
     }
 

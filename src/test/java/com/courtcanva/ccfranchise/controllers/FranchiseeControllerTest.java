@@ -6,14 +6,12 @@ import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
+import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
-import com.courtcanva.ccfranchise.utils.FranchiseeAndStaffTestHelper;
-import com.courtcanva.ccfranchise.utils.MailingClient;
-import com.courtcanva.ccfranchise.utils.OrderTestHelper;
-import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
+import com.courtcanva.ccfranchise.utils.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,6 +25,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -111,6 +111,21 @@ class FranchiseeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.orders[0].status")
                         .value("ACCEPTED"));
+
+    }
+
+    @Test
+    @WithMockUser
+    void shouldReturnAcceptedOrderWithPagination() throws Exception {
+
+        orderRepository.save(OrderTestHelper.mockAcceptedOrder1());
+        franchiseeRepository.save(FranchiseeTestHelper.createFranchisee());
+        Optional<Order> order1 = orderRepository.findById(1L);
+        order1.get().setFranchisee(franchiseeRepository.findFranchiseeById(1L).get());
+        orderRepository.save(order1.get());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/franchisee/1/acceptedorders?page=1"))
+              .andExpect(jsonPath("$.acceptedOrders[0].orderId").value("111"));
 
     }
 }
