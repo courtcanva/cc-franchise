@@ -71,6 +71,8 @@ class FranchiseeServiceTest {
     private PasswordEncoder passwordEncoder;
     @Mock
     private OrderRepository orderRepository;
+    @Mock
+    private OrderService orderService;
 
     @BeforeEach
     void setUp() {
@@ -101,7 +103,8 @@ class FranchiseeServiceTest {
                 suburbService,
                 suburbMapper,
                 orderMapper,
-                orderRepository
+                orderRepository,
+                orderService
         );
     }
 

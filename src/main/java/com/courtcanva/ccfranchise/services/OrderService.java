@@ -1,6 +1,7 @@
 package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.constants.OrderStatus;
+import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
@@ -8,6 +9,7 @@ import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,19 +21,16 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
 
-    public OrderListGetDto getAcceptedOrders (Franchisee franchisee){
+    public OrderAcceptedListGetDto getAcceptedOrders (Franchisee franchisee, int pageNumber){
 
-        List<Order> allOrders = orderRepository.findOrdersByFranchisee(franchisee);
+        PageRequest pageRequest = PageRequest.of(pageNumber-1, 10);
+        List<Order> allOrders = orderRepository.findOrdersByFranchiseeAndStatusInOrderByStatusAscCreatedTime(
+                franchisee,List.of(OrderStatus.COMPLETED, OrderStatus.ACCEPTED), pageRequest);
 
-        List<Order> acceptedOrders = allOrders.stream()
-                .filter(order -> order.getStatus().equals(OrderStatus.ACCEPTED))
-                .toList();
-
-        return OrderListGetDto.builder()
-                .orders(acceptedOrders
-                        .stream()
-                        .map(orderMapper::orderToGetDto)
-                        .collect(Collectors.toList())).build();
+        return OrderAcceptedListGetDto.builder()
+                .acceptedOrders(allOrders.stream().map(orderMapper::orderToAcceptedGetDto).collect(Collectors.toList()))
+                .PageNumber(pageNumber)
+                .build();
 
     }
 }

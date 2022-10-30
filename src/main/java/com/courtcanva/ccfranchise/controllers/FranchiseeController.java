@@ -3,6 +3,7 @@ package com.courtcanva.ccfranchise.controllers;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 
+import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 
@@ -38,9 +39,10 @@ public class FranchiseeController {
     }
 
 
-    @GetMapping ("/{franchiseeId}/acceptedorders/")
-    public OrderListGetDto acceptedOrdersList (@PathVariable(value = "franchiseeId") Long franchiseeId) {
-        return franchiseeService.findFranchiseeAcceptedOrders(franchiseeId);
+    @GetMapping ("/{franchiseeId}/acceptedorders")
+    public OrderAcceptedListGetDto acceptedOrdersList (@PathVariable(value = "franchiseeId") Long franchiseeId,
+                                                                  @RequestParam(value = "page") int pageNumber) {
+        return franchiseeService.findFranchiseeAcceptedOrders(franchiseeId,pageNumber);
     }
 
     @PostMapping("/{franchiseeId}/accept_orders")
