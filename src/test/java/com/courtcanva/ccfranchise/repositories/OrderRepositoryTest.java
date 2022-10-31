@@ -36,8 +36,6 @@ class OrderRepositoryTest {
         franchiseeRepository.deleteAll();
         orderRepository.save(OrderTestHelper.Order1());
         orderRepository.save(OrderTestHelper.Order2());
-        orderRepository.save(OrderTestHelper.mockAcceptedOrder1());
-        franchiseeRepository.save(FranchiseeTestHelper.createFranchisee());
 
     }
 
@@ -53,15 +51,19 @@ class OrderRepositoryTest {
 
     @Test
     void shouldReturnAcceptedOrders() {
-        Optional<Order> order1 = orderRepository.findById(3L);
+/*        Optional<Order> order1 = orderRepository.findById(3L);
         order1.get().setFranchisee(franchiseeRepository.findFranchiseeById(1L).get());
-        orderRepository.save(order1.get());
+        orderRepository.save(order1.get());*/
+        Order order = orderRepository.save(OrderTestHelper.mockAcceptedOrder1());
+        Franchisee franchisee = franchiseeRepository.save(FranchiseeTestHelper.createFranchisee());
+        order.setFranchisee(franchisee);
+        orderRepository.save(order);
 
 
         PageRequest pageRequest = PageRequest.of(0, 10);
         assertEquals("111",
                 orderRepository
-                        .findOrdersByFranchiseeAndStatusInOrderByStatusAscCreatedTime(franchiseeRepository.findFranchiseeById(1L).get(),
+                        .findOrdersByFranchiseeAndStatusInOrderByStatusAscCreatedTime(franchisee,
                                 List.of(OrderStatus.ACCEPTED, OrderStatus.COMPLETED),
                                 pageRequest).get(0).getOrderId());
     }

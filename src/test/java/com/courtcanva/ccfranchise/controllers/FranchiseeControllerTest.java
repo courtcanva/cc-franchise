@@ -6,6 +6,7 @@ import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
+import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
@@ -57,7 +58,7 @@ class FranchiseeControllerTest {
     public void clear() {
 
         staffRepository.deleteAll();
-
+        orderRepository.deleteAll();
         franchiseeRepository.deleteAll();
 
     }
@@ -118,14 +119,14 @@ class FranchiseeControllerTest {
     @WithMockUser
     void shouldReturnAcceptedOrderWithPagination() throws Exception {
 
-        orderRepository.save(OrderTestHelper.mockAcceptedOrder1());
-        franchiseeRepository.save(FranchiseeTestHelper.createFranchisee());
-        Optional<Order> order1 = orderRepository.findById(1L);
-        order1.get().setFranchisee(franchiseeRepository.findFranchiseeById(1L).get());
-        orderRepository.save(order1.get());
+        Order order = orderRepository.save(OrderTestHelper.mockAcceptedOrder1());
+        Franchisee franchisee = franchiseeRepository.save(FranchiseeTestHelper.createFranchisee());
+        // Optional<Order> order1 = orderRepository.findById(1L);
+        order.setFranchisee(franchisee);
+        orderRepository.save(order);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/franchisee/1/acceptedorders?page=1"))
-              .andExpect(jsonPath("$.acceptedOrders[0].orderId").value("111"));
+        mockMvc.perform(MockMvcRequestBuilders.get("/franchisee/"+franchisee.getId()+"/acceptedorders?page=1"))
+                .andExpect(jsonPath("$.acceptedOrders[0].orderId").value("111"));
 
     }
 }
