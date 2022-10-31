@@ -11,5 +11,4 @@ public interface OrderMapper {
     Order postDtoToOrder(OrderPostDto orderPostDto);
 
     OrderGetDto orderToGetDto(Order order);
-
 }
