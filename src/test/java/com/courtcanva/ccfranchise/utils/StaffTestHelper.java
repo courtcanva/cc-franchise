@@ -26,7 +26,6 @@ public class StaffTestHelper {
                 .residentialAddress("fsdfsdafa")
                 .build();
     }
-
     public static Staff createStaffWithFranchisee() {
 
         return Staff.builder()

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.courtcanva.ccfranchise.constants.OrderStatus;
+import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -36,18 +38,18 @@ class OrderRepositoryTest {
 
     @Test
     void findByIdIn() {
-        Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
-        Franchisee franchiseeFromDb = franchiseeRepository.save(franchisee);
-        List<Order> orderList = List.of(OrderTestHelper.createOrder("101", "3000", 3000L, franchiseeFromDb),
-            OrderTestHelper.createOrder("102", "4000", 4000L, franchiseeFromDb));
-        List<Order> ordersSave = orderRepository.saveAll(orderList);
-        List<Long> orderIds = ordersSave.stream().map(Order::getId).toList();
-        List<Order> ordersGetFromDb = orderRepository.findByIdIn(orderIds);
-        ordersGetFromDb.forEach(order -> assertTrue(orderIds.contains(order.getId())));
+        orderRepository.save(OrderTestHelper.Order1());
+        orderRepository.save(OrderTestHelper.Order2());
+        assertEquals(1L, orderRepository.findByIdIn(
+                        OrderTestHelper.createOrderListPostDto().getOrders()
+                                .stream()
+                                .map(OrderPostDto::getId)
+                                .collect(Collectors.toList()))
+                .get(0).getId());
     }
 
     @Test
-    void givenFranchieeId_whenIdExist_shouldReturnFirst10ListOfOrders() {
+    void givenFranchieeId_whenOpenOrdersAvailable_shouldReturnFirst10ListOfOrders() {
         Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
         Franchisee franchiseeFromDb = franchiseeRepository.save(franchisee);
         List<Order> orders = List.of(
@@ -61,11 +63,12 @@ class OrderRepositoryTest {
     }
 
     @Test
-    void givenFranchieeId_whenIdNotExist_shouldReturnEmptyList() {
-        Long invalidId = 999L;
-        List<Order> ordersOfInvalidId =
-            orderRepository.findFirst10ByFranchiseeIdAndStatus(/*franchiseeFromDb.getId() +*/ invalidId, OrderStatus.ASSIGNED_PENDING);
-        assertEquals(0, ordersOfInvalidId.size());
+    void givenFranchieeId_whenOpenOrdersUnavailable_shouldReturnEmptyList() {
+        Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
+        Franchisee franchiseeFromDb = franchiseeRepository.save(franchisee);
+        List<Order> ordersFromDb =
+            orderRepository.findFirst10ByFranchiseeIdAndStatus(franchiseeFromDb.getId(), OrderStatus.ASSIGNED_PENDING);
+        assertEquals(0, ordersFromDb.size());
     }
 
 }

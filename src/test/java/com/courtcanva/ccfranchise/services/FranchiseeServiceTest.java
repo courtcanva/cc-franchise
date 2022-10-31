@@ -1,16 +1,6 @@
 package com.courtcanva.ccfranchise.services;
 
 
-import static com.courtcanva.ccfranchise.utils.OrderUtil.statusValid;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-
 import com.courtcanva.ccfranchise.constants.DutyAreaFilterMode;
 import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
@@ -21,17 +11,16 @@ import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
-import com.courtcanva.ccfranchise.exceptions.OrderStatusInvalidException;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapperImpl;
 import com.courtcanva.ccfranchise.mappers.OrderMapper;
-import com.courtcanva.ccfranchise.mappers.OrderMapperImpl;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.mappers.SuburbMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapperImpl;
 import com.courtcanva.ccfranchise.mappers.SuburbMapperImpl;
+import com.courtcanva.ccfranchise.mappers.OrderMapperImpl;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.models.Suburb;
@@ -42,7 +31,6 @@ import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
 import com.courtcanva.ccfranchise.utils.OrderTestHelper;
 import com.courtcanva.ccfranchise.utils.StaffTestHelper;
 import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,14 +42,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+
+
 @ExtendWith(MockitoExtension.class)
 class FranchiseeServiceTest {
 
     @Mock
     private FranchiseeRepository franchiseeRepository;
-
-    @Mock
-    private OrderService orderService;
 
     @Mock
     private StaffService staffService;
@@ -107,8 +101,7 @@ class FranchiseeServiceTest {
                 suburbService,
                 suburbMapper,
                 orderMapper,
-                orderRepository,
-                orderService
+                orderRepository
         );
     }
 
@@ -214,20 +207,6 @@ class FranchiseeServiceTest {
         when(orderRepository.findByIdIn(any())).thenReturn(new ArrayList<>());
         assertThrows(ResourceNotFoundException.class,
                 () -> franchiseeService.acceptOrders(orderListPostDto));
-    }
-
-    @Test
-    void whenStatusParameterInvalidShouldThrowOrderStatusInvalidException() {
-        String invalidStatusValue = "invalidValue";
-        assertFalse(statusValid(invalidStatusValue));
-        assertThrows(OrderStatusInvalidException.class,()->franchiseeService.getOrders(1L,invalidStatusValue));
-    }
-
-    @Test
-    void whenIdInValid_shouldThrowResourceNotFoundException() {
-        Long invalidId = 999L;
-        when(franchiseeRepository.findById(invalidId)).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class,()->franchiseeService.getFirst10OpenOrders(invalidId));
     }
 
 }

@@ -123,9 +123,6 @@ public class OrderTestHelper {
         return orders;
     }
 
-
-
-
     public static Order createOrder(String customerId, String postcode, Long totalAmount, Franchisee franchisee) {
         return Order.builder()
                    .orderId("101")
@@ -146,22 +143,8 @@ public class OrderTestHelper {
                    .build();
     }
 
-    public static OrderGetDto createOrderResponseDto(String customerId, String postcode, Long totalAmount) {
-        return OrderGetDto.builder()
-                   .customerId(customerId)
-                   .contactInformation("""
-                       {"name": "Adam", "phone": "0404123456", "address": "Unit 1, 10 Queen Street, Richmond 3121"}""")
-                   .postcode(postcode)
-                   .totalAmount(new BigDecimal(totalAmount))
-                   .createdTime(OffsetDateTime.parse("2021-12-03T10:15:30+11:00"))
-                   .build();
-
-    }
-
     public static List<Order> orders = List.of(
         OrderTestHelper.createOrder("101", "3000", 3000L, FranchiseeTestHelper.createFranchiseeWithId()),
         OrderTestHelper.createOrder("102", "4000", 4000L, FranchiseeTestHelper.createFranchiseeWithId()));
-
-
 }
 

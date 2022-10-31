@@ -15,6 +15,7 @@ import static org.mockito.Mockito.mock;
 
 public class FranchiseeTestHelper {
     public static Franchisee createFranchiseeWithId() {
+
         return Franchisee.builder()
                 .id(1234L)
                 .contactNumber("234567891")
@@ -27,6 +28,7 @@ public class FranchiseeTestHelper {
     }
 
     public static Franchisee createMockFranchisee() {
+
         Franchisee mockFranchisee = mock(Franchisee.class);
         mockFranchisee.setId(1234L);
         mockFranchisee.setContactNumber("234567891");
@@ -38,6 +40,7 @@ public class FranchiseeTestHelper {
 
 
     public static Optional<Franchisee> createOptionalFranchisee() {
+
         Franchisee franchisee = createMockFranchisee();
 
         Optional<Franchisee> optionalFranchisee = Optional.of(franchisee);
@@ -48,9 +51,11 @@ public class FranchiseeTestHelper {
         optionalFranchisee.get().setAbn("12312123111");
 
         return optionalFranchisee;
+
     }
 
     public static Franchisee createFranchisee() {
+
         return Franchisee.builder()
                 .contactNumber("234567891")
                 .businessName("AAAAA")
@@ -63,6 +68,7 @@ public class FranchiseeTestHelper {
     }
 
     public static FranchiseePostDto createFranchiseePostDto() {
+
         return FranchiseePostDto.builder()
                 .businessName("AAAAA")
                 .contactNumber("234567891")
@@ -74,6 +80,7 @@ public class FranchiseeTestHelper {
     }
 
     public static FranchiseeGetDto createFranchiseeGetDto() {
+
         return FranchiseeGetDto.builder()
                 .franchiseeId(1234L)
                 .abn("12345678901")
@@ -95,5 +102,6 @@ public class FranchiseeTestHelper {
                 .abn("12312123111")
                 .dutyAreas(SuburbTestHelper.createSuburbSet())
                 .build();
+
     }
 }

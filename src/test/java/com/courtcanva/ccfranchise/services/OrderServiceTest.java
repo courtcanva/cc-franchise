@@ -33,21 +33,19 @@ class OrderServiceTest {
     }
 
     @Test
-    void givenFranchieeId_whenIdExist_shouldReturnListOfOrders() {
-        Long correctId = 1L;
-        when(orderRepository.findFirst10ByFranchiseeIdAndStatus(correctId, OrderStatus.ASSIGNED_PENDING)).thenReturn(orders);
-        List<OrderGetDto> first10OpenOrdersResponseDto = orderService.getFirst10OpenOrdersById(correctId);
-        assertTrue(first10OpenOrdersResponseDto.stream().map(OrderGetDto::getCustomerId).toList().containsAll(List.of("101", "102")));
-        assertTrue(first10OpenOrdersResponseDto.stream().map(OrderGetDto::getPostcode).toList().containsAll(List.of("3000", "4000")));
-        assertTrue(first10OpenOrdersResponseDto.stream().map(OrderGetDto::getTotalAmount).toList()
+    void givenFranchieeId_whenOpenOrdersAvailable_shouldReturnListOfOrders() {
+        when(orderRepository.findFirst10ByFranchiseeIdAndStatus(1L, OrderStatus.ASSIGNED_PENDING)).thenReturn(orders);
+        List<OrderGetDto> firstTenOpenOrdersGetDto = orderService.getFirstTenOpenOrdersById(1L);
+        assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderGetDto::getCustomerId).toList().containsAll(List.of("101", "102")));
+        assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderGetDto::getPostcode).toList().containsAll(List.of("3000", "4000")));
+        assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderGetDto::getTotalAmount).toList()
                        .containsAll(List.of(BigDecimal.valueOf(3000L), BigDecimal.valueOf(4000L))));
     }
 
     @Test
-    void givenFranchieeId_whenIdNotExist_shouldReturnEmptyList() {
-        Long wrongId = 999L;
-        when(orderRepository.findFirst10ByFranchiseeIdAndStatus(wrongId, OrderStatus.ASSIGNED_PENDING)).thenReturn(new ArrayList<>());
-        assertEquals(0, orderService.getFirst10OpenOrdersById(wrongId).size());
+    void givenFranchieeId_whenOpenOrdersUnavailable_shouldReturnEmptyList() {
+        when(orderRepository.findFirst10ByFranchiseeIdAndStatus(1L, OrderStatus.ASSIGNED_PENDING)).thenReturn(new ArrayList<>());
+        assertEquals(0, orderService.getFirstTenOpenOrdersById(1L).size());
     }
 
 }

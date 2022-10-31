@@ -15,8 +15,8 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
 
-    public List<OrderGetDto> getFirst10OpenOrdersById(Long franchiseeId) {
-        List<Order> ordersFirst10 = orderRepository.findFirst10ByFranchiseeIdAndStatus(franchiseeId, OrderStatus.ASSIGNED_PENDING);
-        return ordersFirst10.stream().map(orderMapper::orderToGetDto).toList();
+    public List<OrderGetDto> getFirstTenOpenOrdersById(Long franchiseeId) {
+        List<Order> firstTenOpenOrders = orderRepository.findFirst10ByFranchiseeIdAndStatus(franchiseeId, OrderStatus.ASSIGNED_PENDING);
+        return firstTenOpenOrders.stream().map(orderMapper::orderToGetDto).toList();
     }
 }

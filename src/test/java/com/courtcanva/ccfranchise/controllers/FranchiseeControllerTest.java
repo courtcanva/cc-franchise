@@ -53,7 +53,6 @@ class FranchiseeControllerTest {
     private SuburbRepository suburbRepository;
     @MockBean
     private MailingClient mailingClient;
-
     @Autowired
     private OrderRepository orderRepository;
 
@@ -70,33 +69,30 @@ class FranchiseeControllerTest {
         FranchiseeAndStaffPostDto franchiseeAndStaffPostDto = FranchiseeAndStaffTestHelper.createFranchiseeAndStaffPostDto();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/signup")
-                            .content(objectMapper.writeValueAsString(franchiseeAndStaffPostDto))
-                            .contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.staffGetDto.email").value("baoruoxi@163.com"))
-            .andExpect(jsonPath("$.franchiseeGetDto.abn").value("12312123111"));
+                        .content(objectMapper.writeValueAsString(franchiseeAndStaffPostDto))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.staffGetDto.email").value("baoruoxi@163.com"))
+                .andExpect(jsonPath("$.franchiseeGetDto.abn").value("12312123111"));
 
     }
 
     @Test
     @WithMockUser
     void givenListOfServiceArea_whenAddDutyArea_shouldReturnSelectSuburbs() throws Exception {
-        Long mockFranchiseeId = franchiseeController.signUpFranchiseeAndStaff(new FranchiseeAndStaffPostDto(
-                new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "23468290381", "Melbourne", AUState.VIC, 3000),
-                new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd")))
-                                    .getFranchiseeGetDto().getFranchiseeId();
+        Long mockFranchiseeId = franchiseeController.signUpFranchiseeAndStaff(new FranchiseeAndStaffPostDto(new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "23468290381", "Melbourne", AUState.VIC, 3000), new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd"))).getFranchiseeGetDto().getFranchiseeId();
         suburbRepository.save(SuburbTestHelper.suburb1());
         suburbRepository.save(SuburbTestHelper.suburb2());
 
         SuburbListAndFilterModePostDto suburbListAndFilterModePostDto = SuburbTestHelper.createSuburbListPostDtoWithIncludeMode();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/" + mockFranchiseeId.toString() + "/service_areas")
-                            .content(objectMapper.writeValueAsString(suburbListAndFilterModePostDto))
-                            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andDo(MockMvcResultHandlers.print())
-            .andExpect(jsonPath("$.suburbs[0].sscCode").value(11344L))
-            .andExpect(jsonPath("$.suburbs[1].sscCode").value(12287L));
+                        .content(objectMapper.writeValueAsString(suburbListAndFilterModePostDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(jsonPath("$.suburbs[0].sscCode").value(11344L))
+                .andExpect(jsonPath("$.suburbs[1].sscCode").value(12287L));
 
     }
 
@@ -110,18 +106,19 @@ class FranchiseeControllerTest {
 
         orderRepository.save(OrderTestHelper.Order1());
         OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
+
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/" + mockFranchiseeId.toString() + "/accept_orders")
-                            .content(objectMapper.writeValueAsString(orderListPostDto))
-                            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.orders[0].status")
-                           .value("ACCEPTED"));
+                        .content(objectMapper.writeValueAsString(orderListPostDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.orders[0].status")
+                        .value("ACCEPTED"));
 
     }
 
     @Test
     @WithMockUser
-    void givenFranchiseeId_whenQueryOpenOrders_shouldReturnOpenOrders() throws Exception {
+    void givenFranchiseeId_whenQueryOpenOrders_shouldReturnFirstTenOpenOrders() throws Exception {
         Long mockFranchiseeId = franchiseeController.signUpFranchiseeAndStaff(new FranchiseeAndStaffPostDto(
                 new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "23468290381", "Melbourne", AUState.VIC, 3000),
                 new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd")))
@@ -131,7 +128,7 @@ class FranchiseeControllerTest {
             OrderTestHelper.createOrder("102", "4000", 4000L, franchisees.get(0)));
         orderRepository.saveAll(orders);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/franchisee/" + mockFranchiseeId.toString() + "/orders?status=open"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/franchisee/" + mockFranchiseeId.toString() + "/pending_orders"))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].customerId").value("101"))
