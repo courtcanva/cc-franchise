@@ -1,8 +1,6 @@
 package com.courtcanva.ccfranchise.models;
 
-import com.courtcanva.ccfranchise.constants.AUState;
-import com.courtcanva.ccfranchise.constants.BusinessRole;
-import com.courtcanva.ccfranchise.constants.StaffStatus;
+import com.courtcanva.ccfranchise.constants.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,17 +11,17 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import java.time.OffsetDateTime;
-
+import javax.persistence.FetchType;
+import javax.persistence.EnumType;
 
 @Entity
 @Setter
@@ -31,56 +29,41 @@ import java.time.OffsetDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "staff")
-public class Staff {
+@Table(name = "`order`")
+public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String firstName;
+    private String orderId;
 
     @Column(nullable = false)
-    private String lastName;
+    private String customerId;
 
     @Column(nullable = false)
-    private String password;
+    private String contactInformation;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private AUState state;
+    private String designInformation;
 
     @Column(nullable = false)
-    private int postcode;
+    private String postcode;
 
     @Column(nullable = false)
-    private String phoneNumber;
+    private BigDecimal totalAmount;
 
-    @Column(nullable = false, name = "address")
-    private String residentialAddress;
+    @Column(nullable = false)
+    private BigDecimal paidAmount;
 
-    @Column
-    @Builder.Default
-    private Boolean isVerified = false;
-
-    @Column(unique = true, nullable = false)
-    private String email;
+    @Column(nullable = false)
+    private BigDecimal unpaidAmount;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private StaffStatus status = StaffStatus.PENDING;
-
-    @Column(name = "role")
-    @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private BusinessRole businessRole = BusinessRole.STAFF;
-
-    @Column
-    private String verificationToken;
-
-    @Column(name = "verification_token_created_at")
-    private OffsetDateTime verificationTokenCreatedTime;
+    private OrderStatus status = OrderStatus.UNASSIGNED;
 
     @Column(nullable = false, updatable = false, name = "created_at")
     @CreationTimestamp
@@ -90,8 +73,10 @@ public class Staff {
     @UpdateTimestamp
     private OffsetDateTime updatedTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "franchisee_id")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Franchisee franchisee;
 
+    @Column
+    private String invoiceLink;
 }

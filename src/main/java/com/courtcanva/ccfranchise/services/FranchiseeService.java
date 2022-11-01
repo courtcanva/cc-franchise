@@ -1,21 +1,30 @@
 package com.courtcanva.ccfranchise.services;
 
+import com.courtcanva.ccfranchise.constants.DutyAreaFilterMode;
+import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
-import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListGetDto;
-import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
+import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
+import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
+import com.courtcanva.ccfranchise.exceptions.MailingClientException;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
+import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.mappers.SuburbMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
+import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.models.Suburb;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,9 +52,13 @@ public class FranchiseeService {
     private final SuburbService suburbService;
 
     private final SuburbMapper suburbMapper;
+
+    private final OrderMapper orderMapper;
+
+    private final OrderRepository orderRepository;
     
 
-    @Transactional
+    @Transactional(noRollbackFor = MailingClientException.class)
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
 
         if (franchiseeExists(franchiseePostDto.getAbn())) {
@@ -72,9 +85,15 @@ public class FranchiseeService {
                 .build();
     }
 
+    public SuburbListAndFilterModeGetDto dutyAreas(SuburbListAndFilterModePostDto suburbListAndFilterModePostDto, Long franchiseeId) {
+
+        return suburbListAndFilterModePostDto.getFilterMode().equals(DutyAreaFilterMode.INCLUDE) ? addDutyAreas(suburbListAndFilterModePostDto, franchiseeId) : null;
+
+    }
 
     @Transactional
-    public SuburbListGetDto addDutyAreas(SuburbListPostDto suburbListPostDto, Long franchiseeId) {
+    public SuburbListAndFilterModeGetDto addDutyAreas(SuburbListAndFilterModePostDto suburbListAndFilterModePostDto, Long franchiseeId) {
+
 
         Optional<Franchisee> optionalFranchisee = findFranchiseeById(franchiseeId);
 
@@ -86,7 +105,7 @@ public class FranchiseeService {
 
         });
 
-        List<Suburb> allSuburbs = suburbService.findSuburbBySscCodes(suburbListPostDto.getSuburbs()
+        List<Suburb> allSuburbs = suburbService.findSuburbBySscCodes(suburbListAndFilterModePostDto.getSuburbs()
                 .stream()
                 .map(SuburbPostDto::getSscCode)
                 .collect(Collectors.toList()));
@@ -94,11 +113,15 @@ public class FranchiseeService {
         franchisee.addDutyAreas(allSuburbs);
         franchiseeRepository.save(franchisee);
 
-        return SuburbListGetDto.builder().suburbs(allSuburbs
+        return SuburbListAndFilterModeGetDto.builder()
+                .filterMode(suburbListAndFilterModePostDto.getFilterMode())
+                .suburbs(allSuburbs
                         .stream()
                         .map(suburbMapper::suburbToGetDto)
                         .collect(Collectors.toList()))
                 .build();
+
+
     }
 
 
@@ -114,5 +137,28 @@ public class FranchiseeService {
 
     }
 
+    @Transactional
+    public OrderListGetDto acceptOrders(OrderListPostDto orderListPostDto) {
 
+        List<Order> selectedOrders = orderRepository.findByIdIn(
+                orderListPostDto.getOrders()
+                        .stream()
+                        .map(OrderPostDto::getId)
+                        .collect(Collectors.toList()));
+
+        if (selectedOrders.isEmpty()) {
+
+            log.debug("selected order id: {} is empty", orderListPostDto.getOrders());
+            throw new ResourceNotFoundException("You have not selected any order.");
+        }
+
+        selectedOrders.forEach(order -> order.setStatus(OrderStatus.ACCEPTED));
+
+        List<Order> acceptedOrderList = orderRepository.saveAll(selectedOrders);
+        return OrderListGetDto.builder()
+                .orders(acceptedOrderList
+                        .stream()
+                        .map(orderMapper::orderToGetDto)
+                        .collect(Collectors.toList())).build();
+    }
 }

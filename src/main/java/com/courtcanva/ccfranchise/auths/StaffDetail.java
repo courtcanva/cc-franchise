@@ -21,6 +21,8 @@ public class StaffDetail implements UserDetails {
     private final boolean isEnabled;
     private final Long id;
 
+    private final Long franchiseeId;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return grantedAuthorities;
@@ -58,6 +60,10 @@ public class StaffDetail implements UserDetails {
 
     public Long getId() {
         return id;
+    }
+
+    public Long getFranchiseeId() {
+        return franchiseeId;
     }
 
 }
