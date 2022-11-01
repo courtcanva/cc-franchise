@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -85,14 +86,15 @@ class StaffServiceTest {
     }
 
     @Test
-    void shouldThrowErrorWhenEmailExits() {
-        String email1 = "222@gmail.com";
-        when(staffRepository.existsStaffByEmail(email1)).thenReturn(false);
-        Assertions.assertFalse(staffService.emailExists(email1));
-
-        String email2 = "333@gmail.com";
-        when(staffRepository.existsStaffByEmail(email2)).thenReturn((true));
+    void givenValidAndExistedEmail_whenCheckIfEmailExists_shouldReturnThrowError() {
+        when(staffRepository.existsStaffByEmail(any())).thenReturn((true));
         assertThrows(ResourceAlreadyExistException.class,
-                () -> staffService.emailExists(email2));
+                () -> staffService.emailExists(any()));
+    }
+
+    @Test
+    void givenValidAndExistedEmail_whenCheckIfEmailExists_shouldReturnFalse() {
+        when(staffRepository.existsStaffByEmail(any())).thenReturn(false);
+        Assertions.assertFalse(staffService.emailExists(any()));
     }
 }

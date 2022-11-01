@@ -1,27 +1,19 @@
 package com.courtcanva.ccfranchise.controllers;
 
-import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
-import com.courtcanva.ccfranchise.services.StaffService;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import com.courtcanva.ccfranchise.dtos.StaffVerifyEmailPostDto;
 import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
-import com.courtcanva.ccfranchise.utils.MailingClient;
 import com.courtcanva.ccfranchise.utils.StaffTestHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -45,12 +37,6 @@ public class StaffControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private StaffRepository staffRepository;
-    @MockBean
-    private MailingClient mailingClient;
-    @MockBean
-    private StaffService staffService;
-    @InjectMocks
-    private StaffController staffController;
 
     @BeforeEach
     public void setupTest() {
@@ -103,23 +89,22 @@ public class StaffControllerTest {
     }
 
     @Test
-    void shouldReturnSuccessWhenEmailNotExists() throws Exception {
+    void givenValidAndNewEmailRecord_whenCheckIfEmailExists_shouldReturnOK() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders.get("/staff/emails/222@gmail.com");
         mockMvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
-    void shouldReturnBadRequestWhenEmailFormatInvalid() throws Exception {
+    void givenInvalidEmailRecord_whenCheckIfEmailExists_shouldReturnBadRequest() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders.get("/staff/emails/222gmail.com");
         mockMvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
-    void shouldReturnConflictWhenEmailAlreadyExists() throws Exception {
-        RequestBuilder request = MockMvcRequestBuilders.get("/staff/emails/333@gmail.com");
-        when(staffService.emailExists(any())).thenThrow(new ResourceAlreadyExistException("Email already existed"));
+    void givenValidAndExistedEmail_whenCheckIfEmailExists_shouldReturnConflict() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders.get("/staff/emails/666@gmail.com");
         mockMvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isConflict());
     }
