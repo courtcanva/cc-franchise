@@ -14,9 +14,13 @@ public interface OrderAssignmentRepository extends JpaRepository<OrderAssignment
     @Modifying
     @Transactional//TODO: Need to delete after testing
     @Query("update OrderAssignment set status='reject' where createdTime < :rejectTime")
-    int rejectAllExpiredOrders(@Param("rejectTime") OffsetDateTime rejectTime);
+    void rejectAllExpiredOrders(@Param("rejectTime") OffsetDateTime rejectTime);
 
     //TODO: Need to delete after testing
     @Query("select order from OrderAssignment order where order.createdTime < :rejectTime")
     List<OrderAssignment> findAllExpiredOrders(@Param("rejectTime") OffsetDateTime rejectTime);
+
+    @Modifying
+    @Query("update OrderAssignment set status='reject' where id = :id")
+    void rejectOrder(@Param("id") Long id);
 }

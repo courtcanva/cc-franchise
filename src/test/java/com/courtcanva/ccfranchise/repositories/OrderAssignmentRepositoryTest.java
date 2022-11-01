@@ -19,7 +19,7 @@ public class OrderAssignmentRepositoryTest {
     @Test
     public void shouldChangeExpriedOrdersStatus() {
         OffsetDateTime now = OffsetDateTime.now();
-        int count = orderAssignmentRepository.rejectAllExpiredOrders(now);
+        orderAssignmentRepository.rejectAllExpiredOrders(now);
     }
 
     @Test

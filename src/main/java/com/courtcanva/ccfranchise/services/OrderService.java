@@ -13,10 +13,9 @@ public class OrderService {
     private final OrderAssignmentRepository orderAssignmentRepository;
 
     @Transactional
-    public int rejectAllExpriedOrders() {
+    public void rejectAllExpriedOrders() {
         OffsetDateTime now = OffsetDateTime.now();
         OffsetDateTime rejectTime = now.minusHours(48);
-        int count = orderAssignmentRepository.rejectAllExpiredOrders(rejectTime);
-        return count;
+        orderAssignmentRepository.rejectAllExpiredOrders(rejectTime);
     }
 }
