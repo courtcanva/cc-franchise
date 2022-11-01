@@ -1,7 +1,7 @@
 package com.courtcanva.ccfranchise.models;
 
-import com.courtcanva.ccfranchise.constants.EmployeeStatus;
 import com.courtcanva.ccfranchise.constants.BusinessRole;
+import com.courtcanva.ccfranchise.constants.EmployeeStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

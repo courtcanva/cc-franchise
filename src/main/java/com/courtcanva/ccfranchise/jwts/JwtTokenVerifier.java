@@ -1,12 +1,12 @@
 package com.courtcanva.ccfranchise.jwts;
 
+import com.courtcanva.ccfranchise.auths.FranchiseeAuthenticationToken;
 import com.google.common.base.Strings;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -54,6 +54,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
                 .parseClaimsJws(token);
         Claims body = claimsJws.getBody();
         String username = body.getSubject();
+        long franchiseeId = (Integer) body.get("FranchiseeId");
 
         List<Map<String, String>> authorities = (List<Map<String, String>>) body.get(AUTHORITIES);
 
@@ -61,10 +62,12 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
                 .map(map -> new SimpleGrantedAuthority(map.get(AUTHORITY)))
                 .collect(Collectors.toSet());
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
+        Authentication authentication = new FranchiseeAuthenticationToken(
+                franchiseeId,
                 username,
                 null,
                 grantedAuthorities
+
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

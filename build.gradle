@@ -9,6 +9,12 @@ group = 'com.courtcanva'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
+test {
+    testLogging {
+        events "PASSED", "SKIPPED", "FAILED"
+    }
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -33,6 +39,7 @@ dependencies {
 
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    implementation 'com.amazonaws:aws-java-sdk-ses:1.12.315'
 
     compileOnly 'org.projectlombok:lombok'
 
