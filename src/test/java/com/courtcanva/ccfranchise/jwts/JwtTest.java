@@ -7,6 +7,7 @@ import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
@@ -57,15 +58,15 @@ class JwtTest {
 
     private static final String BEARER = "Bearer ";
 
+    @Autowired
+    private OrderRepository orderRepository;
+
     @BeforeEach
     public void clear() {
-
+        orderRepository.deleteAll();
         staffRepository.deleteAll();
-
         franchiseeRepository.deleteAll();
-
         suburbRepository.deleteAll();
-
     }
 
 

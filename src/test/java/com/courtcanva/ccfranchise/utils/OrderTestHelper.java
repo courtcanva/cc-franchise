@@ -1,11 +1,15 @@
 package com.courtcanva.ccfranchise.utils;
 
 import com.courtcanva.ccfranchise.constants.OrderStatus;
+import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
 import com.courtcanva.ccfranchise.models.Order;
 
+import com.courtcanva.ccfranchise.models.Franchisee;
+
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +69,7 @@ public class OrderTestHelper {
                 .unpaidAmount(BigDecimal.valueOf(998.00))
                 .totalAmount(BigDecimal.valueOf(999.00))
                 .paidAmount(BigDecimal.valueOf(1.00))
-                .status(OrderStatus.ASSIGNED)
+                .status(OrderStatus.ASSIGNED_PENDING)
                 .franchisee(FranchiseeTestHelper.createFranchiseeWithId())
                 .build();
         Order order2 = Order.builder()
@@ -78,7 +82,7 @@ public class OrderTestHelper {
                 .unpaidAmount(BigDecimal.valueOf(998.00))
                 .totalAmount(BigDecimal.valueOf(999.00))
                 .paidAmount(BigDecimal.valueOf(1.00))
-                .status(OrderStatus.ASSIGNED)
+                .status(OrderStatus.ASSIGNED_PENDING)
                 .franchisee(FranchiseeTestHelper.createFranchiseeWithId())
                 .build();
         orders.add(0, (order1));
@@ -118,4 +122,29 @@ public class OrderTestHelper {
         orders.add(1, (order2));
         return orders;
     }
+
+    public static Order createOrder(String customerId, String postcode, Long totalAmount, Franchisee franchisee) {
+        return Order.builder()
+                   .orderId("101")
+                   .customerId(customerId)
+                   .contactInformation("""
+                       {"name": "Adam", "phone": "0404123456", "address": "Unit 1, 10 Queen Street, Richmond 3121"}""")
+                   .designInformation("""
+                       {"name": "draft version 1"}""")
+                   .postcode(postcode)
+                   .totalAmount(new BigDecimal(totalAmount))
+                   .paidAmount(new BigDecimal(1000L))
+                   .unpaidAmount(new BigDecimal(2000L))
+                   .status(OrderStatus.ASSIGNED_PENDING)
+                   .franchisee(franchisee)
+                   .invoiceLink("https://link.co")
+                   .createdTime(OffsetDateTime.parse("2021-12-03T10:15:30+11:00"))
+                   .updatedTime(OffsetDateTime.parse("2021-12-03T10:15:30+11:00"))
+                   .build();
+    }
+
+    public static List<Order> orders = List.of(
+        OrderTestHelper.createOrder("101", "3000", 3000L, FranchiseeTestHelper.createFranchiseeWithId()),
+        OrderTestHelper.createOrder("102", "4000", 4000L, FranchiseeTestHelper.createFranchiseeWithId()));
 }
+

@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.courtcanva.ccfranchise.constants.AUState.VIC;
 import static org.mockito.Mockito.mock;
 
 
@@ -20,7 +21,9 @@ public class FranchiseeTestHelper {
                 .contactNumber("234567891")
                 .businessName("AAAAA")
                 .businessAddress("zetland NSWssss")
+                .legalEntityName("XX Company")
                 .abn("12312123111")
+                .state(VIC)
                 .build();
     }
 

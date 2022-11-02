@@ -56,7 +56,7 @@ public class FranchiseeService {
     private final OrderMapper orderMapper;
 
     private final OrderRepository orderRepository;
-    
+
 
     @Transactional(noRollbackFor = MailingClientException.class)
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
