@@ -52,7 +52,7 @@ class OrderServiceTest {
         assertEquals("102",orderService.findAcceptedOrdersByFranchisee(FranchiseeTestHelper.createFranchiseeWithId(),
                 1).getAcceptedOrders().get(0).getOrderId());
     }
-}
+
 
     @Test
     void givenFranchieeId_whenOpenOrdersAvailable_shouldReturnListOfOrders() {

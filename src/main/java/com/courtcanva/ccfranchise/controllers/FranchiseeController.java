@@ -41,11 +41,10 @@ public class FranchiseeController {
         return franchiseeService.dutyAreas(suburbListAndFilterModePostDto, franchiseeId);
     }
 
-
-    @GetMapping ("/{franchiseeId}/acceptedorders")
-    public OrderAcceptedListGetDto acceptedOrdersList (@PathVariable(value = "franchiseeId") Long franchiseeId,
-                                                                  @RequestParam(value = "page") int pageNumber) {
-        return franchiseeService.findFranchiseeAcceptedOrders(franchiseeId,pageNumber);
+    @GetMapping("/{franchiseeId}/acceptedorders")
+    public OrderAcceptedListGetDto acceptedOrdersList(@PathVariable(value = "franchiseeId") Long franchiseeId,
+                                                      @RequestParam(value = "page") int pageNumber) {
+        return franchiseeService.findFranchiseeAcceptedOrders(franchiseeId, pageNumber);
     }
 
     @PostMapping("/{franchiseeId}/accept_orders")
@@ -55,10 +54,9 @@ public class FranchiseeController {
         return franchiseeService.acceptOrders(orderListPostDto);
     }
 
-
     @GetMapping("/{franchiseeId}/pending_orders")
     @ResponseStatus(HttpStatus.OK)
-    public List<OrderGetDto> getFirstTenOpenOrders(@PathVariable Long franchiseeId){
+    public List<OrderGetDto> getFirstTenOpenOrders(@PathVariable Long franchiseeId) {
         return orderService.getFirstTenOpenOrdersById(franchiseeId);
     }
 

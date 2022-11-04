@@ -32,8 +32,6 @@ public class OrderService {
                 .acceptedOrders(allOrders.stream().map(orderMapper::orderToAcceptedGetDto).collect(Collectors.toList()))
                 .PageNumber(pageNumber)
                 .build();
-
-
     }
 
     public List<OrderGetDto> getFirstTenOpenOrdersById(Long franchiseeId) {
