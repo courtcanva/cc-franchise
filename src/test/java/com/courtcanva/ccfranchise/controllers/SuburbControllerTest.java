@@ -28,6 +28,7 @@ class SuburbControllerTest {
 
     @BeforeEach
     void setUp() {
+        suburbRepository.deleteAll();
         suburbRepository.save(SuburbTestHelper.suburb1());
         suburbRepository.save(SuburbTestHelper.suburb2());
     }

@@ -3,6 +3,7 @@ package com.courtcanva.ccfranchise.services;
 import com.amazonaws.util.Base64;
 import com.courtcanva.ccfranchise.constants.StaffStatus;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
+import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ExpiredVerificationTokenException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
@@ -30,6 +31,14 @@ public class StaffService {
         Staff savedStaff = staffRepository.save(staff);
         sendVerificationEmail(savedStaff.getId());
         return staffMapper.staffToGetDto(savedStaff);
+    }
+
+    public Boolean emailExists(String email) {
+        Boolean isExisted = staffRepository.existsStaffByEmail(email);
+        if (Boolean.TRUE.equals(isExisted)) {
+            throw new ResourceAlreadyExistException("Email already existed");
+        }
+        return isExisted;
     }
 
     public void sendVerificationEmail(Long id) {

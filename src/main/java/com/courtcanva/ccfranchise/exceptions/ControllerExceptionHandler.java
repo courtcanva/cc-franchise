@@ -8,16 +8,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
+
 @Slf4j
 @RestControllerAdvice
 public class ControllerExceptionHandler {
 
     @ExceptionHandler(value = ResourceAlreadyExistException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorDto handleResourceAlreadyExistException(ResourceAlreadyExistException e) {
 
         return ErrorDto.builder()
-                .errorCode(HttpStatus.BAD_REQUEST.value())
+                .errorCode(HttpStatus.CONFLICT.value())
                 .details(e.getMessage())
                 .build();
 
@@ -44,6 +46,18 @@ public class ControllerExceptionHandler {
                 .details(e.getMessage())
                 .build();
 
+    }
+
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDto handleConstraintViolationException(ConstraintViolationException e) {
+
+        log.debug("Method argument is not valid", e);
+
+        return ErrorDto.builder()
+                .errorCode(HttpStatus.BAD_REQUEST.value())
+                .details(e.getMessage())
+                .build();
     }
 
     @ExceptionHandler(value = MailingClientException.class)

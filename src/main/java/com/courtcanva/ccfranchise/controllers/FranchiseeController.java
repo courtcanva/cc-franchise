@@ -2,18 +2,19 @@ package com.courtcanva.ccfranchise.controllers;
 
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
-
 import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedListGetDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
-
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
+import com.courtcanva.ccfranchise.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import javax.validation.Valid;
 
 @RestController
@@ -22,6 +23,8 @@ import javax.validation.Valid;
 public class FranchiseeController {
 
     private final FranchiseeService franchiseeService;
+
+    private final OrderService orderService;
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
@@ -51,5 +54,13 @@ public class FranchiseeController {
                                         @PathVariable(value = "franchiseeId") Long franchiseeId) {
         return franchiseeService.acceptOrders(orderListPostDto);
     }
+
+
+    @GetMapping("/{franchiseeId}/pending_orders")
+    @ResponseStatus(HttpStatus.OK)
+    public List<OrderGetDto> getFirstTenOpenOrders(@PathVariable Long franchiseeId){
+        return orderService.getFirstTenOpenOrdersById(franchiseeId);
+    }
+
 
 }
