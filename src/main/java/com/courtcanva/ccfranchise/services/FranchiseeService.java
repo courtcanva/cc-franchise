@@ -14,6 +14,7 @@ import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
 import com.courtcanva.ccfranchise.exceptions.MailingClientException;
+import com.courtcanva.ccfranchise.exceptions.PageNumberNotValidException;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
@@ -144,6 +145,13 @@ public class FranchiseeService {
             return new ResourceNotFoundException("franchisee id is not exist");
 
         });
+
+        if (pageNumber <=1){
+
+            log.debug("pageNumber: {} is not valid ",pageNumber);
+            throw new PageNumberNotValidException("PageNumber is not valid");
+        }
+
         return orderService.findAcceptedOrdersByFranchisee(franchisee, pageNumber);
     }
 

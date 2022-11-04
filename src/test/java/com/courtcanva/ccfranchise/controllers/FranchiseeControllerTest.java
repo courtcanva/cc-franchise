@@ -130,7 +130,7 @@ class FranchiseeControllerTest {
         order.setFranchisee(franchisee);
         orderRepository.save(order);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/franchisee/"+franchisee.getId()+"/acceptedorders?page=1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/franchisee/"+franchisee.getId()+"/orders/accepted?page=1"))
                 .andExpect(jsonPath("$.acceptedOrders[0].orderId").value("111"));
 
     }

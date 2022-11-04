@@ -41,7 +41,7 @@ public class FranchiseeController {
         return franchiseeService.dutyAreas(suburbListAndFilterModePostDto, franchiseeId);
     }
 
-    @GetMapping("/{franchiseeId}/acceptedorders")
+    @GetMapping("/{franchiseeId}/orders/accepted")
     public OrderAcceptedListGetDto acceptedOrdersList(@PathVariable(value = "franchiseeId") Long franchiseeId,
                                                       @RequestParam(value = "page") int pageNumber) {
         return franchiseeService.findFranchiseeAcceptedOrders(franchiseeId, pageNumber);
