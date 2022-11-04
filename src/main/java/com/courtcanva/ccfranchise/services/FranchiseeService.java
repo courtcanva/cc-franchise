@@ -146,9 +146,9 @@ public class FranchiseeService {
 
         });
 
-        if (pageNumber <=1){
+        if (pageNumber <= 0) {
 
-            log.debug("pageNumber: {} is not valid ",pageNumber);
+            log.debug("pageNumber: {} is not valid ", pageNumber);
             throw new PageNumberNotValidException("PageNumber is not valid");
         }
 
