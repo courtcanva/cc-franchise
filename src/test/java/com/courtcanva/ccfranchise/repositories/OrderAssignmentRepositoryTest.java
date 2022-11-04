@@ -30,4 +30,9 @@ public class OrderAssignmentRepositoryTest {
             System.out.println(expiredOrder);
         }
     }
+
+    @Test
+    public void givenOrderIds_whenFranchiseeRejectOrders_thenUpdateOrdersStatusToReject() {
+        orderAssignmentRepository.rejectOrder(2L);
+    }
 }

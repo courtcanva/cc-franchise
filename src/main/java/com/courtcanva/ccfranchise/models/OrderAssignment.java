@@ -19,6 +19,8 @@ public class OrderAssignment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long order_id;
+
     @Column(nullable = false, updatable = false, name = "created_at")
     @CreationTimestamp
     private OffsetDateTime createdTime;

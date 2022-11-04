@@ -23,8 +23,10 @@ import com.courtcanva.ccfranchise.mappers.SuburbMapperImpl;
 import com.courtcanva.ccfranchise.mappers.OrderMapperImpl;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
+import com.courtcanva.ccfranchise.models.OrderAssignment;
 import com.courtcanva.ccfranchise.models.Suburb;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.OrderAssignmentRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
 import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
@@ -71,6 +73,8 @@ class FranchiseeServiceTest {
     private PasswordEncoder passwordEncoder;
     @Mock
     private OrderRepository orderRepository;
+    @Mock
+    private OrderAssignmentRepository orderAssignmentRepository;
 
     @BeforeEach
     void setUp() {
@@ -101,7 +105,8 @@ class FranchiseeServiceTest {
                 suburbService,
                 suburbMapper,
                 orderMapper,
-                orderRepository
+                orderRepository,
+                orderAssignmentRepository
         );
     }
 
@@ -209,4 +214,8 @@ class FranchiseeServiceTest {
                 () -> franchiseeService.acceptOrders(orderListPostDto));
     }
 
+    @Test
+    public void givenOrderIds_whenFranchiseeRejectOrders_thenUpdateOrdersStatusToReject() {
+        OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
+    }
 }

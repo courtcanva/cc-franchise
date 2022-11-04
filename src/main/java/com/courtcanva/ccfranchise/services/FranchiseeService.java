@@ -6,9 +6,7 @@ import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.*;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
@@ -24,6 +22,7 @@ import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.models.Suburb;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.OrderAssignmentRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -56,6 +56,8 @@ public class FranchiseeService {
     private final OrderMapper orderMapper;
 
     private final OrderRepository orderRepository;
+
+    private final OrderAssignmentRepository orderAssignmentRepository;
     
 
     @Transactional(noRollbackFor = MailingClientException.class)
@@ -139,7 +141,6 @@ public class FranchiseeService {
 
     @Transactional
     public OrderListGetDto acceptOrders(OrderListPostDto orderListPostDto) {
-
         List<Order> selectedOrders = orderRepository.findByIdIn(
                 orderListPostDto.getOrders()
                         .stream()
@@ -160,5 +161,14 @@ public class FranchiseeService {
                         .stream()
                         .map(orderMapper::orderToGetDto)
                         .collect(Collectors.toList())).build();
+    }
+
+    @Transactional
+    public OrderAssignmentListGetDto rejectOrders(OrderAssignmentListPostDto orderAssignmentListPostDto) {
+        //关于reject api调用完成后，是再调用一次getAll api还是说直接传回修改后的List
+        List<OrderAssignmentPostDto> orders = orderAssignmentListPostDto.getOrders();
+        orders.forEach(order -> orderAssignmentRepository.rejectOrder(order.getId()));
+        //TODO: continue.....
+        return new OrderAssignmentListGetDto();
     }
 }
