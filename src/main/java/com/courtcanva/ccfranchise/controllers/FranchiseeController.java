@@ -2,11 +2,14 @@ package com.courtcanva.ccfranchise.controllers;
 
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeGetDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
+import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
 import com.courtcanva.ccfranchise.services.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +60,12 @@ public class FranchiseeController {
     @ResponseStatus(HttpStatus.OK)
     public List<OrderGetDto> getFirstTenOpenOrders(@PathVariable Long franchiseeId){
         return orderService.getFirstTenOpenOrdersById(franchiseeId);
+    }
+
+    @PostMapping("/findbypostcode")
+    @ResponseStatus(HttpStatus.OK)
+    public FranchiseeListGetDto getFranchiseeByPostcode(@RequestBody @Valid int postcode){
+        return franchiseeService.findFranchiseesByPostcode(postcode);
     }
 
 }

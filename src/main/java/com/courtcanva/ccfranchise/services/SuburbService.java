@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +31,10 @@ public class SuburbService {
 
         return suburbRepository.findBySscCodeIn(sscCodes);
 
+    }
+
+    public Optional<Suburb> findAllByPostcode(int postcode){
+        return suburbRepository.findAllByPostcode(postcode);
     }
 
 

@@ -3,6 +3,8 @@ package com.courtcanva.ccfranchise.services;
 import com.courtcanva.ccfranchise.constants.DutyAreaFilterMode;
 import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeGetDto;
+import com.courtcanva.ccfranchise.dtos.FranchiseeListGetDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
@@ -33,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -56,7 +59,6 @@ public class FranchiseeService {
     private final OrderMapper orderMapper;
 
     private final OrderRepository orderRepository;
-
 
     @Transactional(noRollbackFor = MailingClientException.class)
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
@@ -161,4 +163,23 @@ public class FranchiseeService {
                         .map(orderMapper::orderToGetDto)
                         .collect(Collectors.toList())).build();
     }
+
+
+    public List<Franchisee> findFranchiseesByDutyAreas(Long sscCode) {
+        return franchiseeRepository.findFranchiseesByDutyAreas(sscCode);
+    }
+
+    @Transactional
+    public FranchiseeListGetDto findFranchiseesByPostcode(int postcode) {
+
+        List<Franchisee> resultFSE = franchiseeRepository.findFranchiseesByPostcode(postcode);
+
+        return FranchiseeListGetDto.builder()
+                .franchiseeGetDtoList(resultFSE
+                        .stream()
+                        .map(franchiseeMapper::franchiseeToGetDto)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
 }

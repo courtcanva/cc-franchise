@@ -100,4 +100,7 @@ public class Franchisee {
         this.dutyAreas.addAll(suburbs);
     }
 
+    @OneToMany(mappedBy = "franchisee")
+    private Set<OrderAssignment> orderAssignmentSet = new HashSet<>();
+
 }
