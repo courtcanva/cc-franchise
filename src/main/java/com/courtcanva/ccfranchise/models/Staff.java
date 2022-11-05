@@ -56,7 +56,7 @@ public class Staff {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @Column(nullable = false, name = "address")
+    @Column(name = "address")
     private String residentialAddress;
 
     @Column

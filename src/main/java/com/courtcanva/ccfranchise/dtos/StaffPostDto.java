@@ -33,9 +33,9 @@ public class StaffPostDto {
     @Pattern(regexp = "^0[0-9]{9}|[0-9]{9}$", message = "Incorrect phone number format")
     private String phoneNumber;
 
-    @NotBlank(message = "Staff's residential address is mandatory")
     private String residentialAddress;
 
+    @NotBlank(message = "Staff's postcode is mandatory")
     private int postcode;
 
     @NotNull(message = "Staff's state is mandatory")
