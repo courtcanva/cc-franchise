@@ -60,7 +60,6 @@ public class Franchisee {
     @Column(nullable = false)
     private String contactNumber;
 
-
     @Column(nullable = false)
     private String legalEntityName;
 

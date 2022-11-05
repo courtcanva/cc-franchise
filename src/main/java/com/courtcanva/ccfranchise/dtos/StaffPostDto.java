@@ -35,7 +35,6 @@ public class StaffPostDto {
 
     private String residentialAddress;
 
-    @NotBlank(message = "Staff's postcode is mandatory")
     private int postcode;
 
     @NotNull(message = "Staff's state is mandatory")
@@ -45,6 +44,5 @@ public class StaffPostDto {
     @NotBlank(message = "Staff's password is mandatory")
     @Pattern(regexp = ".*[0-9]+.*[A-Z]+.*|.*[A-Z]+.*[0-9]+.*", message = "At least one uppercase letter and one digit")
     private String password;
-
 
 }

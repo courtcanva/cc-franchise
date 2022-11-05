@@ -35,6 +35,6 @@ public class FranchiseePostDto {
     @NotNull(message = "Franchisee's state is mandatory")
     private AUState state;
 
-    @NotBlank(message = "Franchisee's postcode is mandatory")
     private int postcode;
+
 }
