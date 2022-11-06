@@ -1,7 +1,7 @@
 package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.constants.OrderStatus;
-import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedListGetDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedAndCompletedPaginationGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
@@ -20,18 +20,21 @@ import java.util.stream.Collectors;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private static final int PAGE_SIZE = 10;
 
 
-    public OrderAcceptedListGetDto findAcceptedOrdersByFranchisee(Franchisee franchisee, int pageNumber) {
+    public OrderAcceptedAndCompletedPaginationGetDto findAcceptedOrdersByFranchisee(Franchisee franchisee, int pageNumber) {
 
-        PageRequest pageRequest = PageRequest.of(pageNumber - 1, 10);
-        List<Order> allOrders = orderRepository.findOrdersByFranchiseeAndStatusInOrderByStatusAscCreatedTime(
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, PAGE_SIZE);
+
+        List<Order> acceptedAndCompletedOrders = orderRepository.findOrdersByFranchiseeAndStatusInOrderByStatusAscCreatedTime(
                 franchisee, List.of(OrderStatus.COMPLETED, OrderStatus.ACCEPTED), pageRequest);
 
-        return OrderAcceptedListGetDto.builder()
-                .acceptedOrders(allOrders.stream().map(orderMapper::orderToAcceptedGetDto).collect(Collectors.toList()))
+        return OrderAcceptedAndCompletedPaginationGetDto.builder()
+                .acceptedOrders(acceptedAndCompletedOrders.stream().map(orderMapper::orderToAcceptedGetDto).collect(Collectors.toList()))
                 .PageNumber(pageNumber)
                 .build();
+
     }
 
     public List<OrderGetDto> getFirstTenOpenOrdersById(Long franchiseeId) {

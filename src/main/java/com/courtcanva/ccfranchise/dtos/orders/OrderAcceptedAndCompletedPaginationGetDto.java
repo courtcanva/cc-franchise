@@ -11,8 +11,9 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderAcceptedListGetDto {
+public class OrderAcceptedAndCompletedPaginationGetDto {
 
     private int PageNumber;
-    private List<OrderAcceptedGetDto> acceptedOrders;
+    
+    private List<OrderAcceptedAndCompletedGetDto> acceptedOrders;
 }

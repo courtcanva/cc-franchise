@@ -1,8 +1,8 @@
 package com.courtcanva.ccfranchise.utils;
 
 import com.courtcanva.ccfranchise.constants.OrderStatus;
-import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedGetDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedListGetDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedAndCompletedGetDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedAndCompletedPaginationGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
 import com.courtcanva.ccfranchise.models.Order;
@@ -135,10 +135,10 @@ public class OrderTestHelper {
                 .status(OrderStatus.ACCEPTED)
                 .build();
     }
-    public static OrderAcceptedListGetDto mockAcceptedListDto() {
-        return OrderAcceptedListGetDto.builder()
+    public static OrderAcceptedAndCompletedPaginationGetDto mockAcceptedListDto() {
+        return OrderAcceptedAndCompletedPaginationGetDto.builder()
                 .acceptedOrders(List.of(
-                        OrderAcceptedGetDto.builder()
+                        OrderAcceptedAndCompletedGetDto.builder()
                                 .orderId("802")
                                 .build()
                 ))

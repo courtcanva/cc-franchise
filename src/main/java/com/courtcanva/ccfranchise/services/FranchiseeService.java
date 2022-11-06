@@ -6,7 +6,7 @@ import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedListGetDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedAndCompletedPaginationGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
@@ -137,12 +137,12 @@ public class FranchiseeService {
     }
 
 
-    public OrderAcceptedListGetDto findFranchiseeAcceptedOrders(Long franchiseeId, int pageNumber) {
+    public OrderAcceptedAndCompletedPaginationGetDto findFranchiseeAcceptedOrders(Long franchiseeId, int pageNumber) {
         Franchisee franchisee = franchiseeRepository.findFranchiseeById(franchiseeId).orElseThrow(() -> {
 
             log.debug("franchisee with id: {} is not exist", franchiseeId);
 
-            return new ResourceNotFoundException("franchisee id is not exist");
+            return new ResourceNotFoundException("franchisee id:" + franchiseeId.toString() + " is not exist");
 
         });
 

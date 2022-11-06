@@ -1,6 +1,6 @@
 package com.courtcanva.ccfranchise.mappers;
 
-import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedGetDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedAndCompletedGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
 import com.courtcanva.ccfranchise.models.Order;
@@ -13,5 +13,5 @@ public interface OrderMapper {
 
     OrderGetDto orderToGetDto(Order order);
 
-    OrderAcceptedGetDto orderToAcceptedGetDto (Order order);
+    OrderAcceptedAndCompletedGetDto orderToAcceptedGetDto (Order order);
 }

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderAcceptedGetDto {
+public class OrderAcceptedAndCompletedGetDto {
 
     private Long id;
     private String orderId;
