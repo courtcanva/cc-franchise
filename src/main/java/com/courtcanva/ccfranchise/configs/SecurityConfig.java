@@ -37,7 +37,7 @@ public class SecurityConfig {
             "/suburbs",
             "/actuator/health",
             "/staff/verify",
-            "/franchisee/findbypostcode"
+            "/franchisee/findbypostcode",
     };
     private final SecretKey secretKey;
     private final StaffDetailService staffDetailService;

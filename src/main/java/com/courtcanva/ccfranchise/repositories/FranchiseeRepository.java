@@ -1,8 +1,7 @@
 package com.courtcanva.ccfranchise.repositories;
 
-import com.courtcanva.ccfranchise.dtos.FranchiseeGetDto;
-import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
+import com.courtcanva.ccfranchise.models.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,12 +15,23 @@ public interface FranchiseeRepository extends JpaRepository<Franchisee, Long> {
 
     Optional<Franchisee> findFranchiseeById(Long franchiseeId);
 
-//    Optional<List<Franchisee>> findFranchiseeByDutyAreas(Set<Suburb> dutyAreas);
-
-    //    @Query("SELECT f from Franchisee f, Suburb s, DutyArea d where  f.id = d.franchisee_id AND d.sscCode = s.ssc_Code AND s.postcode = :postcode")
-    @Query(value = "SELECT * From franchisee f, suburb s,duty_area d where f.id = d.franchisee_id and d.ssc_code = s.ssc_code AND s.postcode = :postcode", nativeQuery = true)
+    @Query(value = "SELECT * FROM franchise.franchisee " +
+            "Where id IN " +
+            "(Select f.id " +
+            "FROM " +
+              "franchise.franchisee AS f, " +
+              "franchise.suburb AS s, " +
+              "franchise.duty_area AS d , " +
+              "franchise.\"order\" AS o " +
+            "WHERE "+
+              "f.\"id\" = d.franchisee_id " +
+              "AND d.ssc_code = s.ssc_code " +
+              "AND f.\"id\" = o.franchisee_id " +
+              "AND s.postcode =:postcode " +
+            "GROUP BY f.\"id\" " +
+            "HAVING COUNT (*) < 10) "+
+            "ORDER BY business_name", nativeQuery = true)
     List<Franchisee> findFranchiseesByPostcode(@Param("postcode") int postcode);
 
-    List<Franchisee> findFranchiseesByDutyAreas(Long sscCode);
 
 }

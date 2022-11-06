@@ -13,5 +13,5 @@ import java.util.List;
 @Builder
 public class FranchiseeListGetDto {
 
-    private List<FranchiseeGetDto> franchiseeGetDtoList;
+    private List<FranchiseeGetDto> franchisee;
 }

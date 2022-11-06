@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 import javax.validation.Valid;
 
 @RestController
@@ -67,5 +68,11 @@ public class FranchiseeController {
     public FranchiseeListGetDto getFranchiseeByPostcode(@RequestBody @Valid int postcode){
         return franchiseeService.findFranchiseesByPostcode(postcode);
     }
+
+//    @GetMapping("/getFSE")
+//    @ResponseStatus(HttpStatus.OK)
+//    public FranchiseeListGetDto getFranchiseesByOrderNumberLessTen(){
+//        return franchiseeService.findFranchiseesByOrderNumberLessTen();
+//    }
 
 }

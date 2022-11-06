@@ -3,7 +3,6 @@ package com.courtcanva.ccfranchise.services;
 import com.courtcanva.ccfranchise.constants.DutyAreaFilterMode;
 import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
-import com.courtcanva.ccfranchise.dtos.FranchiseeGetDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeListGetDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
@@ -35,7 +34,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -165,21 +163,32 @@ public class FranchiseeService {
     }
 
 
-    public List<Franchisee> findFranchiseesByDutyAreas(Long sscCode) {
-        return franchiseeRepository.findFranchiseesByDutyAreas(sscCode);
-    }
-
     @Transactional
     public FranchiseeListGetDto findFranchiseesByPostcode(int postcode) {
 
-        List<Franchisee> resultFSE = franchiseeRepository.findFranchiseesByPostcode(postcode);
+     List<Franchisee> franchisees = franchiseeRepository.findFranchiseesByPostcode(postcode);
+
+       if(franchisees.isEmpty()){
+            log.debug("franchisee with duty area postcode: {} is not exist", postcode);
+            throw  new ResourceNotFoundException("franchisee is not found");
+        };
+
 
         return FranchiseeListGetDto.builder()
-                .franchiseeGetDtoList(resultFSE
+                .franchisee(franchisees
                         .stream()
                         .map(franchiseeMapper::franchiseeToGetDto)
                         .collect(Collectors.toList()))
                 .build();
     }
+
+//    @Transactional
+//    public FranchiseeListGetDto findFranchiseesByOrderNumberLessTen(){
+//        List<Franchisee> franchisees = franchiseeRepository.findFranchiseesByOrderNumberLessTen();
+//
+//        return FranchiseeListGetDto.builder().franchisee(franchisees.stream().map(franchiseeMapper::franchiseeToGetDto).collect(Collectors.toList())).build();
+//    }
+
+
 
 }
