@@ -51,7 +51,7 @@ public class Franchisee {
     @Builder.Default
     private Boolean isVerified = false;
 
-    @Column(nullable = false, name = "address")
+    @Column(name = "address")
     private String businessAddress;
 
     @Column(nullable = false)
@@ -59,7 +59,6 @@ public class Franchisee {
 
     @Column(nullable = false)
     private String contactNumber;
-
 
     @Column(nullable = false)
     private String legalEntityName;

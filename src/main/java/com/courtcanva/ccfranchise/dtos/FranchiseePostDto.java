@@ -30,11 +30,11 @@ public class FranchiseePostDto {
     @Pattern(regexp = "[0-9]{11}", message = "Incorrect ABN format")
     private String abn;
 
-    @NotBlank(message = "Franchisee's business address is mandatory")
     private String businessAddress;
 
     @NotNull(message = "Franchisee's state is mandatory")
     private AUState state;
 
     private int postcode;
+
 }

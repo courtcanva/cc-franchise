@@ -1,0 +1,5 @@
+ALTER TABLE franchisee
+    ALTER COLUMN address DROP NOT NULL;
+
+ALTER TABLE staff
+    ALTER COLUMN address DROP NOT NULL;
