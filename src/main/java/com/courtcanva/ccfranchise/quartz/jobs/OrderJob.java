@@ -8,12 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OrderJob implements Job {
+public class OrderJob {
     @Autowired
     private OrderService orderService;
 
-    @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+    public void rejectAllExpriedOrders() throws InterruptedException {
         orderService.rejectAllExpriedOrders();
+    }
+
+    public void test2() throws InterruptedException {
+
     }
 }
