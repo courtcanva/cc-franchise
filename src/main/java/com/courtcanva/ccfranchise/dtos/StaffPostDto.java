@@ -1,5 +1,6 @@
 package com.courtcanva.ccfranchise.dtos;
 
+import com.courtcanva.ccfranchise.annotations.AustralianNumber;
 import com.courtcanva.ccfranchise.constants.AUState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +31,7 @@ public class StaffPostDto {
     private String email;
 
     @NotBlank(message = "Staff's phone number is mandatory")
-    @Pattern(regexp = "^0[0-9]{9}|[0-9]{9}$", message = "Incorrect phone number format")
+    @AustralianNumber
     private String phoneNumber;
 
     private String residentialAddress;
