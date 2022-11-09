@@ -30,7 +30,7 @@ public class OrderService {
                 franchisee, List.of(OrderStatus.COMPLETED, OrderStatus.ACCEPTED), pageRequest);
 
         return OrderAcceptedAndCompletedPaginationGetDto.builder()
-                .acceptedOrders(acceptedAndCompletedOrders.stream().map(orderMapper::orderToAcceptedGetDto).collect(Collectors.toList()))
+                .acceptedOrders(acceptedAndCompletedOrders.stream().map(orderMapper::orderToGetDto).collect(Collectors.toList()))
                 .PageNumber(pageNumber)
                 .build();
 

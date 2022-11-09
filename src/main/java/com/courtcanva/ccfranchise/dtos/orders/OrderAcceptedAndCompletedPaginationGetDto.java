@@ -14,6 +14,6 @@ import java.util.List;
 public class OrderAcceptedAndCompletedPaginationGetDto {
 
     private int PageNumber;
-    
-    private List<OrderAcceptedAndCompletedGetDto> acceptedOrders;
+
+    private List<OrderGetDto> acceptedOrders;
 }

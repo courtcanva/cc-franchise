@@ -1,8 +1,5 @@
 package com.courtcanva.ccfranchise.controllers;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.courtcanva.ccfranchise.constants.AUState;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
@@ -15,7 +12,11 @@ import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
-import com.courtcanva.ccfranchise.utils.*;
+import com.courtcanva.ccfranchise.utils.FranchiseeAndStaffTestHelper;
+import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
+import com.courtcanva.ccfranchise.utils.MailingClient;
+import com.courtcanva.ccfranchise.utils.OrderTestHelper;
+import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,12 +31,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-import java.util.Optional;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
 
 
 @SpringBootTest
@@ -122,7 +121,6 @@ class FranchiseeControllerTest {
 
     @Test
     @WithMockUser
-
     void shouldReturnAcceptedOrderWithPagination() throws Exception {
 
         Order order = orderRepository.save(OrderTestHelper.mockAcceptedOrder1());
@@ -130,29 +128,30 @@ class FranchiseeControllerTest {
         order.setFranchisee(franchisee);
         orderRepository.save(order);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/franchisee/"+franchisee.getId()+"/orders/accepted?page=1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/franchisee/" + franchisee.getId() + "/orders/accepted?page=1"))
                 .andExpect(jsonPath("$.acceptedOrders[0].orderId").value("111"));
 
     }
+
     void givenFranchiseeId_whenQueryOpenOrders_shouldReturnFirstTenOpenOrders() throws Exception {
         Long mockFranchiseeId = franchiseeController.signUpFranchiseeAndStaff(new FranchiseeAndStaffPostDto(
-                new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "23468290381", "Melbourne", AUState.VIC, 3000),
-                new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd")))
-                                    .getFranchiseeGetDto().getFranchiseeId();
+                        new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "23468290381", "Melbourne", AUState.VIC, 3000),
+                        new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd")))
+                .getFranchiseeGetDto().getFranchiseeId();
         List<Franchisee> franchisees = franchiseeRepository.findAll();
         List<Order> orders = List.of(OrderTestHelper.createOrder("101", "3000", 3000L, franchisees.get(0)),
-            OrderTestHelper.createOrder("102", "4000", 4000L, franchisees.get(0)));
+                OrderTestHelper.createOrder("102", "4000", 4000L, franchisees.get(0)));
         orderRepository.saveAll(orders);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/franchisee/" + mockFranchiseeId.toString() + "/pending_orders"))
-            .andDo(MockMvcResultHandlers.print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$[0].customerId").value("101"))
-            .andExpect(jsonPath("$[0].postcode").value("3000"))
-            .andExpect(jsonPath("$[0].totalAmount").value("3000.0"))
-            .andExpect(jsonPath("$[1].customerId").value("102"))
-            .andExpect(jsonPath("$[1].postcode").value("4000"))
-            .andExpect(jsonPath("$[1].totalAmount").value("4000.0"));
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].customerId").value("101"))
+                .andExpect(jsonPath("$[0].postcode").value("3000"))
+                .andExpect(jsonPath("$[0].totalAmount").value("3000.0"))
+                .andExpect(jsonPath("$[1].customerId").value("102"))
+                .andExpect(jsonPath("$[1].postcode").value("4000"))
+                .andExpect(jsonPath("$[1].totalAmount").value("4000.0"));
     }
 
 }
