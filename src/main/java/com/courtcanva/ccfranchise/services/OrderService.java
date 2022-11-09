@@ -18,10 +18,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class OrderService {
+    private static final int PAGE_SIZE = 10;
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
-    private static final int PAGE_SIZE = 10;
-
 
     public OrderAcceptedAndCompletedPaginationGetDto findAcceptedOrdersByFranchisee(Franchisee franchisee, int pageNumber) {
 
