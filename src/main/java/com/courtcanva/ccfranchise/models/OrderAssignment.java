@@ -8,15 +8,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.Table;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -25,14 +32,21 @@ import java.time.OffsetDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "order_assignment")
+//@EntityListeners(AuditingEntityListener.class)
 public class OrderAssignment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+//    @Id
+//    @EmbeddedId
+//    private OrderAssignmentId id;
+
     //Assigned,Accepted,Rejected
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private OrderAssignmentStatus status;
 
     @Column(nullable = false, updatable = false)
@@ -45,10 +59,12 @@ public class OrderAssignment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
+//    @MapsId("orderId")
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "franchisee_id")
+//    @MapsId("franchiseeId")
     private Franchisee franchisee;
 
 

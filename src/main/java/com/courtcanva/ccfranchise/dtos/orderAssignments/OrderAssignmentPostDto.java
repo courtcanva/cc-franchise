@@ -16,6 +16,10 @@ import java.time.OffsetDateTime;
 @Builder
 public class OrderAssignmentPostDto {
 
+    private Long franchiseeId;
+
+    private Long orderId;
+
     private OrderAssignmentStatus status;
 
     private OffsetDateTime assignedTime;

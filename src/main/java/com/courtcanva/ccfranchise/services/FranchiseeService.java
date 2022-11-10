@@ -2,8 +2,8 @@ package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.constants.DutyAreaFilterMode;
 import com.courtcanva.ccfranchise.constants.OrderStatus;
+import com.courtcanva.ccfranchise.dtos.FranchiseeAndOrderNumber;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
-import com.courtcanva.ccfranchise.dtos.FranchiseeListGetDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
@@ -32,8 +32,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -162,33 +165,41 @@ public class FranchiseeService {
                         .collect(Collectors.toList())).build();
     }
 
-
-    @Transactional
-    public FranchiseeListGetDto findFranchiseesByPostcode(int postcode) {
-
-     List<Franchisee> franchisees = franchiseeRepository.findFranchiseesByPostcode(postcode);
-
-       if(franchisees.isEmpty()){
-            log.debug("franchisee with duty area postcode: {} is not exist", postcode);
-            throw  new ResourceNotFoundException("franchisee is not found");
-        };
-
-
-        return FranchiseeListGetDto.builder()
-                .franchisee(franchisees
-                        .stream()
-                        .map(franchiseeMapper::franchiseeToGetDto)
-                        .collect(Collectors.toList()))
-                .build();
+    public List<Franchisee> findFranchiseeByIds(List<Long> ids){
+        return franchiseeRepository.findByIdIn(ids);
     }
 
-//    @Transactional
-//    public FranchiseeListGetDto findFranchiseesByOrderNumberLessTen(){
-//        List<Franchisee> franchisees = franchiseeRepository.findFranchiseesByOrderNumberLessTen();
-//
-//        return FranchiseeListGetDto.builder().franchisee(franchisees.stream().map(franchiseeMapper::franchiseeToGetDto).collect(Collectors.toList())).build();
-//    }
+    public List<Long> findFranchiseesHaveNoOrder() {
+        return franchiseeRepository.findFranchiseesHaveNoOrder();
+    }
 
+    public List<Long> findFranchiseesIdByDutyArea(int sscCode) {
+        return franchiseeRepository.findFranchiseesByDutyArea(sscCode);
+    }
+
+    public List<FranchiseeAndOrderNumber> findFranchiseesHasOrderLessTen() {
+        return franchiseeRepository.findFranchiseesOrderNumberLessTen();
+    }
+
+    public List<Long> findFranchiseesIdWasRejected(Long orderId) {
+        return franchiseeRepository.findFranchiseesWhoIsRejected(orderId);
+    }
+
+    @Transactional
+    public List<Long> findMatchedFranchisee(int sscCode, Long orderId) {
+
+        List<Long> franchiseeOrderNumLessTen = findFranchiseesHasOrderLessTen().stream().map(FranchiseeAndOrderNumber::getFranchiseeId).toList();
+
+        List<Long> dutyAreaAndOrderNumberLessTen = findFranchiseesIdByDutyArea(sscCode).stream().filter(franchiseeOrderNumLessTen::contains).toList();
+        List<Long> dutyAreaAndOrderNumberLessTenAndNoOrder = findFranchiseesIdByDutyArea(sscCode).stream().filter(id -> findFranchiseesHaveNoOrder().contains(id)).toList();
+
+        Set<Long> availableFranchisees = new HashSet<>();
+        availableFranchisees.addAll(dutyAreaAndOrderNumberLessTen);
+        availableFranchisees.addAll(dutyAreaAndOrderNumberLessTenAndNoOrder);
+
+        return availableFranchisees.stream().filter(item -> !findFranchiseesIdWasRejected(orderId).contains(item)).toList();
+
+    }
 
 
 }

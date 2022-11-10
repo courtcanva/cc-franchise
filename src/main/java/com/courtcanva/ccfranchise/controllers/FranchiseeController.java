@@ -1,15 +1,13 @@
 package com.courtcanva.ccfranchise.controllers;
 
+import com.courtcanva.ccfranchise.dtos.FranchiseeAndOrderNumber;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
-import com.courtcanva.ccfranchise.dtos.FranchiseeGetDto;
-import com.courtcanva.ccfranchise.dtos.FranchiseeListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
-import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
 import com.courtcanva.ccfranchise.services.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 import javax.validation.Valid;
 
 @RestController
@@ -63,16 +61,11 @@ public class FranchiseeController {
         return orderService.getFirstTenOpenOrdersById(franchiseeId);
     }
 
-    @PostMapping("/findbypostcode")
-    @ResponseStatus(HttpStatus.OK)
-    public FranchiseeListGetDto getFranchiseeByPostcode(@RequestBody @Valid int postcode){
-        return franchiseeService.findFranchiseesByPostcode(postcode);
-    }
 
-//    @GetMapping("/getFSE")
-//    @ResponseStatus(HttpStatus.OK)
-//    public FranchiseeListGetDto getFranchiseesByOrderNumberLessTen(){
-//        return franchiseeService.findFranchiseesByOrderNumberLessTen();
-//    }
+    @PostMapping("/getOrders/{sscCode}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Long> franchiseeListGetDto(@PathVariable(value = "sscCode") int sscCode, @RequestBody Long orderId){
+        return franchiseeService.findMatchedFranchisee(sscCode, orderId);
+    }
 
 }

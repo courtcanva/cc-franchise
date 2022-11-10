@@ -17,6 +17,8 @@ import java.time.OffsetDateTime;
 public class OrderAssignmentGetDto {
 
     private Long id;
+    private Long franchiseeId;
+    private Long orderId;
     private OrderAssignmentStatus status;
     private OffsetDateTime assignedTime;
     private OffsetDateTime updatedTime;

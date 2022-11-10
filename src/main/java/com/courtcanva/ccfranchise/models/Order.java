@@ -55,6 +55,9 @@ public class Order {
     private String postcode;
 
     @Column(nullable = false)
+    private String sscCode;
+
+    @Column(nullable = false)
     private BigDecimal totalAmount;
 
     @Column(nullable = false)

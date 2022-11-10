@@ -1,9 +1,10 @@
+ALTER TABLE "order" ADD COLUMN ssc_code BIGINT NOT NULL;
+
 DROP TABLE IF EXISTS order_assignment CASCADE;
 
 CREATE TABLE order_assignment
 (
     id            BIGSERIAL                NOT NULL PRIMARY KEY,
-
 
     status        VARCHAR                  NOT NULL,
 
