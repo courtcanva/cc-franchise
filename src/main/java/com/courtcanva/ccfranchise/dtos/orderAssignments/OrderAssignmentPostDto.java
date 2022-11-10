@@ -1,6 +1,8 @@
 package com.courtcanva.ccfranchise.dtos.orderAssignments;
 
 import com.courtcanva.ccfranchise.constants.OrderAssignmentStatus;
+import com.courtcanva.ccfranchise.models.Franchisee;
+import com.courtcanva.ccfranchise.models.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,9 +18,9 @@ import java.time.OffsetDateTime;
 @Builder
 public class OrderAssignmentPostDto {
 
-    private Long franchiseeId;
+    private Franchisee franchisee;
 
-    private Long orderId;
+    private Order order;
 
     private OrderAssignmentStatus status;
 

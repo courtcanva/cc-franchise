@@ -18,6 +18,7 @@ import com.courtcanva.ccfranchise.repositories.OrderAssignmentRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
@@ -55,36 +56,34 @@ public class OrderService {
     }
 
 
-
     public void assignOneOrder() {
 
-        Order order = orderRepository.findAllUnAssignedOrders().get(0);
+        List<Order> unassignedOrders = orderRepository.findAllUnAssignedOrders();
 
-        int serviceArea = Integer.parseInt(order.getSscCode());
+        if (unassignedOrders.isEmpty()) {
+            log.debug("No unassigned order");
+            throw new ResourceNotFoundException("No unassigned order");
+        }
+
+        Order order = unassignedOrders.get(0);
 
         OffsetDateTime currentTime = OffsetDateTime.now();
         OffsetDateTime updateTime = OffsetDateTime.now();
 
-        List<Franchisee> franchiseeList = franchiseeService.findFranchiseeByIds(franchiseeService.findMatchedFranchisee(serviceArea, order.getId()))
+        int sscCode = Integer.parseInt(unassignedOrders.get(0).getSscCode());
+
+        List<Franchisee> franchiseeList = franchiseeService.findFranchiseeByIds(franchiseeService.findMatchedFranchisee(sscCode, order.getId()))
                 .stream()
-                .sorted(Comparator.comparing(franchisee -> franchisee.getBusinessName().compareTo(franchisee.getBusinessName())))
+                .sorted((Comparator.comparing(Franchisee::getBusinessName)))
                 .toList();
 
+        if (franchiseeList.isEmpty()) {
+            log.debug("No available franchisee for sscCode: {}", sscCode);
+            throw new ResourceNotFoundException("No available franchisee");
+        }
 
+        OrderAssignment orderAssignment = new OrderAssignment(OrderAssignmentStatus.ASSIGNED, currentTime, updateTime, order, franchiseeList.get(0));
 
-//        Franchisee franchisee = optionalFranchisee.orElseThrow(()->{
-//            log.debug("no available franchisee");
-//            return new ResourceNotFoundException("no available franchisee");
-//        });
-
-        OrderAssignment orderAssignment = new OrderAssignment();
-
-
-        orderAssignment.setAssignedTime(currentTime);
-        orderAssignment.setUpdatedTime(updateTime);
-        orderAssignment.setOrder(order);
-        orderAssignment.setStatus(OrderAssignmentStatus.ASSIGNED);
-        orderAssignment.setFranchisee(franchiseeList.get(0));
 
         order.setFranchisee(franchiseeList.get(0));
         order.setStatus(OrderStatus.ASSIGNED_PENDING);

@@ -68,4 +68,11 @@ public class OrderAssignment {
     private Franchisee franchisee;
 
 
+    public OrderAssignment(OrderAssignmentStatus status, OffsetDateTime currentTime, OffsetDateTime updateTime, Order order, Franchisee franchisee) {
+        this.status = status;
+        this.assignedTime = currentTime;
+        this.updatedTime = updateTime;
+        this.order = order;
+        this.franchisee = franchisee;
+    }
 }
