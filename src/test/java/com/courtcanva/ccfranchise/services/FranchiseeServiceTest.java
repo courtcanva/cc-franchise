@@ -31,6 +31,7 @@ import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
 import com.courtcanva.ccfranchise.utils.OrderTestHelper;
 import com.courtcanva.ccfranchise.utils.StaffTestHelper;
 import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -175,6 +176,19 @@ class FranchiseeServiceTest {
         assertThrows(ResourceAlreadyExistException.class,
                 () -> franchiseeService.createFranchiseeAndStaff(franchiseePostDto, staffPostDto));
 
+    }
+
+    @Test
+    void givenValidAndExistedAbn_whenCheckIfAbnExists_shouldReturnThrowError() {
+        when(franchiseeRepository.existsFranchiseeByAbn(any())).thenReturn((true));
+        assertThrows(ResourceAlreadyExistException.class,
+                () -> franchiseeService.abnExists(any()));
+    }
+
+    @Test
+    void givenValidAndExistedAbn_whenCheckIfAbnExists_shouldReturnFalse() {
+        when(franchiseeRepository.existsFranchiseeByAbn(any())).thenReturn(false);
+        Assertions.assertFalse(franchiseeService.abnExists(any()));
     }
 
     @Test

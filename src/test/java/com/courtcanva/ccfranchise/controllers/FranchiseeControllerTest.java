@@ -30,8 +30,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import java.util.List;
 
 @SpringBootTest
@@ -75,6 +78,27 @@ class FranchiseeControllerTest {
                 .andExpect(jsonPath("$.staffGetDto.email").value("baoruoxi@163.com"))
                 .andExpect(jsonPath("$.franchiseeGetDto.abn").value("12312123111"));
 
+    }
+
+    @Test
+    void givenValidAndNewAbnRecord_whenCheckIfAbnExists_shouldReturnOK() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders.get("/franchisee/abn/98765432100");
+        mockMvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    void givenInvalidAbnRecord_whenCheckIfAbnExists_shouldReturnBadRequest() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders.get("/franchisee/abn/98765432100");
+        mockMvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    void givenValidAndExistedAbn_whenCheckIfAbnExists_shouldReturnConflict() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders.get("/franchisee/abn/12345678900");
+        mockMvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isConflict());
     }
 
     @Test
