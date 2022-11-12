@@ -43,7 +43,7 @@ public class FranchiseeController {
     }
 
     @GetMapping("/abn/{abn}")
-    public Boolean abnExists(@PathVariable("abn") @Size(min = 11, max = 11, message = "Your abn format is invalid.") String abn) {
+    public Boolean abnExists(@PathVariable("abn") @Valid @Size(min = 11, max = 11, message = "Your abn format is invalid.") String abn) {
         return franchiseeService.abnExists(abn);
     }
 

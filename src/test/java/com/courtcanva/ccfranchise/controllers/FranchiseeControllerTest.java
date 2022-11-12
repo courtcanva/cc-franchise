@@ -89,7 +89,7 @@ class FranchiseeControllerTest {
 
     @Test
     void givenInvalidAbnRecord_whenCheckIfAbnExists_shouldReturnBadRequest() throws Exception {
-        RequestBuilder request = MockMvcRequestBuilders.get("/franchisee/abn/98765432100");
+        RequestBuilder request = MockMvcRequestBuilders.get("/franchisee/abn/1");
         mockMvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
