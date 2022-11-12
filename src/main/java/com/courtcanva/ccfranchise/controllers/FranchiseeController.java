@@ -27,7 +27,7 @@ import javax.validation.constraints.Size;
 @RestController
 @RequestMapping("/franchisee")
 @RequiredArgsConstructor
-//@Validated
+@Validated
 public class FranchiseeController {
 
     private final FranchiseeService franchiseeService;

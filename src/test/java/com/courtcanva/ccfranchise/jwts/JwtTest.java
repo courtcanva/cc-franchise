@@ -91,7 +91,7 @@ class JwtTest {
 
     @Test
     void shouldReturnForbiddenWhenUnknownFranchiseeAct() throws Exception {
-        franchiseeController.signUpFranchiseeAndStaff(new FranchiseeAndStaffPostDto(new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "23468290381", "Melbourne", AUState.VIC, 3000), new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd")));
+        franchiseeController.signUpFranchiseeAndStaff(new FranchiseeAndStaffPostDto(new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "0434666666", "12345678900", "Melbourne", AUState.VIC, 3000), new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "0434666666", "abc st", 3000, AUState.VIC, "A123123123")));
         suburbRepository.save(SuburbTestHelper.suburb1());
         suburbRepository.save(SuburbTestHelper.suburb2());
 
@@ -99,7 +99,7 @@ class JwtTest {
 
         UsernameAndPasswordAuthenticationRequest user = new UsernameAndPasswordAuthenticationRequest();
         user.setUsername("taylor.s@gmail.com");
-        user.setPassword("sdjkhsd");
+        user.setPassword("A123123123");
 
         String body = objectMapper.writeValueAsString(user);
 
@@ -112,7 +112,7 @@ class JwtTest {
         assert response != null;
         String token = response.replace(BEARER, "");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/11/service_areas")
+        mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/12/service_areas")
                         .header("Authorization", "Bearer " + token)
                         .content(objectMapper.writeValueAsString(suburbListAndFilterModePostDto))
                         .contentType(MediaType.APPLICATION_JSON))
