@@ -1,6 +1,7 @@
 package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.constants.DutyAreaFilterMode;
+import com.courtcanva.ccfranchise.constants.OrderAssignmentStatus;
 import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndOrderNumber;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
@@ -33,11 +34,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -165,39 +170,77 @@ public class FranchiseeService {
                         .collect(Collectors.toList())).build();
     }
 
-    public List<Franchisee> findFranchiseeByIds(List<Long> ids){
+    public List<Franchisee> findFranchiseeByIds(List<Long> ids) {
         return franchiseeRepository.findByIdIn(ids);
     }
 
-    public List<Long> findFranchiseesHaveNoOrder() {
-        return franchiseeRepository.findFranchiseesHaveNoOrder();
-    }
-
-    public List<Long> findFranchiseesIdByDutyArea(int sscCode) {
-        return franchiseeRepository.findFranchiseesByDutyArea(sscCode);
-    }
-
-    public List<FranchiseeAndOrderNumber> findFranchiseesHasOrderLessTen() {
-        return franchiseeRepository.findFranchiseesOrderNumberLessTen();
-    }
-
-    public List<Long> findFranchiseesIdWasRejected(Long orderId) {
-        return franchiseeRepository.findFranchiseesWhoIsRejected(orderId);
-    }
+//    public List<Long> findFranchiseesHaveNoOrder() {
+//        return franchiseeRepository.findFranchiseesHaveNoOrder();
+//    }
+//
+//    public List<Long> findFranchiseesIdByDutyArea(int sscCode) {
+//        return franchiseeRepository.findFranchiseesByDutyArea(sscCode);
+//    }
+//
+//    public List<FranchiseeAndOrderNumber> findFranchiseesHasOrderLessTen() {
+//        return franchiseeRepository.findFranchiseesOrderNumberLessTen();
+//    }
+//
+//    public List<Long> findFranchiseesIdWasRejected(Long orderId) {
+//        return franchiseeRepository.findFranchiseesWhoIsRejected(orderId);
+//    }
 
     @Transactional
-    public List<Long> findMatchedFranchisee(int sscCode, Long orderId) {
+    public List<Franchisee> findMatchedFranchisee(long sscCode, Long orderId) {
 
-        List<Long> franchiseeOrderNumLessTen = findFranchiseesHasOrderLessTen().stream().map(FranchiseeAndOrderNumber::getFranchiseeId).toList();
+        Set<Suburb> dutyAreas = new HashSet<>(suburbService.findSuburbBySscCodes(List.of(sscCode)));
 
-        List<Long> dutyAreaAndOrderNumberLessTen = findFranchiseesIdByDutyArea(sscCode).stream().filter(franchiseeOrderNumLessTen::contains).toList();
-        List<Long> dutyAreaAndOrderNumberLessTenAndNoOrder = findFranchiseesIdByDutyArea(sscCode).stream().filter(id -> findFranchiseesHaveNoOrder().contains(id)).toList();
+        List<Franchisee> franchisees = franchiseeRepository.findFranchiseesByDutyAreasIn(dutyAreas).stream()
+                .filter(franchisee -> franchisee.getOrderAssignmentSet().size() < 10)
+                .filter(franchisee -> franchisee.getOrderAssignmentSet().stream().noneMatch(orderAssignment ->
+                        Objects.equals(orderAssignment.getOrder().getId(), orderId)
+                                && orderAssignment.getStatus().equals(OrderAssignmentStatus.REJECTED)))
+                .toList();
 
-        Set<Long> availableFranchisees = new HashSet<>();
-        availableFranchisees.addAll(dutyAreaAndOrderNumberLessTen);
-        availableFranchisees.addAll(dutyAreaAndOrderNumberLessTenAndNoOrder);
+//        return franchisees.stream().map(Franchisee::getId).toList();
 
-        return availableFranchisees.stream().filter(item -> !findFranchiseesIdWasRejected(orderId).contains(item)).toList();
+        return franchisees;
+
+//        List<Long> franchiseeOrderNumLessTen = findFranchiseesHasOrderLessTen().stream().map(FranchiseeAndOrderNumber::getFranchiseeId).toList();
+//
+//        List<Long> dutyAreaAndOrderNumberLessTen = findFranchiseesIdByDutyArea(sscCode).stream().filter(franchiseeOrderNumLessTen::contains).toList();
+//
+//        List<Long> dutyAreaAndOrderNumberLessTenAndNoOrder = findFranchiseesIdByDutyArea(sscCode).stream().filter(id -> findFranchiseesHaveNoOrder().contains(id)).toList();
+//
+//        Set<Long> availableFranchisees = new HashSet<>();
+//        availableFranchisees.addAll(dutyAreaAndOrderNumberLessTen);
+//        availableFranchisees.addAll(dutyAreaAndOrderNumberLessTenAndNoOrder);
+//
+//        return availableFranchisees.stream().filter(item -> !findFranchiseesIdWasRejected(orderId).contains(item)).toList();
+
+    }
+
+    public List<FranchiseeAndOrderNumber> franchiseeAndOrderNumberList(long sscCode, Long orderId) {
+
+        Set<Suburb> dutyArea = new HashSet<>(suburbService.findSuburbBySscCodes(List.of(sscCode)));
+
+        List<Franchisee> franchisees = franchiseeRepository.findFranchiseesByDutyAreasIn(dutyArea).stream()
+                .filter(franchisee -> franchisee.getOrderAssignmentSet().size() < 10)
+                .filter(franchisee -> franchisee.getOrderAssignmentSet().stream().noneMatch(orderAssignment ->
+                        Objects.equals(orderAssignment.getOrder().getId(), orderId)
+                                && orderAssignment.getStatus().equals(OrderAssignmentStatus.REJECTED)))
+                .toList();
+
+        List<Integer> orderNumber = franchisees.stream().map(franchisee -> franchisee.getOrderAssignmentSet().size()).toList();
+
+        Map<Franchisee,Integer> franchiseeIntegerMap = new HashMap<>();
+
+        for (int i = 0; i < franchisees.size(); i++) {
+            franchiseeIntegerMap.put(franchisees.get(i), orderNumber.get(i));
+        }
+
+
+
 
     }
 

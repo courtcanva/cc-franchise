@@ -3,6 +3,7 @@ package com.courtcanva.ccfranchise.controllers;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndOrderNumber;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
+import com.courtcanva.ccfranchise.dtos.orderAssignments.OrderAssignmentGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
@@ -62,10 +63,10 @@ public class FranchiseeController {
     }
 
 
-    @PostMapping("/getOrders/{sscCode}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Long> franchiseeListGetDto(@PathVariable(value = "sscCode") int sscCode, @RequestBody Long orderId){
-        return franchiseeService.findMatchedFranchisee(sscCode, orderId);
-    }
+//    @PostMapping("/getOrders/{sscCode}")
+//    @ResponseStatus(HttpStatus.OK)
+//    public OrderAssignmentGetDto franchiseeListGetDto(@PathVariable(value = "sscCode") Long franchiseeId, @RequestBody Long orderId){
+//        return orderService.findByOrderAssignmentId(franchiseeId,orderId);
+//    }
 
 }

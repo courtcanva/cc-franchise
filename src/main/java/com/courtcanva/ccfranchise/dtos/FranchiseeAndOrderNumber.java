@@ -1,5 +1,6 @@
 package com.courtcanva.ccfranchise.dtos;
 
+import com.courtcanva.ccfranchise.models.Franchisee;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FranchiseeAndOrderNumber {
 
-    private Long franchiseeId;
+    private Franchisee franchisee;
 
-    private Long currentOrderNum;
+    private Integer currentOrderNum;
 }

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -33,16 +35,16 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "order_assignment")
-//@EntityListeners(AuditingEntityListener.class)
+@EntityListeners(AuditingEntityListener.class)
 public class OrderAssignment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
 
 //    @Id
-//    @EmbeddedId
-//    private OrderAssignmentId id;
+    @EmbeddedId
+    private OrderAssignmentId id;
 
     //Assigned,Accepted,Rejected
     @Column(nullable = false)
@@ -59,20 +61,12 @@ public class OrderAssignment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
-//    @MapsId("orderId")
+    @MapsId("orderId")
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "franchisee_id")
-//    @MapsId("franchiseeId")
+    @MapsId("franchiseeId")
     private Franchisee franchisee;
 
-
-    public OrderAssignment(OrderAssignmentStatus status, OffsetDateTime currentTime, OffsetDateTime updateTime, Order order, Franchisee franchisee) {
-        this.status = status;
-        this.assignedTime = currentTime;
-        this.updatedTime = updateTime;
-        this.order = order;
-        this.franchisee = franchisee;
-    }
 }

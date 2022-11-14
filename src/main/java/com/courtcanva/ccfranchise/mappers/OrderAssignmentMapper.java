@@ -11,5 +11,5 @@ public interface OrderAssignmentMapper {
 
     OrderAssignment postDtoToOrderAssignment(OrderAssignmentPostDto orderAssignmentPostDto);
 
-    OrderAssignmentGetDto orderAssignmentToGetDto(OrderAssignment orderAssignment);
+//    OrderAssignmentGetDto orderAssignmentToGetDto(OrderAssignment orderAssignment);
 }

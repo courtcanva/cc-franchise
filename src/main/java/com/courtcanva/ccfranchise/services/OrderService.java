@@ -4,6 +4,7 @@ import com.courtcanva.ccfranchise.constants.OrderAssignmentStatus;
 import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.FranchiseeGetDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeListGetDto;
+import com.courtcanva.ccfranchise.dtos.orderAssignments.OrderAssignmentGetDto;
 import com.courtcanva.ccfranchise.dtos.orderAssignments.OrderAssignmentPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.Collections;
@@ -55,6 +57,17 @@ public class OrderService {
                 .build();
     }
 
+    private OrderAssignment buildOrderAssignment(OrderAssignmentId orderAssignmentId, OrderAssignmentStatus orderAssignmentStatus, OffsetDateTime assignedTime,OffsetDateTime updateTime, Order order, Franchisee franchisee){
+        return OrderAssignment.builder()
+                .id(orderAssignmentId)
+                .status(orderAssignmentStatus)
+                .assignedTime(assignedTime)
+                .updatedTime(updateTime)
+                .order(order)
+                .franchisee(franchisee)
+                .build();
+    }
+
 
     public void assignOneOrder() {
 
@@ -72,7 +85,7 @@ public class OrderService {
 
         int sscCode = Integer.parseInt(unassignedOrders.get(0).getSscCode());
 
-        List<Franchisee> franchiseeList = franchiseeService.findFranchiseeByIds(franchiseeService.findMatchedFranchisee(sscCode, order.getId()))
+        List<Franchisee> franchiseeList = franchiseeService.findFranchiseeByIds(franchiseeService.findMatchedFranchisee(sscCode, order.getId()).stream().map(Franchisee::getId).toList())
                 .stream()
                 .sorted((Comparator.comparing(Franchisee::getBusinessName)))
                 .toList();
@@ -82,8 +95,11 @@ public class OrderService {
             throw new ResourceNotFoundException("No available franchisee");
         }
 
-        OrderAssignment orderAssignment = new OrderAssignment(OrderAssignmentStatus.ASSIGNED, currentTime, updateTime, order, franchiseeList.get(0));
+        OrderAssignmentId orderAssignmentId = buildOrderAssignmentId(franchiseeList.get(0).getId(), order.getId());
 
+//        OrderAssignment orderAssignment = new OrderAssignment(orderAssignmentId,OrderAssignmentStatus.ASSIGNED, currentTime, updateTime, order, franchiseeList.get(0));
+
+        OrderAssignment orderAssignment = buildOrderAssignment(orderAssignmentId,OrderAssignmentStatus.ASSIGNED,currentTime,updateTime,order,franchiseeList.get(0));
 
         order.setFranchisee(franchiseeList.get(0));
         order.setStatus(OrderStatus.ASSIGNED_PENDING);
@@ -93,5 +109,6 @@ public class OrderService {
 
 
     }
+
 
 }
