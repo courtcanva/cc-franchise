@@ -59,8 +59,7 @@ class OrderRepositoryTest {
         Franchisee franchisee = franchiseeRepository.save(FranchiseeTestHelper.createFranchisee());
         order.setFranchisee(franchisee);
         orderRepository.save(order);
-
-
+        
         PageRequest pageRequest = PageRequest.of(0, 10);
         assertEquals("111",
                 orderRepository
