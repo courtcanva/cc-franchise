@@ -20,21 +20,13 @@ class FranchiseeRepositoryTest {
     @Autowired
     private FranchiseeRepository franchiseeRepository;
 
-    @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private StaffRepository staffRepository;
-
     @BeforeEach
     void setUp() {
-        orderRepository.deleteAll();
-        staffRepository.deleteAll();
         franchiseeRepository.deleteAll();
     }
 
     @Test
-    public void shouldReturnTureWhenAbnAlreadyExist() {
+    public void givenAbnAlreadyExists_whenSaveToRepository_shouldReturnTrue() {
 
         franchiseeRepository.save(
                 FranchiseeTestHelper.createFranchisee());
@@ -45,13 +37,13 @@ class FranchiseeRepositoryTest {
     }
 
     @Test
-    public void shouldReturnFranchiseeWhenFranchiseeIdIsExist() {
+    public void givenFranchiseIdAlreadyExists_whenSaveToRepository_shouldReturnFranchisee() {
 
         Long franchiseeId = 1L;
 
         Franchisee franchisee = FranchiseeTestHelper.createFranchisee();
         franchiseeRepository.save(franchisee);
 
-        assertEquals(franchisee.getAbn(), Objects.requireNonNull(franchiseeRepository.findFranchiseeById(franchisee.getId()).orElse(null)).getAbn());
+        assertEquals(franchisee.getAbn(), Objects.requireNonNull(franchiseeRepository.findFranchiseeById(franchiseeId).orElse(null)).getAbn());
     }
 }

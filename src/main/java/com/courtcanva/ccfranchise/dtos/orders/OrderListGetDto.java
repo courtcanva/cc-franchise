@@ -1,4 +1,4 @@
-package com.courtcanva.ccfranchise.dtos.suburbs;
+package com.courtcanva.ccfranchise.dtos.orders;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class SuburbListPostDto {
+public class OrderListGetDto {
+    private List<OrderGetDto> orders;
 
-    private List<SuburbPostDto> suburbs;
 }

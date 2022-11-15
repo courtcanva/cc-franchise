@@ -1,6 +1,5 @@
 package com.courtcanva.ccfranchise.dtos.suburbs;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,5 +14,4 @@ import java.util.List;
 public class SuburbListGetDto {
 
     private List<SuburbGetDto> suburbs;
-
 }

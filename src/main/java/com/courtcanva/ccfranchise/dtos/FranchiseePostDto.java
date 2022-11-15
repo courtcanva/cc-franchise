@@ -1,5 +1,6 @@
 package com.courtcanva.ccfranchise.dtos;
 
+import com.courtcanva.ccfranchise.annotations.AustralianNumber;
 import com.courtcanva.ccfranchise.constants.AUState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,18 +24,18 @@ public class FranchiseePostDto {
     private String legalEntityName;
 
     @NotBlank(message = "Franchisee's contact number is mandatory")
-    @Pattern(regexp = "^0[0-9]{9}|[0-9]{9}$", message = "Incorrect phone number format")
+    @AustralianNumber
     private String contactNumber;
 
     @NotBlank(message = "Franchisee's abn is mandatory")
     @Pattern(regexp = "[0-9]{11}", message = "Incorrect ABN format")
     private String abn;
 
-    @NotBlank(message = "Franchisee's business address is mandatory")
     private String businessAddress;
 
     @NotNull(message = "Franchisee's state is mandatory")
     private AUState state;
 
     private int postcode;
+
 }
