@@ -2,6 +2,7 @@ package com.courtcanva.ccfranchise.controllers;
 
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderDetailsGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
@@ -57,6 +58,12 @@ public class FranchiseeController {
     @ResponseStatus(HttpStatus.OK)
     public List<OrderGetDto> getFirstTenOpenOrders(@PathVariable Long franchiseeId){
         return orderService.getFirstTenOpenOrdersById(franchiseeId);
+    }
+
+    @GetMapping("/{franchiseeId}/{orderId}/order_details")
+    @ResponseStatus(HttpStatus.OK)
+    public OrderDetailsGetDto getOrderDetails(@PathVariable Long franchiseeId, @PathVariable Long orderId){
+        return orderService.getOrderDetailsByOrderId(franchiseeId, orderId);
     }
 
 }
