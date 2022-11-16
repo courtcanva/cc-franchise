@@ -57,6 +57,21 @@ public class OrderTestHelper {
                 .build();
     }
 
+    public static Order OrderWithSscCode() {
+        return Order.builder()
+                .id(1L)
+                .orderId("102")
+                .customerId("102")
+                .designInformation("{\"name\": \"draft 1\"}")
+                .contactInformation("{\"name\": \"Alex\", \"phone\": \"0404123457\"}")
+                .sscCode("11344")
+                .postcode("3003")
+                .unpaidAmount(BigDecimal.valueOf(998.00))
+                .totalAmount(BigDecimal.valueOf(999.00))
+                .paidAmount(BigDecimal.valueOf(1.00))
+                .status(OrderStatus.UNASSIGNED)
+                .build();
+    }
     public static List<Order> OrderList() {
         List<Order> orders = new ArrayList<>();
         Order order1 = Order.builder()
