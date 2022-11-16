@@ -33,7 +33,10 @@ public class SecurityConfig {
 
 
     private static final String[] AUTH_URL_WHITELIST = {
+            "/staff/emails/*",
+            "/franchisee/abn/*",
             "/franchisee/signup",
+            "/franchisee/*/service_areas",
             "/suburbs",
             "/actuator/health",
             "/staff/verify",
