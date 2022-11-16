@@ -7,7 +7,9 @@ import static org.mockito.Mockito.when;
 
 import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
+import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.mappers.OrderMapperImpl;
+import com.courtcanva.ccfranchise.repositories.OrderAssignmentRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,10 +28,21 @@ class OrderServiceTest {
     @Mock
     private OrderRepository orderRepository;
 
+    @Mock
+    private OrderAssignmentRepository orderAssignmentRepository;
+
+    @Mock
+    private FranchiseeService franchiseeService;
+
     @BeforeEach
     void setUp() {
         orderRepository.saveAll(orders);
-        orderService = new OrderService(orderRepository, new OrderMapperImpl());
+    }
+
+    @BeforeEach
+    public void setOrderServiceUp(){
+        OrderMapper orderMapper = new OrderMapperImpl();
+        orderService = new OrderService(orderRepository,orderMapper,franchiseeService,orderAssignmentRepository);
     }
 
     @Test

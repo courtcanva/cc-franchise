@@ -2,14 +2,8 @@ package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.constants.OrderAssignmentStatus;
 import com.courtcanva.ccfranchise.constants.OrderStatus;
-import com.courtcanva.ccfranchise.dtos.FranchiseeGetDto;
-import com.courtcanva.ccfranchise.dtos.FranchiseeListGetDto;
-import com.courtcanva.ccfranchise.dtos.orderAssignments.OrderAssignmentGetDto;
-import com.courtcanva.ccfranchise.dtos.orderAssignments.OrderAssignmentPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
-import com.courtcanva.ccfranchise.mappers.OrderAssignmentMapper;
 import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
@@ -19,26 +13,17 @@ import com.courtcanva.ccfranchise.repositories.OrderAssignmentRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
-
-    private final OrderAssignmentMapper orderAssignmentMapper;
-
     private final FranchiseeService franchiseeService;
 
     private final OrderAssignmentRepository orderAssignmentRepository;
@@ -57,10 +42,10 @@ public class OrderService {
                 .build();
     }
 
-    private OrderAssignment buildOrderAssignment(OrderAssignmentId orderAssignmentId, OrderAssignmentStatus orderAssignmentStatus, OffsetDateTime assignedTime,OffsetDateTime updateTime, Order order, Franchisee franchisee){
+    private OrderAssignment buildOrderAssignment(OrderAssignmentId orderAssignmentId, OffsetDateTime assignedTime, OffsetDateTime updateTime, Order order, Franchisee franchisee) {
         return OrderAssignment.builder()
                 .id(orderAssignmentId)
-                .status(orderAssignmentStatus)
+                .status(OrderAssignmentStatus.ASSIGNED)
                 .assignedTime(assignedTime)
                 .updatedTime(updateTime)
                 .order(order)
@@ -69,7 +54,7 @@ public class OrderService {
     }
 
 
-    public void assignOneOrder() {
+    public void assignOrders() {
 
         List<Order> unassignedOrders = orderRepository.findAllUnAssignedOrders();
 
@@ -78,35 +63,34 @@ public class OrderService {
             throw new ResourceNotFoundException("No unassigned order");
         }
 
-        Order order = unassignedOrders.get(0);
+        for (Order order : unassignedOrders) {
 
-        OffsetDateTime currentTime = OffsetDateTime.now();
-        OffsetDateTime updateTime = OffsetDateTime.now();
+            OffsetDateTime currentTime = OffsetDateTime.now();
+            OffsetDateTime updateTime = OffsetDateTime.now();
 
-        int sscCode = Integer.parseInt(unassignedOrders.get(0).getSscCode());
+            int sscCode = Integer.parseInt(order.getSscCode());
 
-        List<Franchisee> franchiseeList = franchiseeService.findFranchiseeByIds(franchiseeService.findMatchedFranchisee(sscCode, order.getId()).stream().map(Franchisee::getId).toList())
-                .stream()
-                .sorted((Comparator.comparing(Franchisee::getBusinessName)))
-                .toList();
+            List<Franchisee> franchiseeList = franchiseeService.findFranchiseeByIds(franchiseeService.findMatchedFranchisee(sscCode, order.getId()).stream().map(Franchisee::getId).toList())
+                    .stream()
+                    .sorted((Comparator.comparing(Franchisee::getBusinessName)))
+                    .toList();
 
-        if (franchiseeList.isEmpty()) {
-            log.debug("No available franchisee for sscCode: {}", sscCode);
-            throw new ResourceNotFoundException("No available franchisee");
+            if (franchiseeList.isEmpty()) {
+                log.debug("No available franchisee for sscCode: {}", sscCode);
+                throw new ResourceNotFoundException("No available franchisee");
+            }
+
+            OrderAssignmentId orderAssignmentId = buildOrderAssignmentId(franchiseeList.get(0).getId(), order.getId());
+
+            OrderAssignment orderAssignment = buildOrderAssignment(orderAssignmentId, currentTime, updateTime, order, franchiseeList.get(0));
+
+            order.setFranchisee(franchiseeList.get(0));
+            order.setStatus(OrderStatus.ASSIGNED_PENDING);
+
+            orderRepository.save(order);
+            orderAssignmentRepository.save(orderAssignment);
+
         }
-
-        OrderAssignmentId orderAssignmentId = buildOrderAssignmentId(franchiseeList.get(0).getId(), order.getId());
-
-//        OrderAssignment orderAssignment = new OrderAssignment(orderAssignmentId,OrderAssignmentStatus.ASSIGNED, currentTime, updateTime, order, franchiseeList.get(0));
-
-        OrderAssignment orderAssignment = buildOrderAssignment(orderAssignmentId,OrderAssignmentStatus.ASSIGNED,currentTime,updateTime,order,franchiseeList.get(0));
-
-        order.setFranchisee(franchiseeList.get(0));
-        order.setStatus(OrderStatus.ASSIGNED_PENDING);
-
-        orderRepository.save(order);
-        orderAssignmentRepository.save(orderAssignment);
-
 
     }
 

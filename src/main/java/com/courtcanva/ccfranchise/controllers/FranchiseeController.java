@@ -1,9 +1,7 @@
 package com.courtcanva.ccfranchise.controllers;
 
-import com.courtcanva.ccfranchise.dtos.FranchiseeAndOrderNumber;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
-import com.courtcanva.ccfranchise.dtos.orderAssignments.OrderAssignmentGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Set;
 import javax.validation.Valid;
 
 @RestController
@@ -63,10 +60,5 @@ public class FranchiseeController {
     }
 
 
-//    @PostMapping("/getOrders/{sscCode}")
-//    @ResponseStatus(HttpStatus.OK)
-//    public OrderAssignmentGetDto franchiseeListGetDto(@PathVariable(value = "sscCode") Long franchiseeId, @RequestBody Long orderId){
-//        return orderService.findByOrderAssignmentId(franchiseeId,orderId);
-//    }
 
 }

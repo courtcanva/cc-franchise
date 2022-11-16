@@ -41,7 +41,7 @@ public class QuartzConfig {
     public CronTriggerFactoryBean cronTriggerFactoryBean2(JobDetail assignOrder) {
         CronTriggerFactoryBean factory = new CronTriggerFactoryBean();
         factory.setJobDetail(assignOrder);
-        factory.setCronExpression("0/10 * * * * ? *");
+        factory.setCronExpression("* 0/5 * * * ? *");
         return factory;
     }
 
