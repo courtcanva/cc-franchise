@@ -114,14 +114,23 @@ public class FranchiseeTestHelper {
                 .businessName("AAAAA")
                 .businessAddress("zetland NSWssss")
                 .abn("12345678900")
-//                .dutyAreas(SuburbTestHelper.createOneSuburbSet())
+                .dutyAreas(SuburbTestHelper.createOneSuburbSet())
                 .orderAssignmentSet(OrderAssignmentTestHelper.orderAssignmentSet())
                 .build();
     }
 
     public static List<Franchisee> createFranchiseeList() {
         List<Franchisee> franchisees = new ArrayList<>();
-        franchisees.add(createFranchiseeWithOrderAssignmentSet());
+        franchisees.add(createFranchiseeWithDutyAreas());
+
+        return franchisees;
+    }
+
+    public static List<Franchisee> createFranchiseeListWithOrderAssignment() {
+        List<Franchisee> franchisees = new ArrayList<>();
+        Franchisee franchisee = createFranchiseeWithOrderAssignmentSet();
+
+        franchisees.add(franchisee);
 
         return franchisees;
     }

@@ -38,15 +38,9 @@ import java.time.OffsetDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class OrderAssignment {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-
-//    @Id
     @EmbeddedId
     private OrderAssignmentId id;
 
-    //Assigned,Accepted,Rejected
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private OrderAssignmentStatus status;

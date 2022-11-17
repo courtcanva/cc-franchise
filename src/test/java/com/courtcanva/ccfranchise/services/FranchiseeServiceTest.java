@@ -146,7 +146,7 @@ class FranchiseeServiceTest {
     @Test
     void givenSscCodeAndOrderId_whenFindMatchedFranchisees_shouldReturnFranchiseeList(){
 
-        List<Franchisee> franchisees = FranchiseeTestHelper.createFranchiseeList();
+        List<Franchisee> franchisees = FranchiseeTestHelper.createFranchiseeListWithOrderAssignment();
 
         when(franchiseeRepository.findFranchiseesByDutyAreasIn(any())).thenReturn(franchisees);
 

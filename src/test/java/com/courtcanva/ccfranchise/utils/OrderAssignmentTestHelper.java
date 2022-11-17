@@ -12,15 +12,12 @@ public class OrderAssignmentTestHelper {
 
     public static OrderAssignment createOrderAssignment(){
 
-        OffsetDateTime currentTime = OffsetDateTime.now();
-        OffsetDateTime updateTime = OffsetDateTime.now();
-
         return OrderAssignment.builder()
-                .assignedTime(currentTime)
-                .updatedTime(updateTime)
+                .assignedTime(OffsetDateTime.parse("2021-12-03T10:15:30+11:00"))
+                .updatedTime(OffsetDateTime.parse("2021-12-03T10:15:30+11:00"))
                 .status(OrderAssignmentStatus.ASSIGNED)
                 .order(OrderTestHelper.createAssignedOrder())
-                .franchisee(FranchiseeTestHelper.createFranchiseeList().get(0))
+                .franchisee(FranchiseeTestHelper.createFranchiseeWithDutyAreas())
                 .build();
     }
 
@@ -34,7 +31,7 @@ public class OrderAssignmentTestHelper {
 
     public static OrderAssignmentId orderAssignmentId(){
         return OrderAssignmentId.builder()
-                .franchiseeId(FranchiseeTestHelper.createFranchiseeList().get(0).getId())
+                .franchiseeId(FranchiseeTestHelper.createFranchiseeWithDutyAreas().getId())
                 .orderId(OrderTestHelper.Order1().getId())
                 .build();
     }

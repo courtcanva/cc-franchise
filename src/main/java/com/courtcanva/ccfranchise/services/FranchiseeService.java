@@ -184,10 +184,12 @@ public class FranchiseeService {
         Set<Suburb> dutyAreas = new HashSet<>(suburbService.findSuburbBySscCodes(List.of(sscCode)));
 
         return franchiseeRepository.findFranchiseesByDutyAreasIn(dutyAreas).stream()
-                .filter(franchisee -> franchisee.getOrderAssignmentSet().size() < 10)
                 .filter(franchisee -> franchisee.getOrderAssignmentSet().stream().noneMatch(orderAssignment ->
                         Objects.equals(orderAssignment.getOrder().getId(), orderId)
                                 && orderAssignment.getStatus().equals(OrderAssignmentStatus.REJECTED)))
+                .filter(franchisee -> franchisee.getOrderAssignmentSet().stream()
+                        .filter(orderAssignment -> !orderAssignment.getStatus().equals(OrderAssignmentStatus.REJECTED)
+                                && !orderAssignment.getStatus().equals(OrderAssignmentStatus.COMPLETED)).toList().size() < 10)
                 .sorted(Comparator.comparing(Franchisee::getBusinessName))
                 .toList();
 

@@ -193,7 +193,7 @@ public class OrderTestHelper {
                 .totalAmount(BigDecimal.valueOf(999.00))
                 .paidAmount(BigDecimal.valueOf(1.00))
                 .status(OrderStatus.ASSIGNED_PENDING)
-                .franchisee(FranchiseeTestHelper.createFranchiseeList().get(0))
+                .franchisee(FranchiseeTestHelper.createFranchiseeWithDutyAreas())
                 .build();
     }
 }

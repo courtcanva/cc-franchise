@@ -77,6 +77,7 @@ class OrderServiceTest {
     void shouldAssignOrders() {
 
         List<Order> unassignedOrders = OrderTestHelper.createUnassignedOrderList();
+
         Order assignedOrders = OrderTestHelper.createAssignedOrder();
         List<Franchisee> availableFranchisee = FranchiseeTestHelper.createFranchiseeList();
         OrderAssignment orderAssignment = OrderAssignmentTestHelper.createOrderAssignment();
@@ -84,9 +85,12 @@ class OrderServiceTest {
         OrderAssignmentId orderAssignmentId = OrderAssignmentTestHelper.orderAssignmentId();
 
         when(orderRepository.findAllByStatusIs(OrderStatus.UNASSIGNED)).thenReturn(unassignedOrders);
-        when(franchiseeService.findMatchedFranchisee(any(),any())).thenReturn(availableFranchisee);
-        when(orderRepository.save(any())).thenReturn(assignedOrders);
-        when(orderAssignmentRepository.save(any())).thenReturn(orderAssignment);
+
+            when(franchiseeService.findMatchedFranchisee(any(),any())).thenReturn(availableFranchisee);
+
+            when(orderRepository.save(any())).thenReturn(assignedOrders);
+            when(orderAssignmentRepository.save(any())).thenReturn(orderAssignment);
+
 
         assertEquals(orderAssignmentId,orderAssignment.getId());
         assertEquals(OrderStatus.ASSIGNED_PENDING,assignedOrders.getStatus());

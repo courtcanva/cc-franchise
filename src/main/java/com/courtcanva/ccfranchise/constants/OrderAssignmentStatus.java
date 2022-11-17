@@ -6,5 +6,7 @@ public enum OrderAssignmentStatus {
 
     ACCEPTED,
 
+    COMPLETED,
+
     REJECTED
 }
