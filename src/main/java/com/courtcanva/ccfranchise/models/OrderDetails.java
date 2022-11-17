@@ -20,4 +20,7 @@ public class OrderDetails {
     @OneToOne(mappedBy = "orderDetails")
     private Order order;
 
+    @Column(nullable = false)
+    private String designUrl;
+
 }

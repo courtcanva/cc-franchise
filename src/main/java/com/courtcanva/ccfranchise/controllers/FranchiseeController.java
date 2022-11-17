@@ -8,6 +8,7 @@ import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
+import com.courtcanva.ccfranchise.models.OrderDetails;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
 import com.courtcanva.ccfranchise.services.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -62,8 +63,8 @@ public class FranchiseeController {
 
     @GetMapping("/{franchiseeId}/{orderId}/order_details")
     @ResponseStatus(HttpStatus.OK)
-    public OrderDetailsGetDto getOrderDetails(@PathVariable Long franchiseeId, @PathVariable Long orderId){
-        return orderService.getOrderDetailsByOrderId(franchiseeId, orderId);
+    public OrderDetails getOrderDetails(@PathVariable Long orderId){
+        return orderService.getOrderDetailsByOrderId(orderId);
     }
 
 }
