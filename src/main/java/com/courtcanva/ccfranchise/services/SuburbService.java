@@ -33,9 +33,6 @@ public class SuburbService {
 
     }
 
-    public Optional<Suburb> findAllByPostcode(int postcode){
-        return suburbRepository.findAllByPostcode(postcode);
-    }
 
 
 }

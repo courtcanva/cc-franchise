@@ -14,6 +14,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     List<Order> findFirst10ByFranchiseeIdAndStatus(Long franchiseeId, OrderStatus statusCode);
 
-    @Query(value = "SELECT * FROM franchise.\"order\" WHERE status = 'UNASSIGNED' ORDER BY created_at", nativeQuery = true)
-    List<Order> findAllUnAssignedOrders();
+    List<Order> findAllByStatusIs(OrderStatus orderStatus);
+
 }

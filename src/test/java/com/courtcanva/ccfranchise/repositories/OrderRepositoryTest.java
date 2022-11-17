@@ -71,4 +71,14 @@ class OrderRepositoryTest {
         assertEquals(0, ordersFromDb.size());
     }
 
+    @Test
+    void givenOrderStatus_whenUnassignedOrderIsAvailable_shouldReturnOrderList(){
+
+        orderRepository.save(OrderTestHelper.Order1());
+
+        List<Order> orderList = orderRepository.findAllByStatusIs(OrderStatus.UNASSIGNED);
+        assertEquals(OrderStatus.UNASSIGNED,orderList.get(0).getStatus());
+
+    }
+
 }

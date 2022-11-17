@@ -41,8 +41,7 @@ public class QuartzConfig {
     public CronTriggerFactoryBean cronTriggerFactoryBean2(JobDetail assignOrder) {
         CronTriggerFactoryBean factory = new CronTriggerFactoryBean();
         factory.setJobDetail(assignOrder);
-        //At second :00, every 5 minutes starting at minute :00, at 00am, on every Monday, Tuesday, Wednesday, Thursday and Friday, every month
-        factory.setCronExpression("0 0/5 0 ? * MON,TUE,WED,THU,FRI *");
+        factory.setCronExpression("* 0/5 * * * ? *");
         return factory;
     }
 

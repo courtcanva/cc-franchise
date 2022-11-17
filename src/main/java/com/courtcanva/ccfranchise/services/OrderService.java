@@ -14,10 +14,12 @@ import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.Comparator;
 import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -56,7 +58,7 @@ public class OrderService {
 
     public void assignOrders() {
 
-        List<Order> unassignedOrders = orderRepository.findAllUnAssignedOrders();
+        List<Order> unassignedOrders = orderRepository.findAllByStatusIs(OrderStatus.UNASSIGNED);
 
         if (unassignedOrders.isEmpty()) {
             log.debug("No unassigned order");

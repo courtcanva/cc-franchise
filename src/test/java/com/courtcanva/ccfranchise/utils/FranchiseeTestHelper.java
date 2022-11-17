@@ -5,7 +5,9 @@ import com.courtcanva.ccfranchise.dtos.FranchiseeGetDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.models.Franchisee;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -103,5 +105,24 @@ public class FranchiseeTestHelper {
                 .dutyAreas(SuburbTestHelper.createSuburbSet())
                 .build();
 
+    }
+
+    public static Franchisee createFranchiseeWithOrderAssignmentSet(){
+        return Franchisee.builder()
+                .id(1234L)
+                .contactNumber("0434666666")
+                .businessName("AAAAA")
+                .businessAddress("zetland NSWssss")
+                .abn("12345678900")
+//                .dutyAreas(SuburbTestHelper.createOneSuburbSet())
+                .orderAssignmentSet(OrderAssignmentTestHelper.orderAssignmentSet())
+                .build();
+    }
+
+    public static List<Franchisee> createFranchiseeList() {
+        List<Franchisee> franchisees = new ArrayList<>();
+        franchisees.add(createFranchiseeWithOrderAssignmentSet());
+
+        return franchisees;
     }
 }

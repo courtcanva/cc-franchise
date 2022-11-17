@@ -42,6 +42,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -143,6 +144,18 @@ class FranchiseeServiceTest {
     }
 
     @Test
+    void givenSscCodeAndOrderId_whenFindMatchedFranchisees_shouldReturnFranchiseeList(){
+
+        List<Franchisee> franchisees = FranchiseeTestHelper.createFranchiseeList();
+
+        when(franchiseeRepository.findFranchiseesByDutyAreasIn(any())).thenReturn(franchisees);
+
+        List<Franchisee> franchiseeList = franchiseeService.findMatchedFranchisee(11344L,1L);
+        assertEquals(1234L,franchiseeList.get(0).getId());
+
+    }
+
+    @Test
     void shouldReturnNullWhenFilterModeIsNotInclude() {
         Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
         SuburbListAndFilterModePostDto suburbListAndFilterModePostDto = SuburbTestHelper.createSuburbListPostDtoWithExcludeMode();
@@ -222,5 +235,7 @@ class FranchiseeServiceTest {
         assertThrows(ResourceNotFoundException.class,
                 () -> franchiseeService.acceptOrders(orderListPostDto));
     }
+
+
 
 }
