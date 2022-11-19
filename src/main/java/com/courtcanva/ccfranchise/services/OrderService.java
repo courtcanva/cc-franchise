@@ -14,10 +14,8 @@ import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
-import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -61,8 +59,7 @@ public class OrderService {
         List<Order> unassignedOrders = orderRepository.findAllByStatusIs(OrderStatus.UNASSIGNED);
 
         if (unassignedOrders.isEmpty()) {
-            log.debug("No unassigned order");
-            throw new ResourceNotFoundException("No unassigned order");
+            log.info("No unassigned order");
         }
 
         for (Order order : unassignedOrders) {
@@ -72,10 +69,8 @@ public class OrderService {
 
             int sscCode = Integer.parseInt(order.getSscCode());
 
-            List<Franchisee> franchiseeList = franchiseeService.findFranchiseeByIds(franchiseeService.findMatchedFranchisee(sscCode, order.getId()).stream().map(Franchisee::getId).toList())
-                    .stream()
-                    .sorted((Comparator.comparing(Franchisee::getBusinessName)))
-                    .toList();
+            List<Franchisee> franchiseeList = franchiseeService.findMatchedFranchisee(sscCode, order.getId());
+
 
             if (franchiseeList.isEmpty()) {
                 log.debug("No available franchisee for sscCode: {}", sscCode);
@@ -91,6 +86,8 @@ public class OrderService {
 
             orderRepository.save(order);
             orderAssignmentRepository.save(orderAssignment);
+
+            log.info("Assigned {} to franchisee {}", order.getId(), franchiseeList.get(0).getId());
 
         }
 

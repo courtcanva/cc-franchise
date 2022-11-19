@@ -16,7 +16,6 @@ public interface FranchiseeRepository extends JpaRepository<Franchisee, Long> {
 
     Optional<Franchisee> findFranchiseeById(Long franchiseeId);
 
-    List<Franchisee> findByIdIn(List<Long> ids);
 
 
 

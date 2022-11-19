@@ -98,13 +98,8 @@ public class FranchiseeService {
     @Transactional
     public SuburbListAndFilterModeGetDto addDutyAreas(SuburbListAndFilterModePostDto suburbListAndFilterModePostDto, Long franchiseeId) {
 
-
-        Optional<Franchisee> optionalFranchisee = findFranchiseeById(franchiseeId);
-
-        Franchisee franchisee = optionalFranchisee.orElseThrow(() -> {
-
+        Franchisee franchisee = findFranchiseeById(franchiseeId).orElseThrow(() -> {
             log.debug("franchisee with id: {} is not exist", franchiseeId);
-
             return new ResourceNotFoundException("franchisee id is not exist");
 
         });
@@ -136,17 +131,15 @@ public class FranchiseeService {
     }
 
     public Boolean abnExists(String abn) {
-        Boolean isExisted = franchiseeRepository.existsFranchiseeByAbn(abn);
-        if (Boolean.TRUE.equals(isExisted)) {
+        boolean isExisted = franchiseeRepository.existsFranchiseeByAbn(abn);
+        if (isExisted) {
             throw new ResourceAlreadyExistException("ABN already existed");
         }
-        return isExisted;
+        return false;
     }
 
     public Optional<Franchisee> findFranchiseeById(Long franchiseeId) {
-
         return franchiseeRepository.findFranchiseeById(franchiseeId);
-
     }
 
     @Transactional
@@ -174,9 +167,6 @@ public class FranchiseeService {
                         .collect(Collectors.toList())).build();
     }
 
-    public List<Franchisee> findFranchiseeByIds(List<Long> ids) {
-        return franchiseeRepository.findByIdIn(ids);
-    }
 
     @Transactional(readOnly = true)
     public List<Franchisee> findMatchedFranchisee(long sscCode, Long orderId) {

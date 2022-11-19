@@ -1,13 +1,11 @@
 package com.courtcanva.ccfranchise.utils;
 
 import com.courtcanva.ccfranchise.constants.OrderStatus;
-import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
 import com.courtcanva.ccfranchise.models.Order;
 
 import com.courtcanva.ccfranchise.models.Franchisee;
-import org.aspectj.weaver.ast.Or;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -60,21 +58,6 @@ public class OrderTestHelper {
                 .build();
     }
 
-    public static Order OrderWithSscCode() {
-        return Order.builder()
-                .id(1L)
-                .orderId("102")
-                .customerId("102")
-                .designInformation("{\"name\": \"draft 1\"}")
-                .contactInformation("{\"name\": \"Alex\", \"phone\": \"0404123457\"}")
-                .sscCode("11344")
-                .postcode("3003")
-                .unpaidAmount(BigDecimal.valueOf(998.00))
-                .totalAmount(BigDecimal.valueOf(999.00))
-                .paidAmount(BigDecimal.valueOf(1.00))
-                .status(OrderStatus.UNASSIGNED)
-                .build();
-    }
 
     public static List<Order> OrderList() {
         List<Order> orders = new ArrayList<>();
@@ -174,10 +157,7 @@ public class OrderTestHelper {
 
 
     public static List<Order> createUnassignedOrderList(){
-        List<Order> unassignedOrderList = new ArrayList<>();
-        unassignedOrderList.add(Order1());
-
-        return unassignedOrderList;
+        return List.of(Order1());
     }
 
     public static Order createAssignedOrder(){

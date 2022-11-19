@@ -40,16 +40,17 @@ class OrderRepositoryTest {
     void findByIdIn() {
         orderRepository.save(OrderTestHelper.Order1());
         orderRepository.save(OrderTestHelper.Order2());
-        assertEquals(1L, orderRepository.findByIdIn(
-                        OrderTestHelper.createOrderListPostDto().getOrders()
-                                .stream()
+        assertEquals(2L, orderRepository.findByIdIn(
+                OrderTestHelper.createOrderListPostDto().getOrders().stream()
                                 .map(OrderPostDto::getId)
-                                .collect(Collectors.toList()))
-                .get(0).getId());
+                                .collect(Collectors.toList()
+                                ))
+                .get(0)
+                .getId());
     }
 
     @Test
-    void givenFranchieeId_whenOpenOrdersAvailable_shouldReturnFirst10ListOfOrders() {
+    void givenFranchiseeId_whenOpenOrdersAvailable_shouldReturnFirst10ListOfOrders() {
         Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
         Franchisee franchiseeFromDb = franchiseeRepository.save(franchisee);
         List<Order> orders = List.of(
@@ -63,7 +64,7 @@ class OrderRepositoryTest {
     }
 
     @Test
-    void givenFranchieeId_whenOpenOrdersUnavailable_shouldReturnEmptyList() {
+    void givenFranchiseeId_whenOpenOrdersUnavailable_shouldReturnEmptyList() {
         Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
         Franchisee franchiseeFromDb = franchiseeRepository.save(franchisee);
         List<Order> ordersFromDb =

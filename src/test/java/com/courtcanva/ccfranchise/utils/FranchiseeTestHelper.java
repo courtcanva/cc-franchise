@@ -1,7 +1,6 @@
 package com.courtcanva.ccfranchise.utils;
 
 import com.courtcanva.ccfranchise.constants.AUState;
-import com.courtcanva.ccfranchise.dtos.FranchiseeGetDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.models.Franchisee;
 
@@ -81,13 +80,6 @@ public class FranchiseeTestHelper {
                 .build();
     }
 
-    public static FranchiseeGetDto createFranchiseeGetDto() {
-
-        return FranchiseeGetDto.builder()
-                .franchiseeId(1234L)
-                .abn("12345678900")
-                .build();
-    }
 
     public static Set<Franchisee> createFranchiseeSet() {
         Set<Franchisee> franchisees = new HashSet<>();
@@ -128,9 +120,7 @@ public class FranchiseeTestHelper {
 
     public static List<Franchisee> createFranchiseeListWithOrderAssignment() {
         List<Franchisee> franchisees = new ArrayList<>();
-        Franchisee franchisee = createFranchiseeWithOrderAssignmentSet();
-
-        franchisees.add(franchisee);
+        franchisees.add(createFranchiseeWithOrderAssignmentSet());
 
         return franchisees;
     }

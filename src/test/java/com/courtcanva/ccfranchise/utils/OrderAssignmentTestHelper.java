@@ -2,7 +2,6 @@ package com.courtcanva.ccfranchise.utils;
 
 import com.courtcanva.ccfranchise.constants.OrderAssignmentStatus;
 import com.courtcanva.ccfranchise.models.OrderAssignment;
-import com.courtcanva.ccfranchise.models.OrderAssignmentId;
 
 import java.time.OffsetDateTime;
 import java.util.HashSet;
@@ -29,10 +28,4 @@ public class OrderAssignmentTestHelper {
 
     }
 
-    public static OrderAssignmentId orderAssignmentId(){
-        return OrderAssignmentId.builder()
-                .franchiseeId(FranchiseeTestHelper.createFranchiseeWithDutyAreas().getId())
-                .orderId(OrderTestHelper.Order1().getId())
-                .build();
-    }
 }
