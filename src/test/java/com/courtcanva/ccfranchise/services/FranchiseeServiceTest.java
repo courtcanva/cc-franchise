@@ -42,7 +42,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -83,8 +82,8 @@ class FranchiseeServiceTest {
 
     @BeforeEach
     void setOrderRepositoryUp() {
-        orderRepository.save(OrderTestHelper.Order1());
-        orderRepository.save(OrderTestHelper.Order2());
+        orderRepository.save(OrderTestHelper.order1());
+        orderRepository.save(OrderTestHelper.order2());
     }
 
     @BeforeEach
@@ -144,14 +143,14 @@ class FranchiseeServiceTest {
     }
 
     @Test
-    void givenSscCodeAndOrderId_whenFindMatchedFranchisees_shouldReturnFranchiseeList(){
+    void givenSscCodeAndOrderId_whenFindMatchedFranchisees_shouldReturnFranchiseeList() {
 
         List<Franchisee> franchisees = FranchiseeTestHelper.createFranchiseeListWithOrderAssignment();
 
         when(franchiseeRepository.findFranchiseesByDutyAreasIn(any())).thenReturn(franchisees);
 
-        List<Franchisee> franchiseeList = franchiseeService.findMatchedFranchisee(11344L,1L);
-        assertEquals(1234L,franchiseeList.get(0).getId());
+        List<Franchisee> franchiseeList = franchiseeService.findMatchedFranchisee(11344L, 1L);
+        assertEquals(1234L, franchiseeList.get(0).getId());
 
     }
 
@@ -216,8 +215,8 @@ class FranchiseeServiceTest {
 
     @Test
     void shouldThrowOrderListGetDto() {
-        List<Order> orders = OrderTestHelper.OrderList();
-        List<Order> acceptedOrders = OrderTestHelper.AcceptedOrderList();
+        List<Order> orders = OrderTestHelper.orderList();
+        List<Order> acceptedOrders = OrderTestHelper.acceptedOrderList();
         OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
 
         when(orderRepository.findByIdIn(any())).thenReturn(orders);
@@ -235,7 +234,6 @@ class FranchiseeServiceTest {
         assertThrows(ResourceNotFoundException.class,
                 () -> franchiseeService.acceptOrders(orderListPostDto));
     }
-
 
 
 }

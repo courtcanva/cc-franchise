@@ -130,7 +130,7 @@ public class FranchiseeService {
 
     }
 
-    public Boolean abnExists(String abn) {
+    public boolean abnExists(String abn) {
         boolean isExisted = franchiseeRepository.existsFranchiseeByAbn(abn);
         if (isExisted) {
             throw new ResourceAlreadyExistException("ABN already existed");
@@ -169,7 +169,7 @@ public class FranchiseeService {
 
 
     @Transactional(readOnly = true)
-    public List<Franchisee> findMatchedFranchisee(long sscCode, Long orderId) {
+    public List<Franchisee> findMatchedFranchisee(long sscCode, long orderId) {
 
         Set<Suburb> dutyAreas = new HashSet<>(suburbService.findSuburbBySscCodes(List.of(sscCode)));
 

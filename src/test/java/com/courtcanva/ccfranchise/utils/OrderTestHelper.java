@@ -26,7 +26,7 @@ public class OrderTestHelper {
         return OrderListPostDto.builder().orders(orders).build();
     }
 
-    public static Order Order1() {
+    public static Order order1() {
         return Order.builder()
                 .id(1L)
                 .orderId("102")
@@ -42,7 +42,7 @@ public class OrderTestHelper {
                 .build();
     }
 
-    public static Order Order2() {
+    public static Order order2() {
         return Order.builder()
                 .id(2L)
                 .orderId("102")
@@ -59,7 +59,7 @@ public class OrderTestHelper {
     }
 
 
-    public static List<Order> OrderList() {
+    public static List<Order> orderList() {
         List<Order> orders = new ArrayList<>();
         Order order1 = Order.builder()
                 .id(1L)
@@ -94,7 +94,7 @@ public class OrderTestHelper {
         return orders;
     }
 
-    public static List<Order> AcceptedOrderList() {
+    public static List<Order> acceptedOrderList() {
         List<Order> orders = new ArrayList<>();
         Order order1 = Order.builder()
                 .id(1L)
@@ -157,7 +157,7 @@ public class OrderTestHelper {
 
 
     public static List<Order> createUnassignedOrderList(){
-        return List.of(Order1());
+        return List.of(order1());
     }
 
     public static Order createAssignedOrder(){

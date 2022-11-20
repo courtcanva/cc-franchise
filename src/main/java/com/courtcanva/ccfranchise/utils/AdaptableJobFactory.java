@@ -1,21 +1,25 @@
 package com.courtcanva.ccfranchise.utils;
 
 import lombok.RequiredArgsConstructor;
+import org.quartz.Job;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.quartz.spi.TriggerFiredBundle;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Component;
 
 @Component("adaptableJobFactory")
 @RequiredArgsConstructor
 public class AdaptableJobFactory extends org.springframework.scheduling.quartz.AdaptableJobFactory{
 
-    private final AutowireCapableBeanFactory autowireCapableBeanFactory;
-
     @Override
-    protected Object createJobInstance(TriggerFiredBundle bundle) throws Exception{
-        Object obj = super.createJobInstance(bundle);
-        this.autowireCapableBeanFactory.autowireBean(obj);
-        return obj;
+    public Job newJob(TriggerFiredBundle bundle, Scheduler scheduler) throws SchedulerException {
+        try {
+            Object jobObject = createJobInstance(bundle);
+            return adaptJob(jobObject);
+        }
+        catch (Exception ex) {
+            throw new SchedulerException("Job instantiation failed", ex);
+        }
     }
 
 

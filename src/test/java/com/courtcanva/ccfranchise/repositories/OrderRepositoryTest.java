@@ -38,8 +38,8 @@ class OrderRepositoryTest {
 
     @Test
     void findByIdIn() {
-        orderRepository.save(OrderTestHelper.Order1());
-        orderRepository.save(OrderTestHelper.Order2());
+        orderRepository.save(OrderTestHelper.order1());
+        orderRepository.save(OrderTestHelper.order2());
         assertEquals(2L, orderRepository.findByIdIn(
                 OrderTestHelper.createOrderListPostDto().getOrders().stream()
                                 .map(OrderPostDto::getId)
@@ -75,7 +75,7 @@ class OrderRepositoryTest {
     @Test
     void givenOrderStatus_whenUnassignedOrderIsAvailable_shouldReturnOrderList(){
 
-        orderRepository.save(OrderTestHelper.Order1());
+        orderRepository.save(OrderTestHelper.order1());
 
         List<Order> orderList = orderRepository.findAllByStatusIs(OrderStatus.UNASSIGNED);
         assertEquals(OrderStatus.UNASSIGNED,orderList.get(0).getStatus());

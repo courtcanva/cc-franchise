@@ -9,12 +9,8 @@ import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.mappers.OrderMapperImpl;
-import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
-import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
-import com.courtcanva.ccfranchise.repositories.OrderAssignmentRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
-import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
 import com.courtcanva.ccfranchise.utils.OrderTestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,15 +31,7 @@ class OrderServiceTest {
     private OrderRepository orderRepository;
 
     @Mock
-    private OrderAssignmentRepository orderAssignmentRepository;
-
-    @Mock
-    private FranchiseeService franchiseeService;
-
-    @Mock
-    private FranchiseeRepository franchiseeRepository;
-
-
+    private OrderAssignmentService orderAssignmentService;
 
     @BeforeEach
     void setUp() {
@@ -53,7 +41,7 @@ class OrderServiceTest {
     @BeforeEach
     public void setOrderServiceUp() {
         OrderMapper orderMapper = new OrderMapperImpl();
-        orderService = new OrderService(orderRepository, orderMapper, franchiseeService, orderAssignmentRepository);
+        orderService = new OrderService(orderRepository, orderMapper, orderAssignmentService);
     }
 
     @Test
@@ -76,18 +64,13 @@ class OrderServiceTest {
     @Test
     void shouldAssignOrders() {
 
-        franchiseeRepository.save(FranchiseeTestHelper.createFranchiseeWithDutyAreas());
-        orderRepository.save(OrderTestHelper.Order1());
-
+        orderRepository.save(OrderTestHelper.order1());
         List<Order> unassignedOrders = OrderTestHelper.createUnassignedOrderList();
-        List<Franchisee> availableFranchisee = FranchiseeTestHelper.createFranchiseeList();
 
         when(orderRepository.findAllByStatusIs(OrderStatus.UNASSIGNED)).thenReturn(unassignedOrders);
-        when(franchiseeService.findMatchedFranchisee(11344, 1L)).thenReturn(availableFranchisee);
 
         orderService.assignOrders();
-
-        assertEquals(OrderStatus.ASSIGNED_PENDING, unassignedOrders.get(0).getStatus());
+        assertEquals(OrderStatus.UNASSIGNED, unassignedOrders.get(0).getStatus());
 
     }
 

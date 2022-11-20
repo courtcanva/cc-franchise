@@ -129,7 +129,7 @@ class FranchiseeControllerTest {
                                 new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "0434666666", "abc st", 3000, AUState.VIC, "A123123123")))
                 .getFranchiseeGetDto().getFranchiseeId();
 
-        orderRepository.save(OrderTestHelper.Order1());
+        orderRepository.save(OrderTestHelper.order1());
         OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/" + mockFranchiseeId.toString() + "/accept_orders")
