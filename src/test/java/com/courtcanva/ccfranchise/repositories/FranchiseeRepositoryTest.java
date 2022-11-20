@@ -31,7 +31,7 @@ class FranchiseeRepositoryTest {
         franchiseeRepository.save(
                 FranchiseeTestHelper.createFranchisee());
 
-        assertTrue(franchiseeRepository.existsFranchiseeByAbn("12312123111"));
+        assertTrue(franchiseeRepository.existsFranchiseeByAbn("12345678900"));
 
 
     }
