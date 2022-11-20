@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import com.courtcanva.ccfranchise.constants.OrderStatus;
-import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderPendingPostDto;
 import com.courtcanva.ccfranchise.mappers.OrderMapperImpl;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,10 +35,9 @@ class OrderServiceTest {
     @Test
     void givenFranchieeId_whenOpenOrdersAvailable_shouldReturnListOfOrders() {
         when(orderRepository.findFirst10ByFranchiseeIdAndStatus(1L, OrderStatus.ASSIGNED_PENDING)).thenReturn(orders);
-        List<OrderGetDto> firstTenOpenOrdersGetDto = orderService.getFirstTenOpenOrdersById(1L);
-        assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderGetDto::getCustomerId).toList().containsAll(List.of("101", "102")));
-        assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderGetDto::getPostcode).toList().containsAll(List.of("3000", "4000")));
-        assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderGetDto::getTotalAmount).toList()
+        List<OrderPendingPostDto> firstTenOpenOrdersGetDto = orderService.getFirstTenOpenOrdersById(1L);
+        assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderPendingPostDto::getPostcode).toList().containsAll(List.of("3000", "4000")));
+        assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderPendingPostDto::getTotalAmount).toList()
                        .containsAll(List.of(BigDecimal.valueOf(3000L), BigDecimal.valueOf(4000L))));
     }
 

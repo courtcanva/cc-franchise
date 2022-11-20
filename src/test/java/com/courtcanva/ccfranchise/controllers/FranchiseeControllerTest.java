@@ -124,17 +124,16 @@ class FranchiseeControllerTest {
                 new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd")))
                                     .getFranchiseeGetDto().getFranchiseeId();
         List<Franchisee> franchisees = franchiseeRepository.findAll();
-        List<Order> orders = List.of(OrderTestHelper.createOrder("101", "3000", 3000L, franchisees.get(0)),
+        List<Order> orders = List.of(
+            OrderTestHelper.createOrder("101", "3000", 3000L, franchisees.get(0)),
             OrderTestHelper.createOrder("102", "4000", 4000L, franchisees.get(0)));
         orderRepository.saveAll(orders);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/franchisee/" + mockFranchiseeId.toString() + "/pending_orders"))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$[0].customerId").value("101"))
             .andExpect(jsonPath("$[0].postcode").value("3000"))
             .andExpect(jsonPath("$[0].totalAmount").value("3000.0"))
-            .andExpect(jsonPath("$[1].customerId").value("102"))
             .andExpect(jsonPath("$[1].postcode").value("4000"))
             .andExpect(jsonPath("$[1].totalAmount").value("4000.0"));
     }
