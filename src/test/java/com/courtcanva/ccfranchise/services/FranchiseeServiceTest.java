@@ -16,11 +16,11 @@ import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapperImpl;
 import com.courtcanva.ccfranchise.mappers.OrderMapper;
-import com.courtcanva.ccfranchise.mappers.StaffMapper;
-import com.courtcanva.ccfranchise.mappers.SuburbMapper;
-import com.courtcanva.ccfranchise.mappers.StaffMapperImpl;
-import com.courtcanva.ccfranchise.mappers.SuburbMapperImpl;
 import com.courtcanva.ccfranchise.mappers.OrderMapperImpl;
+import com.courtcanva.ccfranchise.mappers.StaffMapper;
+import com.courtcanva.ccfranchise.mappers.StaffMapperImpl;
+import com.courtcanva.ccfranchise.mappers.SuburbMapper;
+import com.courtcanva.ccfranchise.mappers.SuburbMapperImpl;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.models.Suburb;
@@ -43,13 +43,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -72,6 +68,8 @@ class FranchiseeServiceTest {
     private PasswordEncoder passwordEncoder;
     @Mock
     private OrderRepository orderRepository;
+    @Mock
+    private OrderService orderService;
 
     @BeforeEach
     void setUp() {
@@ -102,7 +100,8 @@ class FranchiseeServiceTest {
                 suburbService,
                 suburbMapper,
                 orderMapper,
-                orderRepository
+                orderRepository,
+                orderService
         );
     }
 
@@ -221,6 +220,16 @@ class FranchiseeServiceTest {
         when(orderRepository.findByIdIn(any())).thenReturn(new ArrayList<>());
         assertThrows(ResourceNotFoundException.class,
                 () -> franchiseeService.acceptOrders(orderListPostDto));
+    }
+
+    @Test
+    void shouldReturnAcceptedOrdersSuccessfully() {
+        when(orderService.findAcceptedOrdersByFranchisee(any(),
+                anyInt())).thenReturn(OrderTestHelper.mockAcceptedListDto());
+        when(franchiseeRepository.findFranchiseeById(1L)).
+                thenReturn(Optional.ofNullable(FranchiseeTestHelper.createFranchiseeWithId()));
+        assertEquals("802", franchiseeService.findFranchiseeAcceptedOrders(1L, 1).getAcceptedOrders().get(0).getOrderId());
+
     }
 
 }

@@ -2,6 +2,8 @@ package com.courtcanva.ccfranchise.controllers;
 
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedAndCompletedPaginationGetDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderPendingPostDto;
@@ -11,18 +13,20 @@ import com.courtcanva.ccfranchise.services.FranchiseeService;
 import com.courtcanva.ccfranchise.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.validation.annotation.Validated;
 
-import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/franchisee")
@@ -51,6 +55,12 @@ public class FranchiseeController {
     @ResponseStatus(HttpStatus.OK)
     public SuburbListAndFilterModeGetDto addDutyAreas(@RequestBody @Valid SuburbListAndFilterModePostDto suburbListAndFilterModePostDto, @PathVariable(value = "franchiseeId") Long franchiseeId) {
         return franchiseeService.dutyAreas(suburbListAndFilterModePostDto, franchiseeId);
+    }
+
+    @GetMapping("/{franchiseeId}/orders/accepted")
+    public OrderAcceptedAndCompletedPaginationGetDto acceptedOrdersList(@PathVariable(value = "franchiseeId") Long franchiseeId,
+                                                                        @RequestParam(value = "page") int pageNumber) {
+        return franchiseeService.findFranchiseeAcceptedOrders(franchiseeId, pageNumber);
     }
 
     @PostMapping("/{franchiseeId}/accept_orders")
