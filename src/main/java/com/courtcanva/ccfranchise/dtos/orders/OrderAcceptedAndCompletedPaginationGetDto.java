@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderAcceptedAndCompletedPaginationGetDto {
 
-    private int PageNumber;
+    private int pageNumber;
 
     private List<OrderGetDto> acceptedOrders;
 }

@@ -149,7 +149,7 @@ public class OrderTestHelper {
                                 .orderId("802")
                                 .build()
                 ))
-                .PageNumber(1)
+                .pageNumber(1)
                 .build();
     }
 

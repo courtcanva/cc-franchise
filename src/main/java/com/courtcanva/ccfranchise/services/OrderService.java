@@ -31,7 +31,7 @@ public class OrderService {
 
         return OrderAcceptedAndCompletedPaginationGetDto.builder()
                 .acceptedOrders(acceptedAndCompletedOrders.stream().map(orderMapper::orderToGetDto).collect(Collectors.toList()))
-                .PageNumber(pageNumber)
+                .pageNumber(pageNumber)
                 .build();
 
     }
