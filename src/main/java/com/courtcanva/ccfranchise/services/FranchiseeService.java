@@ -130,6 +130,14 @@ public class FranchiseeService {
 
     }
 
+    public Boolean abnExists(String abn) {
+        Boolean isExisted = franchiseeRepository.existsFranchiseeByAbn(abn);
+        if (Boolean.TRUE.equals(isExisted)) {
+            throw new ResourceAlreadyExistException("ABN already existed");
+        }
+        return isExisted;
+    }
+
     public Optional<Franchisee> findFranchiseeById(Long franchiseeId) {
 
         return franchiseeRepository.findFranchiseeById(franchiseeId);

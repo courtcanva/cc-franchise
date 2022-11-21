@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.courtcanva.ccfranchise.constants.AUState.VIC;
 import static org.mockito.Mockito.mock;
 
 
@@ -18,7 +17,7 @@ public class FranchiseeTestHelper {
 
         return Franchisee.builder()
                 .id(1234L)
-                .contactNumber("234567891")
+                .contactNumber("0434666666")
                 .businessName("AAAAA")
                 .businessAddress("zetland NSWssss")
                 .legalEntityName("XX Company")
@@ -34,10 +33,10 @@ public class FranchiseeTestHelper {
 
         Franchisee mockFranchisee = mock(Franchisee.class);
         mockFranchisee.setId(1234L);
-        mockFranchisee.setContactNumber("234567891");
+        mockFranchisee.setContactNumber("0434666666");
         mockFranchisee.setBusinessName("AAAAA");
         mockFranchisee.setBusinessAddress("zetland NSWssss");
-        mockFranchisee.setAbn("12312123111");
+        mockFranchisee.setAbn("12345678900");
         return mockFranchisee;
     }
 
@@ -48,10 +47,10 @@ public class FranchiseeTestHelper {
 
         Optional<Franchisee> optionalFranchisee = Optional.of(franchisee);
         optionalFranchisee.get().setId(1234L);
-        optionalFranchisee.get().setContactNumber("234567891");
+        optionalFranchisee.get().setContactNumber("0434666666");
         optionalFranchisee.get().setBusinessName("AAAAA");
         optionalFranchisee.get().setBusinessAddress("zetland NSWssss");
-        optionalFranchisee.get().setAbn("12312123111");
+        optionalFranchisee.get().setAbn("12345678900");
 
         return optionalFranchisee;
 
@@ -60,13 +59,13 @@ public class FranchiseeTestHelper {
     public static Franchisee createFranchisee() {
 
         return Franchisee.builder()
-                .contactNumber("234567891")
+                .contactNumber("0434666666")
                 .businessName("AAAAA")
                 .legalEntityName("COUNTCANVA")
                 .state(AUState.ACT)
                 .postcode(1234)
                 .businessAddress("zetland NSWssss")
-                .abn("12312123111")
+                .abn("12345678900")
                 .build();
     }
 
@@ -74,11 +73,11 @@ public class FranchiseeTestHelper {
 
         return FranchiseePostDto.builder()
                 .businessName("AAAAA")
-                .contactNumber("234567891")
+                .contactNumber("0434666666")
                 .businessAddress("zetland NSWssss")
                 .legalEntityName("AAAA info")
                 .state(AUState.ACT)
-                .abn("12312123111")
+                .abn("12345678900")
                 .build();
     }
 
@@ -86,7 +85,7 @@ public class FranchiseeTestHelper {
 
         return FranchiseeGetDto.builder()
                 .franchiseeId(1234L)
-                .abn("12345678901")
+                .abn("12345678900")
                 .build();
     }
 
@@ -99,10 +98,10 @@ public class FranchiseeTestHelper {
     public static Franchisee createFranchiseeWithDutyAreas() {
         return Franchisee.builder()
                 .id(1234L)
-                .contactNumber("234567891")
+                .contactNumber("0434666666")
                 .businessName("AAAAA")
                 .businessAddress("zetland NSWssss")
-                .abn("12312123111")
+                .abn("12345678900")
                 .dutyAreas(SuburbTestHelper.createSuburbSet())
                 .build();
 

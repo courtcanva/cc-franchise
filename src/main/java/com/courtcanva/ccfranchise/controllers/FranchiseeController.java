@@ -12,6 +12,7 @@ import com.courtcanva.ccfranchise.services.FranchiseeService;
 import com.courtcanva.ccfranchise.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,11 +23,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/franchisee")
 @RequiredArgsConstructor
+@Validated
 public class FranchiseeController {
 
     private final FranchiseeService franchiseeService;
@@ -39,7 +43,11 @@ public class FranchiseeController {
 
         return franchiseeService.createFranchiseeAndStaff(franchiseeAndStaffPostDto.getFranchiseePostDto(),
                 franchiseeAndStaffPostDto.getStaffPostDto());
+    }
 
+    @GetMapping("/abn/{abn}")
+    public Boolean abnExists(@PathVariable("abn") @Valid @Size(min = 11, max = 11, message = "Your abn format is invalid.") String abn) {
+        return franchiseeService.abnExists(abn);
     }
 
     @PostMapping("/{franchiseeId}/service_areas")
