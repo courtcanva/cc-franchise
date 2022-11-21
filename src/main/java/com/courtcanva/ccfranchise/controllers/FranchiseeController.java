@@ -20,16 +20,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
 
 @RestController
 @RequestMapping("/franchisee")
 @RequiredArgsConstructor
-@Validated
 public class FranchiseeController {
 
     private final FranchiseeService franchiseeService;
@@ -42,11 +39,7 @@ public class FranchiseeController {
 
         return franchiseeService.createFranchiseeAndStaff(franchiseeAndStaffPostDto.getFranchiseePostDto(),
                 franchiseeAndStaffPostDto.getStaffPostDto());
-    }
 
-    @GetMapping("/abn/{abn}")
-    public Boolean abnExists(@PathVariable("abn") @Valid @Size(min = 11, max = 11, message = "Your abn format is invalid.") String abn) {
-        return franchiseeService.abnExists(abn);
     }
 
     @PostMapping("/{franchiseeId}/service_areas")
@@ -68,7 +61,7 @@ public class FranchiseeController {
         return orderService.getFirstTenOpenOrdersById(franchiseeId);
     }
 
-    @GetMapping("/{franchiseeId}/{orderId}/order_details")
+    @GetMapping("/{orderId}/order_details")
     @ResponseStatus(HttpStatus.OK)
     public OrderDetails getOrderDetails(@PathVariable Long orderId){
         return orderService.getOrderDetailsByOrderId(orderId);
