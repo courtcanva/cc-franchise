@@ -39,7 +39,7 @@ class OrderServiceTest {
     }
 
     @BeforeEach
-    public void setOrderServiceUp() {
+    void setOrderServiceUp() {
         OrderMapper orderMapper = new OrderMapperImpl();
         orderService = new OrderService(orderRepository, orderMapper, orderAssignmentService);
     }
