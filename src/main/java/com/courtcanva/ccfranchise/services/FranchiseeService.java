@@ -168,7 +168,6 @@ public class FranchiseeService {
     }
 
 
-    @Transactional(readOnly = true)
     public List<Franchisee> findMatchedFranchisee(long sscCode, long orderId) {
 
         Set<Suburb> dutyAreas = new HashSet<>(suburbService.findSuburbBySscCodes(List.of(sscCode)));
