@@ -14,7 +14,7 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 public class QuartzConfig {
 
     @Bean(name = "assignOrder")
-    public MethodInvokingJobDetailFactoryBean test2(AssignOrderJob assignOrderJob) {
+    public MethodInvokingJobDetailFactoryBean invokeAssignOrder(AssignOrderJob assignOrderJob) {
         MethodInvokingJobDetailFactoryBean jobDetail = new MethodInvokingJobDetailFactoryBean();
         jobDetail.setTargetObject(assignOrderJob);
         jobDetail.setTargetMethod("assignOrders");
@@ -23,7 +23,7 @@ public class QuartzConfig {
 
 
     @Bean(name = "assignOrderTrigger")
-    public CronTriggerFactoryBean cronTriggerFactoryBean2(JobDetail assignOrder) {
+    public CronTriggerFactoryBean triggerAssignOrder(JobDetail assignOrder) {
         CronTriggerFactoryBean factory = new CronTriggerFactoryBean();
         factory.setJobDetail(assignOrder);
         factory.setCronExpression("0 0/5 * ? * MON-FRI");
