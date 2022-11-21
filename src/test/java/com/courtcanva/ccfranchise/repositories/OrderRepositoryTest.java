@@ -35,10 +35,11 @@ class OrderRepositoryTest {
     @BeforeEach
     void setOrderRepositoryUp() {
         orderRepository.deleteAll();
+        staffRepository.deleteAll();
         franchiseeRepository.deleteAll();
         orderRepository.save(OrderTestHelper.Order1());
         orderRepository.save(OrderTestHelper.Order2());
-        staffRepository.deleteAll();
+
     }
 
     @Test
@@ -59,7 +60,7 @@ class OrderRepositoryTest {
         Franchisee franchisee = franchiseeRepository.save(FranchiseeTestHelper.createFranchisee());
         order.setFranchisee(franchisee);
         orderRepository.save(order);
-        
+
         PageRequest pageRequest = PageRequest.of(0, 10);
         assertEquals("111",
                 orderRepository

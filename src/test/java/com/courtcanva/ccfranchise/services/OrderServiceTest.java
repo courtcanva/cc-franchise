@@ -7,10 +7,6 @@ import com.courtcanva.ccfranchise.mappers.OrderMapperImpl;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
 import com.courtcanva.ccfranchise.utils.OrderTestHelper;
-import static com.courtcanva.ccfranchise.utils.OrderTestHelper.orders;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,12 +14,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.courtcanva.ccfranchise.utils.OrderTestHelper.orders;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
@@ -33,10 +33,10 @@ class OrderServiceTest {
 
     private OrderService orderService;
 
-    private OrderMapper orderMapper;
+
     @BeforeEach
-    void setUp(){
-        orderMapper = new OrderMapperImpl();
+    void setUp() {
+        OrderMapper orderMapper = new OrderMapperImpl();
         orderService = new OrderService(
                 orderRepository,
                 orderMapper
@@ -44,12 +44,12 @@ class OrderServiceTest {
     }
 
     @Test
-    public void shouldReturnAcceptedOrder(){
+    public void shouldReturnAcceptedOrder() {
         when(orderRepository.findOrdersByFranchiseeAndStatusInOrderByStatusAscCreatedTime(
-                any(),any(),eq(PageRequest.of(0,10))
-                )).thenReturn(OrderTestHelper.AcceptedOrderList());
+                any(), any(), eq(PageRequest.of(0, 10))
+        )).thenReturn(OrderTestHelper.AcceptedOrderList());
 
-        assertEquals("102",orderService.findAcceptedOrdersByFranchisee(FranchiseeTestHelper.createFranchiseeWithId(),
+        assertEquals("102", orderService.findAcceptedOrdersByFranchisee(FranchiseeTestHelper.createFranchiseeWithId(),
                 1).getAcceptedOrders().get(0).getOrderId());
     }
 
@@ -61,7 +61,7 @@ class OrderServiceTest {
         assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderGetDto::getCustomerId).toList().containsAll(List.of("101", "102")));
         assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderGetDto::getPostcode).toList().containsAll(List.of("3000", "4000")));
         assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderGetDto::getTotalAmount).toList()
-                       .containsAll(List.of(BigDecimal.valueOf(3000L), BigDecimal.valueOf(4000L))));
+                .containsAll(List.of(BigDecimal.valueOf(3000L), BigDecimal.valueOf(4000L))));
     }
 
     @Test
