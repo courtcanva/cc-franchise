@@ -39,7 +39,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "franchisee")
-@ToString
 public class Franchisee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
