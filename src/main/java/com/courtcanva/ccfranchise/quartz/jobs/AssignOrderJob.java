@@ -10,7 +10,7 @@ public class AssignOrderJob {
     @Autowired
     private OrderService orderService;
 
-    public void assignOrders() throws InterruptedException {
+    public void assignOrders() {
         orderService.assignOrders();
     }
 

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component("adaptableJobFactory")
 @RequiredArgsConstructor
-public class AdaptableJobFactory extends org.springframework.scheduling.quartz.AdaptableJobFactory{
+public class QuartzAdaptableJobFactory extends org.springframework.scheduling.quartz.AdaptableJobFactory{
 
     @Override
     public Job newJob(TriggerFiredBundle bundle, Scheduler scheduler) throws SchedulerException {

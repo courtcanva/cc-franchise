@@ -1,7 +1,7 @@
 package com.courtcanva.ccfranchise.quartz.config;
 
 import com.courtcanva.ccfranchise.quartz.jobs.AssignOrderJob;
-import com.courtcanva.ccfranchise.utils.AdaptableJobFactory;
+import com.courtcanva.ccfranchise.utils.QuartzAdaptableJobFactory;
 import org.quartz.JobDetail;
 import org.quartz.Trigger;
 import org.springframework.context.annotation.Bean;
@@ -32,10 +32,10 @@ public class QuartzConfig {
 
     @Bean
     public SchedulerFactoryBean schedulerFactoryBean1(Trigger assignOrderTrigger,
-                                                      AdaptableJobFactory adaptableJobFactory) {
+                                                      QuartzAdaptableJobFactory quartzAdaptableJobFactory) {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setTriggers(assignOrderTrigger);
-        factory.setJobFactory(adaptableJobFactory);
+        factory.setJobFactory(quartzAdaptableJobFactory);
         return factory;
     }
 }

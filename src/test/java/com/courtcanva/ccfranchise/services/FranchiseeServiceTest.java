@@ -31,7 +31,6 @@ import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
 import com.courtcanva.ccfranchise.utils.OrderTestHelper;
 import com.courtcanva.ccfranchise.utils.StaffTestHelper;
 import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,6 +43,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -191,16 +191,9 @@ class FranchiseeServiceTest {
     }
 
     @Test
-    void givenValidAndExistedAbn_whenCheckIfAbnExists_shouldReturnThrowError() {
-        when(franchiseeRepository.existsFranchiseeByAbn(any())).thenReturn((true));
-        assertThrows(ResourceAlreadyExistException.class,
-                () -> franchiseeService.abnExists(any()));
-    }
-
-    @Test
     void givenValidAndExistedAbn_whenCheckIfAbnExists_shouldReturnFalse() {
         when(franchiseeRepository.existsFranchiseeByAbn(any())).thenReturn(false);
-        Assertions.assertFalse(franchiseeService.abnExists(any()));
+        assertFalse(franchiseeService.abnExists(any()));
     }
 
     @Test
