@@ -215,7 +215,7 @@ class FranchiseeServiceTest {
     }
 
     @Test
-    public void givenOrderIds_whenFranchiseeRejectOrders_thenUpdateOrdersStatusToReject() {
+    public void givenOrderIds_whenFranchiseeRejectOrders_thenUpdateOrdersStatusToRejected() {
         OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
     }
 }

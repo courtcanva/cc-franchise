@@ -1,5 +1,6 @@
 package com.courtcanva.ccfranchise.models;
 
+import com.courtcanva.ccfranchise.constants.OrderAssignmentStatus;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -26,5 +27,5 @@ public class OrderAssignment {
     private OffsetDateTime createdTime;
 
     @Column(nullable = false, name = "status")
-    private String status;
+    private OrderAssignmentStatus status;
 }

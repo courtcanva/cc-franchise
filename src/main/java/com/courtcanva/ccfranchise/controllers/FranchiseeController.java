@@ -2,7 +2,6 @@ package com.courtcanva.ccfranchise.controllers;
 
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderAssignmentListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderAssignmentListPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
@@ -51,7 +50,7 @@ public class FranchiseeController {
 
     @PostMapping("/{franchiseeId}/reject_orders")
     @ResponseStatus(HttpStatus.OK)
-    public OrderAssignmentListGetDto rejectOrders(@RequestBody @Valid OrderAssignmentListPostDto orderAssignmentListPostDto,
+    public boolean rejectOrders(@RequestBody @Valid OrderAssignmentListPostDto orderAssignmentListPostDto,
                                                   @PathVariable(value = "franchiseeId") Long franchiseeId) {
         return franchiseeService.rejectOrders(orderAssignmentListPostDto);
     }

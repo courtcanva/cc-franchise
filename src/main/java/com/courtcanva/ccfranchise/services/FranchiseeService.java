@@ -1,6 +1,7 @@
 package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.constants.DutyAreaFilterMode;
+import com.courtcanva.ccfranchise.constants.OrderAssignmentStatus;
 import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
@@ -17,10 +18,7 @@ import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.mappers.SuburbMapper;
-import com.courtcanva.ccfranchise.models.Franchisee;
-import com.courtcanva.ccfranchise.models.Order;
-import com.courtcanva.ccfranchise.models.Staff;
-import com.courtcanva.ccfranchise.models.Suburb;
+import com.courtcanva.ccfranchise.models.*;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import com.courtcanva.ccfranchise.repositories.OrderAssignmentRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
@@ -58,7 +56,7 @@ public class FranchiseeService {
     private final OrderRepository orderRepository;
 
     private final OrderAssignmentRepository orderAssignmentRepository;
-    
+
 
     @Transactional(noRollbackFor = MailingClientException.class)
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
@@ -164,11 +162,20 @@ public class FranchiseeService {
     }
 
     @Transactional
-    public OrderAssignmentListGetDto rejectOrders(OrderAssignmentListPostDto orderAssignmentListPostDto) {
-        //关于reject api调用完成后，是再调用一次getAll api还是说直接传回修改后的List
-        List<OrderAssignmentPostDto> orders = orderAssignmentListPostDto.getOrders();
-        orders.forEach(order -> orderAssignmentRepository.rejectOrder(order.getId()));
-        //TODO: continue.....
-        return new OrderAssignmentListGetDto();
+    public boolean rejectOrders(OrderAssignmentListPostDto orderAssignmentListPostDto) {
+        List<OrderAssignmentPostDto> orderAssignmentPostDtos = orderAssignmentListPostDto.getOrderAssignments();
+        List<OrderAssignment> orderAssignments = orderAssignmentRepository.findOrderAssignmentByIdIn(orderAssignmentPostDtos
+                .stream()
+                .map(OrderAssignmentPostDto::getId).
+                toList());
+        List<Order> orders = orderRepository.findByIdIn(orderAssignmentPostDtos
+                .stream()
+                .map(OrderAssignmentPostDto::getId).
+                toList());
+        orders.forEach(order -> order.setStatus(OrderStatus.UNASSIGNED));
+        orderAssignments.forEach(orderAssignment -> orderAssignment.setStatus(OrderAssignmentStatus.REJECTED));
+        orderRepository.saveAll(orders);
+        orderAssignmentRepository.saveAll(orderAssignments);
+        return true;
     }
 }

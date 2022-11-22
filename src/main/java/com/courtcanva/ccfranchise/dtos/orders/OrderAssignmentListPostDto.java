@@ -12,5 +12,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderAssignmentListPostDto {
-    private List<OrderAssignmentPostDto> orders;
+    private List<OrderAssignmentPostDto> orderAssignments;
 }
