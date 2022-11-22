@@ -3,6 +3,7 @@ package com.courtcanva.ccfranchise.exceptions;
 import com.courtcanva.ccfranchise.dtos.ErrorDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.method.P;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -76,6 +77,15 @@ public class ControllerExceptionHandler {
         log.debug(ex.getMessage());
         return ErrorDto.builder()
                 .errorCode(HttpStatus.UNAUTHORIZED.value())
+                .details(ex.getMessage())
+                .build();
+    }
+    @ExceptionHandler(value = PageNumberNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDto handlePageNumberNotValidException(PageNumberNotValidException ex) {
+
+        return ErrorDto.builder()
+                .errorCode(HttpStatus.BAD_REQUEST.value())
                 .details(ex.getMessage())
                 .build();
     }

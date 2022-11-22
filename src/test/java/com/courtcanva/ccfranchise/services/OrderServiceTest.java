@@ -1,26 +1,32 @@
 package com.courtcanva.ccfranchise.services;
 
-import static com.courtcanva.ccfranchise.utils.OrderTestHelper.orders;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
-
 import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.mappers.OrderMapperImpl;
 import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
+import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
+import com.courtcanva.ccfranchise.utils.OrderTestHelper;
 import com.courtcanva.ccfranchise.utils.OrderTestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.courtcanva.ccfranchise.utils.OrderTestHelper.orders;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
@@ -43,6 +49,17 @@ class OrderServiceTest {
         OrderMapper orderMapper = new OrderMapperImpl();
         orderService = new OrderService(orderRepository, orderMapper, orderAssignmentService);
     }
+
+    @Test
+    public void shouldReturnAcceptedOrder() {
+        when(orderRepository.findOrdersByFranchiseeAndStatusInOrderByStatusAscCreatedTime(
+                any(), any(), eq(PageRequest.of(0, 10))
+        )).thenReturn(OrderTestHelper.AcceptedOrderList());
+
+        assertEquals("102", orderService.findAcceptedOrdersByFranchisee(FranchiseeTestHelper.createFranchiseeWithId(),
+                1).getAcceptedOrders().get(0).getOrderId());
+    }
+
 
     @Test
     void givenFranchiseeId_whenOpenOrdersAvailable_shouldReturnListOfOrders() {

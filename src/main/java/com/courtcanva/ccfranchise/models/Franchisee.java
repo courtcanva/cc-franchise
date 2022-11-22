@@ -98,6 +98,8 @@ public class Franchisee {
             inverseJoinColumns = @JoinColumn(name = "ssc_code"))
     private Set<Suburb> dutyAreas = new HashSet<>();
 
+
+
     public void addDutyAreas(List<Suburb> suburbs) {
         this.dutyAreas.addAll(suburbs);
     }

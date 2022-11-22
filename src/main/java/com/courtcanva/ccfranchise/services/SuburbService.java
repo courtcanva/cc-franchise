@@ -19,13 +19,12 @@ public class SuburbService {
 
     private final SuburbMapper suburbMapper;
 
-    public SuburbListGetDto findAllSuburbs(){
+    public SuburbListGetDto findAllSuburbs() {
 
         List<Suburb> allSuburbs = suburbRepository.findAll();
 
         return SuburbListGetDto.builder().suburbs(allSuburbs.stream().map(suburbMapper::suburbToGetDto).collect(Collectors.toList())).build();
     }
-
 
     public List<Suburb> findSuburbBySscCodes(List<Long> sscCodes) {
 
