@@ -1,7 +1,7 @@
 package com.courtcanva.ccfranchise.mappers;
 
 import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderPendingPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderOpenPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
 import com.courtcanva.ccfranchise.models.DesignInformation;
 import com.courtcanva.ccfranchise.models.Order;
@@ -24,7 +24,7 @@ public interface OrderMapper {
     OrderGetDto orderToGetDto(Order order);
 
     @Mapping(source = "designInformation", target = "designInformation", qualifiedByName = "mapDesignInformation")
-    OrderPendingPostDto orderPendingPostDto(Order order);
+    OrderOpenPostDto orderOpenPostDto(Order order);
 
     @Named("mapDesignInformation")
     static DesignInformation mapDesignInformation(String designInformation) {
