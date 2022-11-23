@@ -55,7 +55,7 @@ class OrderServiceTest {
     }
 
     @Test
-    public void shouldReturnAcceptedOrder() {
+    void shouldReturnAcceptedOrder() {
         when(franchiseeRepository.findFranchiseeById(1234L)).
                 thenReturn(Optional.ofNullable(FranchiseeTestHelper.createFranchiseeWithId()));
         when(orderRepository.findOrdersByFranchiseeAndStatusInOrderByStatusAscCreatedTime(
