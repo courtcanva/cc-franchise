@@ -42,7 +42,7 @@ class OrderRepositoryTest {
     void findByIdIn() {
         orderRepository.save(OrderTestHelper.order1());
         orderRepository.save(OrderTestHelper.order2());
-        assertEquals(1L, orderRepository.findByIdIn(
+        assertEquals(2L, orderRepository.findByIdIn(
                         OrderTestHelper.createOrderListPostDto().getOrders()
                                 .stream()
                                 .map(OrderPostDto::getId)
@@ -71,11 +71,11 @@ class OrderRepositoryTest {
         Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
         Franchisee franchiseeFromDb = franchiseeRepository.save(franchisee);
         List<Order> orders = List.of(
-            OrderTestHelper.createOrder("101", "3000", 3000L, franchiseeFromDb),
-            OrderTestHelper.createOrder("102", "4000", 4000L, franchiseeFromDb));
+                OrderTestHelper.createOrder("101", "3000", 3000L, franchiseeFromDb),
+                OrderTestHelper.createOrder("102", "4000", 4000L, franchiseeFromDb));
         orderRepository.saveAll(orders);
         List<Order> ordersFromDb =
-            orderRepository.findFirst10ByFranchiseeIdAndStatus(franchiseeFromDb.getId(), OrderStatus.ASSIGNED_PENDING);
+                orderRepository.findFirst10ByFranchiseeIdAndStatus(franchiseeFromDb.getId(), OrderStatus.ASSIGNED_PENDING);
         List<Long> ids = orders.stream().map(Order::getId).toList();
         ordersFromDb.forEach(order -> assertTrue(ids.contains(order.getId())));
     }
@@ -85,17 +85,17 @@ class OrderRepositoryTest {
         Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
         Franchisee franchiseeFromDb = franchiseeRepository.save(franchisee);
         List<Order> ordersFromDb =
-            orderRepository.findFirst10ByFranchiseeIdAndStatus(franchiseeFromDb.getId(), OrderStatus.ASSIGNED_PENDING);
+                orderRepository.findFirst10ByFranchiseeIdAndStatus(franchiseeFromDb.getId(), OrderStatus.ASSIGNED_PENDING);
         assertEquals(0, ordersFromDb.size());
     }
 
     @Test
-    void givenOrderStatus_whenUnassignedOrderIsAvailable_shouldReturnOrderList(){
+    void givenOrderStatus_whenUnassignedOrderIsAvailable_shouldReturnOrderList() {
 
         orderRepository.save(OrderTestHelper.order1());
 
         List<Order> orderList = orderRepository.findAllByStatusIs(OrderStatus.UNASSIGNED);
-        assertEquals(OrderStatus.UNASSIGNED,orderList.get(0).getStatus());
+        assertEquals(OrderStatus.UNASSIGNED, orderList.get(0).getStatus());
 
     }
 

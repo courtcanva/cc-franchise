@@ -43,7 +43,6 @@ public class OrderAssignmentService {
         }
 
         OrderAssignmentId orderAssignmentId = buildOrderAssignmentId(franchiseeList.get(0).getId(), order.getId());
-
         OrderAssignment orderAssignment = buildOrderAssignment(orderAssignmentId, currentTime, updateTime, order, franchiseeList.get(0));
 
         order.setFranchisee(franchiseeList.get(0));

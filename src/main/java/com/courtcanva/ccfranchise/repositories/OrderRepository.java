@@ -5,8 +5,6 @@ import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.courtcanva.ccfranchise.constants.OrderStatus;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 

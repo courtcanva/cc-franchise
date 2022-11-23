@@ -7,7 +7,6 @@ import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedAndCompletedPaginationGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
@@ -15,7 +14,6 @@ import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
 import com.courtcanva.ccfranchise.exceptions.MailingClientException;
-import com.courtcanva.ccfranchise.exceptions.PageNumberNotValidException;
 import com.courtcanva.ccfranchise.exceptions.ResourceAlreadyExistException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
@@ -64,7 +62,6 @@ public class FranchiseeService {
 
     private final OrderRepository orderRepository;
 
-    private final OrderService orderService;
 
     @Transactional(noRollbackFor = MailingClientException.class)
     public FranchiseeAndStaffDto createFranchiseeAndStaff(FranchiseePostDto franchiseePostDto, StaffPostDto staffPostDto) {
@@ -140,25 +137,6 @@ public class FranchiseeService {
 
     public Optional<Franchisee> findFranchiseeById(Long franchiseeId) {
         return franchiseeRepository.findFranchiseeById(franchiseeId);
-    }
-
-
-    public OrderAcceptedAndCompletedPaginationGetDto findFranchiseeAcceptedOrders(Long franchiseeId, int pageNumber) {
-        Franchisee franchisee = franchiseeRepository.findFranchiseeById(franchiseeId).orElseThrow(() -> {
-
-            log.debug("franchisee with id: {} is not exist", franchiseeId);
-
-            return new ResourceNotFoundException("franchisee id:" + franchiseeId.toString() + " is not exist");
-
-        });
-
-        if (pageNumber <= 0) {
-
-            log.debug("pageNumber: {} is not valid ", pageNumber);
-            throw new PageNumberNotValidException("PageNumber is not valid");
-        }
-
-        return orderService.findAcceptedOrdersByFranchisee(franchisee, pageNumber);
     }
 
 

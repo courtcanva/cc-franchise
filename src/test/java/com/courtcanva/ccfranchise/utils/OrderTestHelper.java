@@ -137,11 +137,29 @@ public class OrderTestHelper {
                 .customerId("102")
                 .unpaidAmount(BigDecimal.valueOf(998.00))
                 .postcode("3003")
+                .sscCode("11344")
                 .totalAmount(BigDecimal.valueOf(999.00))
                 .designInformation("{\"name\": \"draft 1\"}")
                 .paidAmount(BigDecimal.valueOf(1.00))
                 .contactInformation("{\"name\": \"Alex\", \"phone\": \"0404123457\"}")
                 .status(OrderStatus.ACCEPTED)
+                .build();
+    }
+
+    public static Order mockAcceptedOrderWithFranchisee(){
+        return Order.builder()
+                .id(3L)
+                .orderId("111")
+                .customerId("102")
+                .unpaidAmount(BigDecimal.valueOf(998.00))
+                .postcode("3003")
+                .sscCode("11344")
+                .totalAmount(BigDecimal.valueOf(999.00))
+                .designInformation("{\"name\": \"draft 1\"}")
+                .paidAmount(BigDecimal.valueOf(1.00))
+                .contactInformation("{\"name\": \"Alex\", \"phone\": \"0404123457\"}")
+                .status(OrderStatus.ACCEPTED)
+                .franchisee(FranchiseeTestHelper.createFranchisee())
                 .build();
     }
 

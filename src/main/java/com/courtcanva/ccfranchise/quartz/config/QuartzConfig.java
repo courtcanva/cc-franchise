@@ -26,7 +26,7 @@ public class QuartzConfig {
     public CronTriggerFactoryBean triggerAssignOrder(JobDetail assignOrder) {
         CronTriggerFactoryBean factory = new CronTriggerFactoryBean();
         factory.setJobDetail(assignOrder);
-        factory.setCronExpression("0 0/5 * ? * MON-FRI");
+        factory.setCronExpression("0/5 * * ? * MON-FRI");
         return factory;
     }
 

@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -97,8 +96,6 @@ public class Franchisee {
             joinColumns = @JoinColumn(name = "franchisee_id"),
             inverseJoinColumns = @JoinColumn(name = "ssc_code"))
     private Set<Suburb> dutyAreas = new HashSet<>();
-
-
 
     public void addDutyAreas(List<Suburb> suburbs) {
         this.dutyAreas.addAll(suburbs);

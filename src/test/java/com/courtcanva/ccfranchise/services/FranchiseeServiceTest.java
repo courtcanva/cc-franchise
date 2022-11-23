@@ -72,8 +72,6 @@ class FranchiseeServiceTest {
     private PasswordEncoder passwordEncoder;
     @Mock
     private OrderRepository orderRepository;
-    @Mock
-    private OrderService orderService;
 
     @BeforeEach
     void setUp() {
@@ -104,8 +102,7 @@ class FranchiseeServiceTest {
                 suburbService,
                 suburbMapper,
                 orderMapper,
-                orderRepository,
-                orderService
+                orderRepository
         );
     }
 
@@ -231,15 +228,6 @@ class FranchiseeServiceTest {
                 () -> franchiseeService.acceptOrders(orderListPostDto));
     }
 
-    @Test
-    void shouldReturnAcceptedOrdersSuccessfully() {
-        when(orderService.findAcceptedOrdersByFranchisee(any(),
-                anyInt())).thenReturn(OrderTestHelper.mockAcceptedListDto());
-        when(franchiseeRepository.findFranchiseeById(1L)).
-                thenReturn(Optional.ofNullable(FranchiseeTestHelper.createFranchiseeWithId()));
-        assertEquals("802", franchiseeService.findFranchiseeAcceptedOrders(1L, 1).getAcceptedOrders().get(0).getOrderId());
-
-    }
 
 
 }
