@@ -130,7 +130,7 @@ class FranchiseeControllerTest {
                                 new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "0434666666", "abc st", 3000, AUState.VIC, "A123123123")))
                 .getFranchiseeGetDto().getFranchiseeId();
 
-        orderRepository.save(OrderTestHelper.Order1());
+        orderRepository.save(OrderTestHelper.order1());
         OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/" + mockFranchiseeId.toString() + "/accept_orders")
@@ -146,16 +146,17 @@ class FranchiseeControllerTest {
     @WithMockUser
     void shouldReturnAcceptedOrderWithPagination() throws Exception {
 
-        Order order = orderRepository.save(OrderTestHelper.mockAcceptedOrder1());
-        Franchisee franchisee = franchiseeRepository.save(FranchiseeTestHelper.createFranchisee());
+        Order order =orderRepository.save(OrderTestHelper.mockAcceptedOrder1());
+        Franchisee franchisee = franchiseeRepository.save(FranchiseeTestHelper.createFranchiseeWithId());
         order.setFranchisee(franchisee);
         orderRepository.save(order);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/franchisee/" + franchisee.getId() + "/orders/accepted?page=1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/franchisee/" + franchisee.getId().toString() + "/accepted_orders?page=1"))
                 .andExpect(jsonPath("$.acceptedOrders[0].orderId").value("111"));
 
     }
 
+    @Test
     void givenFranchiseeId_whenQueryOpenOrders_shouldReturnFirstTenOpenOrders() throws Exception {
         Long mockFranchiseeId = franchiseeController.signUpFranchiseeAndStaff(new FranchiseeAndStaffPostDto(
                         new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "0434666666", "12345678900", "Melbourne", AUState.VIC, 3000),

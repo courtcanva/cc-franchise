@@ -89,4 +89,11 @@ public class SuburbTestHelper {
 
         return suburbs;
     }
+
+    public static Set<Suburb> createOneSuburbSet() {
+        Set<Suburb> suburbs = new HashSet<>();
+        suburbs.add(suburbWithFranchisee1());
+
+        return suburbs;
+    }
 }

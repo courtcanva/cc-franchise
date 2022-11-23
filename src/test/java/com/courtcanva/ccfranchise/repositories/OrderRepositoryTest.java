@@ -31,22 +31,18 @@ class OrderRepositoryTest {
     @Autowired
     private OrderRepository orderRepository;
 
-
     @BeforeEach
     void setOrderRepositoryUp() {
         orderRepository.deleteAll();
         staffRepository.deleteAll();
         franchiseeRepository.deleteAll();
-        orderRepository.save(OrderTestHelper.Order1());
-        orderRepository.save(OrderTestHelper.Order2());
-
     }
 
     @Test
     void findByIdIn() {
-        orderRepository.save(OrderTestHelper.Order1());
-        orderRepository.save(OrderTestHelper.Order2());
-        assertEquals(1L, orderRepository.findByIdIn(
+        orderRepository.save(OrderTestHelper.order1());
+        orderRepository.save(OrderTestHelper.order2());
+        assertEquals(2L, orderRepository.findByIdIn(
                         OrderTestHelper.createOrderListPostDto().getOrders()
                                 .stream()
                                 .map(OrderPostDto::getId)
@@ -69,7 +65,9 @@ class OrderRepositoryTest {
                                 pageRequest).get(0).getOrderId());
     }
 
-    void givenFranchieeId_whenOpenOrdersAvailable_shouldReturnFirst10ListOfOrders() {
+
+    @Test
+    void givenFranchiseeId_whenOpenOrdersAvailable_shouldReturnFirst10ListOfOrders() {
         Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
         Franchisee franchiseeFromDb = franchiseeRepository.save(franchisee);
         List<Order> orders = List.of(
@@ -83,11 +81,22 @@ class OrderRepositoryTest {
     }
 
     @Test
-    void givenFranchieeId_whenOpenOrdersUnavailable_shouldReturnEmptyList() {
+    void givenFranchiseeId_whenOpenOrdersUnavailable_shouldReturnEmptyList() {
         Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
         Franchisee franchiseeFromDb = franchiseeRepository.save(franchisee);
         List<Order> ordersFromDb =
                 orderRepository.findFirst10ByFranchiseeIdAndStatus(franchiseeFromDb.getId(), OrderStatus.ASSIGNED_PENDING);
         assertEquals(0, ordersFromDb.size());
     }
+
+    @Test
+    void givenOrderStatus_whenUnassignedOrderIsAvailable_shouldReturnOrderList() {
+
+        orderRepository.save(OrderTestHelper.order1());
+
+        List<Order> orderList = orderRepository.findAllByStatusIs(OrderStatus.UNASSIGNED);
+        assertEquals(OrderStatus.UNASSIGNED, orderList.get(0).getStatus());
+
+    }
+
 }

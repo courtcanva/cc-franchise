@@ -31,6 +31,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-quartz'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.mapstruct:mapstruct:1.5.2.Final'
     implementation 'com.google.guava:guava:31.1-jre'
@@ -41,6 +42,7 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
     implementation 'com.amazonaws:aws-java-sdk-ses:1.12.315'
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.57'
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
 
     compileOnly 'org.projectlombok:lombok'
 
