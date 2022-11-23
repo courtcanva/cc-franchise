@@ -5,7 +5,7 @@ import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedAndCompletedPaginationGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderOpenPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderOpenGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
@@ -71,7 +71,7 @@ public class FranchiseeController {
 
     @GetMapping("/{franchiseeId}/pending_orders")
     @ResponseStatus(HttpStatus.OK)
-    public List<OrderOpenPostDto> getFirstTenOpenOrders(@PathVariable Long franchiseeId){
+    public List<OrderOpenGetDto> getFirstTenOpenOrders(@PathVariable Long franchiseeId){
         return orderService.getFirstTenOpenOrdersById(franchiseeId);
     }
 

@@ -12,7 +12,7 @@ import java.time.OffsetDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderOpenPostDto {
+public class OrderOpenGetDto {
 
     private String id;
 
