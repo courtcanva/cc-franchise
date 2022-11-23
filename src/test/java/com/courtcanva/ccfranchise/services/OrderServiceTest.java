@@ -1,7 +1,7 @@
 package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.constants.OrderStatus;
-import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderOpenGetDto;
 import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.mappers.OrderMapperImpl;
 import com.courtcanva.ccfranchise.models.Order;
@@ -70,11 +70,10 @@ class OrderServiceTest {
     @Test
     void givenFranchiseeId_whenOpenOrdersAvailable_shouldReturnListOfOrders() {
         when(orderRepository.findFirst10ByFranchiseeIdAndStatus(1L, OrderStatus.ASSIGNED_PENDING)).thenReturn(orders);
-        List<OrderGetDto> firstTenOpenOrdersGetDto = orderService.getFirstTenOpenOrdersById(1L);
-        assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderGetDto::getCustomerId).toList().containsAll(List.of("101", "102")));
-        assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderGetDto::getPostcode).toList().containsAll(List.of("3000", "4000")));
-        assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderGetDto::getTotalAmount).toList()
-                .containsAll(List.of(BigDecimal.valueOf(3000L), BigDecimal.valueOf(4000L))));
+        List<OrderOpenGetDto> firstTenOpenOrdersGetDto = orderService.getFirstTenOpenOrdersById(1L);
+        assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderOpenGetDto::getPostcode).toList().containsAll(List.of("3000", "4000")));
+        assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderOpenGetDto::getTotalAmount).toList()
+                       .containsAll(List.of(BigDecimal.valueOf(3000L), BigDecimal.valueOf(4000L))));
     }
 
     @Test

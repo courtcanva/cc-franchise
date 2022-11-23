@@ -2,9 +2,9 @@ package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedAndCompletedPaginationGetDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.exceptions.PageNumberNotValidException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
+import com.courtcanva.ccfranchise.dtos.orders.OrderOpenGetDto;
 import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
@@ -59,10 +59,9 @@ public class OrderService {
 
     }
 
-    public List<OrderGetDto> getFirstTenOpenOrdersById(Long franchiseeId) {
+    public List<OrderOpenGetDto> getFirstTenOpenOrdersById(Long franchiseeId) {
         List<Order> firstTenOpenOrders = orderRepository.findFirst10ByFranchiseeIdAndStatus(franchiseeId, OrderStatus.ASSIGNED_PENDING);
-        return firstTenOpenOrders.stream().map(orderMapper::orderToGetDto).toList();
-
+        return firstTenOpenOrders.stream().map(orderMapper::orderOpenGetDto).toList();
     }
 
 
@@ -79,6 +78,5 @@ public class OrderService {
         }
 
     }
-
 
 }

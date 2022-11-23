@@ -43,6 +43,7 @@ dependencies {
     implementation 'com.amazonaws:aws-java-sdk-ses:1.12.315'
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.57'
     implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
 
     compileOnly 'org.projectlombok:lombok'
 
