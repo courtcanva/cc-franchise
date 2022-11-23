@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.CascadeType;
@@ -95,10 +97,12 @@ public class Franchisee {
             inverseJoinColumns = @JoinColumn(name = "ssc_code"))
     private Set<Suburb> dutyAreas = new HashSet<>();
 
-
-
     public void addDutyAreas(List<Suburb> suburbs) {
         this.dutyAreas.addAll(suburbs);
     }
+
+    @OneToMany(mappedBy = "franchisee")
+    @Fetch(FetchMode.SUBSELECT)
+    private Set<OrderAssignment> orderAssignmentSet = new HashSet<>();
 
 }

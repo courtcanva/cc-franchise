@@ -1,17 +1,12 @@
 package com.courtcanva.ccfranchise.constants;
 
-public enum OrderStatus {
+public enum OrderAssignmentStatus {
 
-    UNASSIGNED,
-
-    ASSIGNED_PENDING,
+    ASSIGNED,
 
     ACCEPTED,
 
     COMPLETED,
 
-
-    CANCELED
-
+    REJECTED
 }
-

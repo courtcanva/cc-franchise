@@ -31,7 +31,6 @@ import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
 import com.courtcanva.ccfranchise.utils.OrderTestHelper;
 import com.courtcanva.ccfranchise.utils.StaffTestHelper;
 import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,9 +42,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -68,8 +72,6 @@ class FranchiseeServiceTest {
     private PasswordEncoder passwordEncoder;
     @Mock
     private OrderRepository orderRepository;
-    @Mock
-    private OrderService orderService;
 
     @BeforeEach
     void setUp() {
@@ -80,8 +82,8 @@ class FranchiseeServiceTest {
 
     @BeforeEach
     void setOrderRepositoryUp() {
-        orderRepository.save(OrderTestHelper.Order1());
-        orderRepository.save(OrderTestHelper.Order2());
+        orderRepository.save(OrderTestHelper.order1());
+        orderRepository.save(OrderTestHelper.order2());
     }
 
     @BeforeEach
@@ -100,8 +102,7 @@ class FranchiseeServiceTest {
                 suburbService,
                 suburbMapper,
                 orderMapper,
-                orderRepository,
-                orderService
+                orderRepository
         );
     }
 
@@ -142,6 +143,18 @@ class FranchiseeServiceTest {
     }
 
     @Test
+    void givenSscCodeAndOrderId_whenFindMatchedFranchisees_shouldReturnFranchiseeList() {
+
+        List<Franchisee> franchisees = FranchiseeTestHelper.createFranchiseeListWithOrderAssignment();
+
+        when(franchiseeRepository.findFranchiseesByDutyAreasIn(any())).thenReturn(franchisees);
+
+        List<Franchisee> franchiseeList = franchiseeService.findMatchedFranchisee(11344L, 1L);
+        assertEquals(1234L, franchiseeList.get(0).getId());
+
+    }
+
+    @Test
     void shouldReturnNullWhenFilterModeIsNotInclude() {
         Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
         SuburbListAndFilterModePostDto suburbListAndFilterModePostDto = SuburbTestHelper.createSuburbListPostDtoWithExcludeMode();
@@ -178,16 +191,9 @@ class FranchiseeServiceTest {
     }
 
     @Test
-    void givenValidAndExistedAbn_whenCheckIfAbnExists_shouldReturnThrowError() {
-        when(franchiseeRepository.existsFranchiseeByAbn(any())).thenReturn((true));
-        assertThrows(ResourceAlreadyExistException.class,
-                () -> franchiseeService.abnExists(any()));
-    }
-
-    @Test
     void givenValidAndExistedAbn_whenCheckIfAbnExists_shouldReturnFalse() {
         when(franchiseeRepository.existsFranchiseeByAbn(any())).thenReturn(false);
-        Assertions.assertFalse(franchiseeService.abnExists(any()));
+        assertFalse(franchiseeService.abnExists(any()));
     }
 
     @Test
@@ -202,8 +208,8 @@ class FranchiseeServiceTest {
 
     @Test
     void shouldThrowOrderListGetDto() {
-        List<Order> orders = OrderTestHelper.OrderList();
-        List<Order> acceptedOrders = OrderTestHelper.AcceptedOrderList();
+        List<Order> orders = OrderTestHelper.orderList();
+        List<Order> acceptedOrders = OrderTestHelper.acceptedOrderList();
         OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
 
         when(orderRepository.findByIdIn(any())).thenReturn(orders);
@@ -222,14 +228,6 @@ class FranchiseeServiceTest {
                 () -> franchiseeService.acceptOrders(orderListPostDto));
     }
 
-    @Test
-    void shouldReturnAcceptedOrdersSuccessfully() {
-        when(orderService.findAcceptedOrdersByFranchisee(any(),
-                anyInt())).thenReturn(OrderTestHelper.mockAcceptedListDto());
-        when(franchiseeRepository.findFranchiseeById(1L)).
-                thenReturn(Optional.ofNullable(FranchiseeTestHelper.createFranchiseeWithId()));
-        assertEquals("802", franchiseeService.findFranchiseeAcceptedOrders(1L, 1).getAcceptedOrders().get(0).getOrderId());
 
-    }
 
 }
