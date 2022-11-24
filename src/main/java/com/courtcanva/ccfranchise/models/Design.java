@@ -11,18 +11,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DesignInformation {
+public class Design {
 
-    private String quotation;
+    private String designName;
 
-    private String constructionDraw;
+    private List<TileColor> tileColor;
 
-    private Boolean isNeedLevelGround;
-
-    private ConstructionAddress constructionAddress;
-
-    private Design design;
-
-    private List<QuotationDetails> quotationDetails;
+    private CourtSize courtSize;
 
 }
