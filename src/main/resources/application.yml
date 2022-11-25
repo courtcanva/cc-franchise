@@ -11,11 +11,11 @@ spring:
     password: admin
   flyway:
     enabled: true
-    schemas: franchise
+    schemas:
   jpa:
     properties:
       hibernate:
-        default_schema: franchise
+        default_schema:
         jdbc:
           time_zone: UTC
     show-sql: true

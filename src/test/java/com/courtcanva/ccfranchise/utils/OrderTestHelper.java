@@ -1,12 +1,12 @@
 package com.courtcanva.ccfranchise.utils;
 
 import com.courtcanva.ccfranchise.constants.OrderStatus;
+import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedAndCompletedPaginationGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
-import com.courtcanva.ccfranchise.models.Order;
-
 import com.courtcanva.ccfranchise.models.Franchisee;
+import com.courtcanva.ccfranchise.models.Order;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -27,13 +27,14 @@ public class OrderTestHelper {
         return OrderListPostDto.builder().orders(orders).build();
     }
 
-    public static Order Order1() {
+    public static Order order1() {
         return Order.builder()
                 .id(1L)
                 .orderId("102")
                 .customerId("102")
                 .designInformation("{\"name\": \"draft 1\"}")
                 .contactInformation("{\"name\": \"Alex\", \"phone\": \"0404123457\"}")
+                .sscCode("11344")
                 .postcode("3003")
                 .unpaidAmount(BigDecimal.valueOf(998.00))
                 .totalAmount(BigDecimal.valueOf(999.00))
@@ -42,13 +43,14 @@ public class OrderTestHelper {
                 .build();
     }
 
-    public static Order Order2() {
+    public static Order order2() {
         return Order.builder()
                 .id(2L)
                 .orderId("102")
                 .customerId("102")
                 .designInformation("{\"name\": \"draft 1\"}")
                 .contactInformation("{\"name\": \"Alex\", \"phone\": \"0404123457\"}")
+                .sscCode("11344")
                 .postcode("3003")
                 .unpaidAmount(BigDecimal.valueOf(998.00))
                 .totalAmount(BigDecimal.valueOf(999.00))
@@ -57,13 +59,15 @@ public class OrderTestHelper {
                 .build();
     }
 
-    public static List<Order> OrderList() {
+
+    public static List<Order> orderList() {
         List<Order> orders = new ArrayList<>();
         Order order1 = Order.builder()
                 .id(1L)
                 .orderId("102")
                 .customerId("102")
                 .designInformation("{\"name\": \"draft 1\"}")
+                .sscCode("11344")
                 .contactInformation("{\"name\": \"Alex\", \"phone\": \"0404123457\"}")
                 .postcode("3003")
                 .unpaidAmount(BigDecimal.valueOf(998.00))
@@ -78,6 +82,7 @@ public class OrderTestHelper {
                 .customerId("102")
                 .designInformation("{\"name\": \"draft 1\"}")
                 .contactInformation("{\"name\": \"Alex\", \"phone\": \"0404123457\"}")
+                .sscCode("11344")
                 .postcode("3003")
                 .unpaidAmount(BigDecimal.valueOf(998.00))
                 .totalAmount(BigDecimal.valueOf(999.00))
@@ -90,7 +95,7 @@ public class OrderTestHelper {
         return orders;
     }
 
-    public static List<Order> AcceptedOrderList() {
+    public static List<Order> acceptedOrderList() {
         List<Order> orders = new ArrayList<>();
         Order order1 = Order.builder()
                 .id(1L)
@@ -98,6 +103,7 @@ public class OrderTestHelper {
                 .customerId("102")
                 .designInformation("{\"name\": \"draft 1\"}")
                 .contactInformation("{\"name\": \"Alex\", \"phone\": \"0404123457\"}")
+                .sscCode("11344")
                 .postcode("3003")
                 .unpaidAmount(BigDecimal.valueOf(998.00))
                 .totalAmount(BigDecimal.valueOf(999.00))
@@ -111,6 +117,7 @@ public class OrderTestHelper {
                 .customerId("102")
                 .designInformation("{\"name\": \"draft 1\"}")
                 .contactInformation("{\"name\": \"Alex\", \"phone\": \"0404123457\"}")
+                .sscCode("11344")
                 .postcode("3003")
                 .unpaidAmount(BigDecimal.valueOf(998.00))
                 .totalAmount(BigDecimal.valueOf(999.00))
@@ -121,30 +128,98 @@ public class OrderTestHelper {
         orders.add(0, (order1));
         orders.add(1, (order2));
         return orders;
+    }
+
+    public static Order mockAcceptedOrder1() {
+        return Order.builder()
+                .id(3L)
+                .orderId("111")
+                .customerId("102")
+                .unpaidAmount(BigDecimal.valueOf(998.00))
+                .postcode("3003")
+                .sscCode("11344")
+                .totalAmount(BigDecimal.valueOf(999.00))
+                .designInformation("{\"name\": \"draft 1\"}")
+                .paidAmount(BigDecimal.valueOf(1.00))
+                .contactInformation("{\"name\": \"Alex\", \"phone\": \"0404123457\"}")
+                .status(OrderStatus.ACCEPTED)
+                .build();
+    }
+
+    public static Order mockAcceptedOrderWithFranchisee(){
+        return Order.builder()
+                .id(3L)
+                .orderId("111")
+                .customerId("102")
+                .unpaidAmount(BigDecimal.valueOf(998.00))
+                .postcode("3003")
+                .sscCode("11344")
+                .totalAmount(BigDecimal.valueOf(999.00))
+                .designInformation("{\"name\": \"draft 1\"}")
+                .paidAmount(BigDecimal.valueOf(1.00))
+                .contactInformation("{\"name\": \"Alex\", \"phone\": \"0404123457\"}")
+                .status(OrderStatus.ACCEPTED)
+                .franchisee(FranchiseeTestHelper.createFranchisee())
+                .build();
+    }
+
+    public static OrderAcceptedAndCompletedPaginationGetDto mockAcceptedListDto() {
+        return OrderAcceptedAndCompletedPaginationGetDto.builder()
+                .acceptedOrders(List.of(
+                        OrderGetDto.builder()
+                                .orderId("802")
+                                .build()
+                ))
+                .pageNumber(1)
+                .build();
     }
 
     public static Order createOrder(String customerId, String postcode, Long totalAmount, Franchisee franchisee) {
         return Order.builder()
-                   .orderId("101")
-                   .customerId(customerId)
-                   .contactInformation("""
-                       {"name": "Adam", "phone": "0404123456", "address": "Unit 1, 10 Queen Street, Richmond 3121"}""")
-                   .designInformation("""
-                       {"name": "draft version 1"}""")
-                   .postcode(postcode)
-                   .totalAmount(new BigDecimal(totalAmount))
-                   .paidAmount(new BigDecimal(1000L))
-                   .unpaidAmount(new BigDecimal(2000L))
-                   .status(OrderStatus.ASSIGNED_PENDING)
-                   .franchisee(franchisee)
-                   .invoiceLink("https://link.co")
-                   .createdTime(OffsetDateTime.parse("2021-12-03T10:15:30+11:00"))
-                   .updatedTime(OffsetDateTime.parse("2021-12-03T10:15:30+11:00"))
-                   .build();
+                .orderId("101")
+                .customerId(customerId)
+                .contactInformation("""
+                        {"name": "Adam", "phone": "0404123456", "address": "Unit 1, 10 Queen Street, Richmond 3121"}""")
+                .designInformation("""
+                        {"name": "draft version 1"}""")
+                .postcode(postcode)
+                .sscCode("11344")
+                .totalAmount(new BigDecimal(totalAmount))
+                .paidAmount(new BigDecimal(1000L))
+                .unpaidAmount(new BigDecimal(2000L))
+                .status(OrderStatus.ASSIGNED_PENDING)
+                .franchisee(franchisee)
+                .invoiceLink("https://link.co")
+                .createdTime(OffsetDateTime.parse("2021-12-03T10:15:30+11:00"))
+                .updatedTime(OffsetDateTime.parse("2021-12-03T10:15:30+11:00"))
+                .build();
     }
 
     public static List<Order> orders = List.of(
-        OrderTestHelper.createOrder("101", "3000", 3000L, FranchiseeTestHelper.createFranchiseeWithId()),
-        OrderTestHelper.createOrder("102", "4000", 4000L, FranchiseeTestHelper.createFranchiseeWithId()));
+            OrderTestHelper.createOrder("101", "3000", 3000L, FranchiseeTestHelper.createFranchiseeWithId()),
+            OrderTestHelper.createOrder("102", "4000", 4000L, FranchiseeTestHelper.createFranchiseeWithId()));
+
+
+
+    public static List<Order> createUnassignedOrderList(){
+        return List.of(order1());
+    }
+
+    public static Order createAssignedOrder(){
+        return Order.builder()
+                .id(1L)
+                .orderId("102")
+                .customerId("102")
+                .designInformation("{\"name\": \"draft 1\"}")
+                .contactInformation("{\"name\": \"Alex\", \"phone\": \"0404123457\"}")
+                .sscCode("11344")
+                .postcode("3003")
+                .unpaidAmount(BigDecimal.valueOf(998.00))
+                .totalAmount(BigDecimal.valueOf(999.00))
+                .paidAmount(BigDecimal.valueOf(1.00))
+                .status(OrderStatus.ASSIGNED_PENDING)
+                .franchisee(FranchiseeTestHelper.createFranchiseeWithDutyAreas())
+                .build();
+    }
 }
 

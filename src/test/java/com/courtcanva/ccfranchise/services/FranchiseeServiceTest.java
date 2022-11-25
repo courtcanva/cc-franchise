@@ -16,11 +16,11 @@ import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import com.courtcanva.ccfranchise.mappers.FranchiseeMapperImpl;
 import com.courtcanva.ccfranchise.mappers.OrderMapper;
-import com.courtcanva.ccfranchise.mappers.StaffMapper;
-import com.courtcanva.ccfranchise.mappers.SuburbMapper;
-import com.courtcanva.ccfranchise.mappers.StaffMapperImpl;
-import com.courtcanva.ccfranchise.mappers.SuburbMapperImpl;
 import com.courtcanva.ccfranchise.mappers.OrderMapperImpl;
+import com.courtcanva.ccfranchise.mappers.StaffMapper;
+import com.courtcanva.ccfranchise.mappers.StaffMapperImpl;
+import com.courtcanva.ccfranchise.mappers.SuburbMapper;
+import com.courtcanva.ccfranchise.mappers.SuburbMapperImpl;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.models.Suburb;
@@ -31,7 +31,6 @@ import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
 import com.courtcanva.ccfranchise.utils.OrderTestHelper;
 import com.courtcanva.ccfranchise.utils.StaffTestHelper;
 import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,6 +43,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -82,8 +82,8 @@ class FranchiseeServiceTest {
 
     @BeforeEach
     void setOrderRepositoryUp() {
-        orderRepository.save(OrderTestHelper.Order1());
-        orderRepository.save(OrderTestHelper.Order2());
+        orderRepository.save(OrderTestHelper.order1());
+        orderRepository.save(OrderTestHelper.order2());
     }
 
     @BeforeEach
@@ -143,6 +143,18 @@ class FranchiseeServiceTest {
     }
 
     @Test
+    void givenSscCodeAndOrderId_whenFindMatchedFranchisees_shouldReturnFranchiseeList() {
+
+        List<Franchisee> franchisees = FranchiseeTestHelper.createFranchiseeListWithOrderAssignment();
+
+        when(franchiseeRepository.findFranchiseesByDutyAreasIn(any())).thenReturn(franchisees);
+
+        List<Franchisee> franchiseeList = franchiseeService.findMatchedFranchisee(11344L, 1L);
+        assertEquals(1234L, franchiseeList.get(0).getId());
+
+    }
+
+    @Test
     void shouldReturnNullWhenFilterModeIsNotInclude() {
         Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
         SuburbListAndFilterModePostDto suburbListAndFilterModePostDto = SuburbTestHelper.createSuburbListPostDtoWithExcludeMode();
@@ -179,16 +191,9 @@ class FranchiseeServiceTest {
     }
 
     @Test
-    void givenValidAndExistedAbn_whenCheckIfAbnExists_shouldReturnThrowError() {
-        when(franchiseeRepository.existsFranchiseeByAbn(any())).thenReturn((true));
-        assertThrows(ResourceAlreadyExistException.class,
-                () -> franchiseeService.abnExists(any()));
-    }
-
-    @Test
     void givenValidAndExistedAbn_whenCheckIfAbnExists_shouldReturnFalse() {
         when(franchiseeRepository.existsFranchiseeByAbn(any())).thenReturn(false);
-        Assertions.assertFalse(franchiseeService.abnExists(any()));
+        assertFalse(franchiseeService.abnExists(any()));
     }
 
     @Test
@@ -203,8 +208,8 @@ class FranchiseeServiceTest {
 
     @Test
     void shouldThrowOrderListGetDto() {
-        List<Order> orders = OrderTestHelper.OrderList();
-        List<Order> acceptedOrders = OrderTestHelper.AcceptedOrderList();
+        List<Order> orders = OrderTestHelper.orderList();
+        List<Order> acceptedOrders = OrderTestHelper.acceptedOrderList();
         OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
 
         when(orderRepository.findByIdIn(any())).thenReturn(orders);
@@ -222,5 +227,7 @@ class FranchiseeServiceTest {
         assertThrows(ResourceNotFoundException.class,
                 () -> franchiseeService.acceptOrders(orderListPostDto));
     }
+
+
 
 }

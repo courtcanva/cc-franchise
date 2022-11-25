@@ -1,6 +1,7 @@
 package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.constants.DutyAreaFilterMode;
+import com.courtcanva.ccfranchise.constants.OrderAssignmentStatus;
 import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
@@ -31,8 +32,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -72,7 +77,6 @@ public class FranchiseeService {
         Franchisee franchisee = franchiseeRepository
                 .save(franchiseeMapper.postDtoToFranchisee(franchiseePostDto));
 
-
         Staff staff = staffMapper.postDtoToStaff(staffPostDto);
         staff.setPassword(passwordEncoder.encode(staffPostDto.getPassword()));
         staff.setFranchisee(franchisee);
@@ -94,13 +98,8 @@ public class FranchiseeService {
     @Transactional
     public SuburbListAndFilterModeGetDto addDutyAreas(SuburbListAndFilterModePostDto suburbListAndFilterModePostDto, Long franchiseeId) {
 
-
-        Optional<Franchisee> optionalFranchisee = findFranchiseeById(franchiseeId);
-
-        Franchisee franchisee = optionalFranchisee.orElseThrow(() -> {
-
+        Franchisee franchisee = findFranchiseeById(franchiseeId).orElseThrow(() -> {
             log.debug("franchisee with id: {} is not exist", franchiseeId);
-
             return new ResourceNotFoundException("franchisee id is not exist");
 
         });
@@ -120,10 +119,7 @@ public class FranchiseeService {
                         .map(suburbMapper::suburbToGetDto)
                         .collect(Collectors.toList()))
                 .build();
-
-
     }
-
 
     public boolean franchiseeExists(String abn) {
 
@@ -131,22 +127,22 @@ public class FranchiseeService {
 
     }
 
-    public Boolean abnExists(String abn) {
-        Boolean isExisted = franchiseeRepository.existsFranchiseeByAbn(abn);
-        if (Boolean.TRUE.equals(isExisted)) {
+    public boolean abnExists(String abn) {
+        boolean isExisted = franchiseeRepository.existsFranchiseeByAbn(abn);
+        if (isExisted) {
             throw new ResourceAlreadyExistException("ABN already existed");
         }
-        return isExisted;
+        return false;
     }
 
     public Optional<Franchisee> findFranchiseeById(Long franchiseeId) {
-
         return franchiseeRepository.findFranchiseeById(franchiseeId);
-
     }
+
 
     @Transactional
     public OrderListGetDto acceptOrders(OrderListPostDto orderListPostDto) {
+
 
         List<Order> selectedOrders = orderRepository.findByIdIn(
                 orderListPostDto.getOrders()
@@ -169,4 +165,23 @@ public class FranchiseeService {
                         .map(orderMapper::orderToGetDto)
                         .collect(Collectors.toList())).build();
     }
+
+
+    public List<Franchisee> findMatchedFranchisee(long sscCode, long orderId) {
+
+        Set<Suburb> dutyAreas = new HashSet<>(suburbService.findSuburbBySscCodes(List.of(sscCode)));
+
+        return franchiseeRepository.findFranchiseesByDutyAreasIn(dutyAreas).stream()
+                .filter(franchisee -> franchisee.getOrderAssignmentSet().stream().noneMatch(orderAssignment ->
+                        Objects.equals(orderAssignment.getOrder().getId(), orderId)
+                                && orderAssignment.getStatus().equals(OrderAssignmentStatus.REJECTED)))
+                .filter(franchisee -> franchisee.getOrderAssignmentSet().stream()
+                        .filter(orderAssignment -> !orderAssignment.getStatus().equals(OrderAssignmentStatus.REJECTED)
+                                && !orderAssignment.getStatus().equals(OrderAssignmentStatus.COMPLETED)).toList().size() < 10)
+                .sorted(Comparator.comparing(Franchisee::getBusinessName))
+                .toList();
+
+    }
+
+
 }

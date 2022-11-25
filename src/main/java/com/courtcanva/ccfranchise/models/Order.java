@@ -12,16 +12,19 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.FetchType;
-import javax.persistence.EnumType;
 
 @Entity
 @Setter
@@ -52,6 +55,9 @@ public class Order {
     private String postcode;
 
     @Column(nullable = false)
+    private String sscCode;
+
+    @Column(nullable = false)
     private BigDecimal totalAmount;
 
     @Column(nullable = false)
@@ -79,4 +85,7 @@ public class Order {
 
     @Column
     private String invoiceLink;
+
+    @OneToMany(mappedBy = "order")
+    private Set<OrderAssignment> orderAssignmentSet = new HashSet<>();
 }

@@ -1,8 +1,5 @@
 package com.courtcanva.ccfranchise.controllers;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.courtcanva.ccfranchise.constants.AUState;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
@@ -15,8 +12,8 @@ import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
-import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
 import com.courtcanva.ccfranchise.utils.FranchiseeAndStaffTestHelper;
+import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
 import com.courtcanva.ccfranchise.utils.MailingClient;
 import com.courtcanva.ccfranchise.utils.OrderTestHelper;
 import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
@@ -37,6 +34,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -129,7 +130,7 @@ class FranchiseeControllerTest {
                                 new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "0434666666", "abc st", 3000, AUState.VIC, "A123123123")))
                 .getFranchiseeGetDto().getFranchiseeId();
 
-        orderRepository.save(OrderTestHelper.Order1());
+        orderRepository.save(OrderTestHelper.order1());
         OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/" + mockFranchiseeId.toString() + "/accept_orders")
@@ -138,6 +139,20 @@ class FranchiseeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.orders[0].status")
                         .value("ACCEPTED"));
+
+    }
+
+    @Test
+    @WithMockUser
+    void shouldReturnAcceptedOrderWithPagination() throws Exception {
+
+        Order order =orderRepository.save(OrderTestHelper.mockAcceptedOrder1());
+        Franchisee franchisee = franchiseeRepository.save(FranchiseeTestHelper.createFranchiseeWithId());
+        order.setFranchisee(franchisee);
+        orderRepository.save(order);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/franchisee/" + franchisee.getId().toString() + "/accepted_orders?page=1"))
+                .andExpect(jsonPath("$.acceptedOrders[0].orderId").value("111"));
 
     }
 
