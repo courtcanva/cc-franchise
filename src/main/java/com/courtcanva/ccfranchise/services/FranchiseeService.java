@@ -24,7 +24,9 @@ import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.models.Staff;
 import com.courtcanva.ccfranchise.models.Suburb;
+import com.courtcanva.ccfranchise.models.OrderAssignment;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.OrderAssignmentRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -61,6 +64,8 @@ public class FranchiseeService {
     private final OrderMapper orderMapper;
 
     private final OrderRepository orderRepository;
+
+    private final OrderAssignmentRepository orderAssignmentRepository;
 
 
     @Transactional(noRollbackFor = MailingClientException.class)
@@ -156,7 +161,21 @@ public class FranchiseeService {
             throw new ResourceNotFoundException("You have not selected any order.");
         }
 
-        selectedOrders.forEach(order -> order.setStatus(OrderStatus.ACCEPTED));
+        OffsetDateTime currentTime = OffsetDateTime.now();
+        selectedOrders.forEach(order -> {
+            order.setStatus(OrderStatus.ACCEPTED);
+            order.setUpdatedTime(currentTime);
+        });
+
+        List<OrderAssignment> assignedOrders = orderAssignmentRepository.findByOrderIdIn(
+                orderListPostDto.getOrders()
+                        .stream()
+                        .map(OrderPostDto::getId)
+                        .collect(Collectors.toList()));
+        assignedOrders.forEach(order_assignment -> {
+            order_assignment.setStatus(OrderAssignmentStatus.ACCEPTED);
+            order_assignment.setUpdatedTime(currentTime);
+        });
 
         List<Order> acceptedOrderList = orderRepository.saveAll(selectedOrders);
         return OrderListGetDto.builder()
