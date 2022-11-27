@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.CascadeType;
@@ -51,7 +53,7 @@ public class Franchisee {
     @Builder.Default
     private Boolean isVerified = false;
 
-    @Column(nullable = false, name = "address")
+    @Column(name = "address")
     private String businessAddress;
 
     @Column(nullable = false)
@@ -59,7 +61,6 @@ public class Franchisee {
 
     @Column(nullable = false)
     private String contactNumber;
-
 
     @Column(nullable = false)
     private String legalEntityName;
@@ -99,5 +100,9 @@ public class Franchisee {
     public void addDutyAreas(List<Suburb> suburbs) {
         this.dutyAreas.addAll(suburbs);
     }
+
+    @OneToMany(mappedBy = "franchisee")
+    @Fetch(FetchMode.SUBSELECT)
+    private Set<OrderAssignment> orderAssignmentSet = new HashSet<>();
 
 }

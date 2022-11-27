@@ -5,13 +5,15 @@ import com.courtcanva.ccfranchise.controllers.FranchiseeController;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
-import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.repositories.StaffRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
 import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
 import com.courtcanva.ccfranchise.utils.MailingClient;
+import com.courtcanva.ccfranchise.utils.OrderTestHelper;
 import com.courtcanva.ccfranchise.utils.StaffTestHelper;
 import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,15 +59,15 @@ class JwtTest {
 
     private static final String BEARER = "Bearer ";
 
+    @Autowired
+    private OrderRepository orderRepository;
+
     @BeforeEach
     public void clear() {
-
+        orderRepository.deleteAll();
         staffRepository.deleteAll();
-
         franchiseeRepository.deleteAll();
-
         suburbRepository.deleteAll();
-
     }
 
 
@@ -90,15 +92,15 @@ class JwtTest {
 
     @Test
     void shouldReturnForbiddenWhenUnknownFranchiseeAct() throws Exception {
-        franchiseeController.signUpFranchiseeAndStaff(new FranchiseeAndStaffPostDto(new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "12312123111", "23468290381", "Melbourne", AUState.VIC, 3000), new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "123456789", "abc st", 3000, AUState.VIC, "sdjkhsd")));
+        franchiseeController.signUpFranchiseeAndStaff(new FranchiseeAndStaffPostDto(new FranchiseePostDto("CourtCanva", "CourtCanva LTD", "0434666666", "12345678900", "Melbourne", AUState.VIC, 3000), new StaffPostDto("Taylor", "Swift", "taylor.s@gmail.com", "0434666666", "abc st", 3000, AUState.VIC, "A123123123")));
         suburbRepository.save(SuburbTestHelper.suburb1());
         suburbRepository.save(SuburbTestHelper.suburb2());
 
-        SuburbListAndFilterModePostDto suburbListAndFilterModePostDto = SuburbTestHelper.createSuburbListPostDtoWithIncludeMode();
+        OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
 
         UsernameAndPasswordAuthenticationRequest user = new UsernameAndPasswordAuthenticationRequest();
         user.setUsername("taylor.s@gmail.com");
-        user.setPassword("sdjkhsd");
+        user.setPassword("A123123123");
 
         String body = objectMapper.writeValueAsString(user);
 
@@ -111,9 +113,9 @@ class JwtTest {
         assert response != null;
         String token = response.replace(BEARER, "");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/11/service_areas")
+        mockMvc.perform(MockMvcRequestBuilders.post("/franchisee/12/accept_orders")
                         .header("Authorization", "Bearer " + token)
-                        .content(objectMapper.writeValueAsString(suburbListAndFilterModePostDto))
+                        .content(objectMapper.writeValueAsString(orderListPostDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 

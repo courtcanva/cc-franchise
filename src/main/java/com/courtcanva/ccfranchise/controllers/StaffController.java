@@ -6,6 +6,9 @@ import com.courtcanva.ccfranchise.services.StaffService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,11 +17,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 
 @Slf4j
 @RestController
 @RequestMapping("/staff")
 @RequiredArgsConstructor
+@Validated
 public class StaffController {
 
     private final StaffService staffService;
@@ -33,5 +38,10 @@ public class StaffController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void verifyEmail(@RequestBody @Valid StaffVerifyEmailPostDto staffVerifyEmailPostDto) throws ExpiredVerificationTokenException {
         staffService.verifyEmail(staffVerifyEmailPostDto.getToken(), staffVerifyEmailPostDto.getEmail());
+    }
+
+    @GetMapping("/emails/{email}")
+    public Boolean emailExists(@PathVariable("email") @Email(message = "Your email format is invalid.") String email) {
+        return staffService.emailExists(email);
     }
 }

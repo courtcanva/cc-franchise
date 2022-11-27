@@ -1,11 +1,10 @@
 package com.courtcanva.ccfranchise.dtos.orders;
 
-import com.courtcanva.ccfranchise.constants.OrderStatus;
+import com.courtcanva.ccfranchise.models.DesignInformation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
@@ -13,17 +12,9 @@ import java.time.OffsetDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderGetDto {
+public class OrderOpenGetDto {
 
-    private Long id;
-
-    private String orderId;
-
-    private String customerId;
-
-    private OrderStatus status;
-
-    private String contactInformation;
+    private String id;
 
     private OffsetDateTime createdTime;
 
@@ -31,5 +22,6 @@ public class OrderGetDto {
 
     private BigDecimal totalAmount;
 
-    private String designInformation;
+    private DesignInformation designInformation;
+
 }
