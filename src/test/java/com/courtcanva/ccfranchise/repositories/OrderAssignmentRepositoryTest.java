@@ -30,7 +30,6 @@ class OrderAssignmentRepositoryTest {
 
     @BeforeEach
     void setOrderRepositoryUp() {
-        orderRepository.deleteAll();
         franchiseeRepository.deleteAll();
         orderAssignmentRepository.deleteAll();
     }
