@@ -8,6 +8,7 @@ import com.courtcanva.ccfranchise.models.OrderAssignmentId;
 import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
 import com.courtcanva.ccfranchise.utils.OrderAssignmentTestHelper;
 import com.courtcanva.ccfranchise.utils.OrderTestHelper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +27,13 @@ class OrderAssignmentRepositoryTest {
     private FranchiseeRepository franchiseeRepository;
     @Autowired
     private OrderRepository orderRepository;
+
+    @BeforeEach
+    void setOrderRepositoryUp() {
+        orderRepository.deleteAll();
+        franchiseeRepository.deleteAll();
+        orderAssignmentRepository.deleteAll();
+    }
 
     @Test
     void shouldReturnOrderAssignmentFindByOrderId() {
