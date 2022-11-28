@@ -30,12 +30,15 @@ class OrderRepositoryTest {
     private StaffRepository staffRepository;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private OrderAssignmentRepository orderAssignmentRepository;
 
     @BeforeEach
     void setOrderRepositoryUp() {
         orderRepository.deleteAll();
         staffRepository.deleteAll();
         franchiseeRepository.deleteAll();
+        orderAssignmentRepository.deleteAll();
     }
 
     @Test

@@ -30,15 +30,15 @@ class OrderAssignmentRepositoryTest {
 
     @BeforeEach
     void setOrderRepositoryUp() {
-        franchiseeRepository.deleteAll();
+//        franchiseeRepository.deleteAll();
         orderAssignmentRepository.deleteAll();
     }
 
     @Test
     void shouldReturnOrderAssignmentFindByOrderId() {
         Order order = orderRepository.save(OrderTestHelper.mockAcceptedOrder1());
-        Franchisee franchisee = franchiseeRepository.save(FranchiseeTestHelper.createFranchisee());
-        OrderAssignment orderAssignment = OrderAssignmentTestHelper.createOrderAssignment();
+        Franchisee franchisee = franchiseeRepository.save(FranchiseeTestHelper.createFranchisee1());
+        OrderAssignment orderAssignment = OrderAssignmentTestHelper.createOrderAssignment1();
         orderAssignment.setId(OrderAssignmentId.builder()
                 .orderId(order.getId())
                 .franchiseeId(franchisee.getId())

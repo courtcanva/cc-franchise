@@ -67,6 +67,18 @@ public class FranchiseeTestHelper {
                 .abn("12345678900")
                 .build();
     }
+    public static Franchisee createFranchisee1() {
+
+        return Franchisee.builder()
+                .contactNumber("0434666666")
+                .businessName("AAAAA")
+                .legalEntityName("COUNTCANVA")
+                .state(AUState.ACT)
+                .postcode(1234)
+                .businessAddress("zetland NSWssss")
+                .abn("12345678910")
+                .build();
+    }
 
     public static FranchiseePostDto createFranchiseePostDto() {
 

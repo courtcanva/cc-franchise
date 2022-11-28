@@ -22,6 +22,17 @@ public class OrderAssignmentTestHelper {
                 .build();
     }
 
+    public static OrderAssignment createOrderAssignment1() {
+
+        return OrderAssignment.builder()
+                .assignedTime(OffsetDateTime.parse("2021-12-03T10:15:30+11:00"))
+                .updatedTime(OffsetDateTime.parse("2021-12-03T10:15:30+11:00"))
+                .status(OrderAssignmentStatus.ASSIGNED)
+                .order(OrderTestHelper.mockAcceptedOrder1())
+                .franchisee(FranchiseeTestHelper.createFranchisee1())
+                .build();
+    }
+
     public static OrderAssignment createAcceptedOrderAssignment() {
 
         return OrderAssignment.builder()
