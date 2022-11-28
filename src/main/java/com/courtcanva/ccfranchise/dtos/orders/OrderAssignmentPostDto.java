@@ -1,5 +1,6 @@
 package com.courtcanva.ccfranchise.dtos.orders;
 
+import com.courtcanva.ccfranchise.models.OrderAssignmentId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderAssignmentPostDto {
-    private Long id;
+    private OrderAssignmentId id;
 }

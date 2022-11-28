@@ -73,13 +73,4 @@ public class OrderAssignmentService {
                 .franchisee(franchisee)
                 .build();
     }
-
-    @Transactional
-    public void rejectAllExpriedOrders() {
-        OffsetDateTime now = OffsetDateTime.now();
-        OffsetDateTime rejectTime = now.minusHours(48);
-        List<OrderAssignment> orderAssignments = orderAssignmentRepository.findOrderAssignmentByCreatedTimeBefore(rejectTime);
-        orderAssignments.forEach(orderAssignment -> orderAssignment.setStatus(OrderAssignmentStatus.REJECTED));
-        orderAssignmentRepository.saveAll(orderAssignments);
-    }
 }

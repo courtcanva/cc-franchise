@@ -28,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -170,15 +171,30 @@ public class FranchiseeService {
                 .stream()
                 .map(OrderAssignmentPostDto::getId).
                 toList());
+        if (orderAssignments.isEmpty()) {
+            return true;
+        }
         List<Order> orders = orderRepository.findByIdIn(orderAssignmentPostDtos
                 .stream()
-                .map(OrderAssignmentPostDto::getId).
-                toList());
-        orders.forEach(order -> order.setStatus(OrderStatus.UNASSIGNED));
-        orderAssignments.forEach(orderAssignment -> orderAssignment.setStatus(OrderAssignmentStatus.REJECTED));
+                .map(OrderAssignmentPostDto::getId)
+                .toList()
+                .stream().map(OrderAssignmentId::getOrderId).toList());
+        for (Order order : orders) {
+            order.setStatus(OrderStatus.UNASSIGNED);
+            order.setFranchisee(null);
+        }
+        updateStatusAndUpdateAt(orderAssignments);
         orderRepository.saveAll(orders);
         orderAssignmentRepository.saveAll(orderAssignments);
         return true;
+    }
+
+    private static void updateStatusAndUpdateAt(List<OrderAssignment> orderAssignments) {
+        OffsetDateTime now = OffsetDateTime.now();
+        for (OrderAssignment orderAssignment : orderAssignments) {
+            orderAssignment.setStatus(OrderAssignmentStatus.REJECTED);
+            orderAssignment.setUpdatedTime(now);
+        }
     }
 
     public List<Franchisee> findMatchedFranchisee(long sscCode, long orderId) {

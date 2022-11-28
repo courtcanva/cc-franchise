@@ -1,20 +1,27 @@
 package com.courtcanva.ccfranchise.services;
 
+import com.courtcanva.ccfranchise.constants.OrderAssignmentStatus;
 import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedAndCompletedPaginationGetDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderAssignmentListPostDto;
 import com.courtcanva.ccfranchise.exceptions.PageNumberNotValidException;
 import com.courtcanva.ccfranchise.exceptions.ResourceNotFoundException;
 import com.courtcanva.ccfranchise.dtos.orders.OrderOpenGetDto;
+import com.courtcanva.ccfranchise.mappers.OrderAssigmentMapper;
 import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
+import com.courtcanva.ccfranchise.models.OrderAssignment;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.OrderAssignmentRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +35,9 @@ public class OrderService {
     private final OrderMapper orderMapper;
     private final FranchiseeRepository franchiseeRepository;
     private final OrderAssignmentService orderAssignmentService;
+    private final OrderAssignmentRepository orderAssignmentRepository;
+    private final FranchiseeService franchiseeService;
+    private final OrderAssigmentMapper orderAssigmentMapper;
 
 
     public OrderAcceptedAndCompletedPaginationGetDto findAcceptedOrdersByFranchisee(Long franchiseeId, int pageNumber) {
@@ -77,6 +87,19 @@ public class OrderService {
             orderAssignmentService.createOrderAssignment(order);
         }
 
+    }
+
+    @Transactional
+    public void rejectAllExpriedOrders() {
+        OffsetDateTime now = OffsetDateTime.now();
+        OffsetDateTime rejectTime = now.minusHours(48);
+        List<OrderAssignment> orderAssignments = orderAssignmentRepository.findOrderAssignmentByAssignedTimeBefore(rejectTime);
+        OrderAssignmentListPostDto orderAssignmentListPostDto = new OrderAssignmentListPostDto(orderAssignments
+                .stream()
+                .filter(orderAssignment -> orderAssignment.getStatus() != OrderAssignmentStatus.REJECTED)
+                .map(orderAssigmentMapper::orderAssignmentToPostDto)
+                .toList());
+        franchiseeService.rejectOrders(orderAssignmentListPostDto);
     }
 
 }

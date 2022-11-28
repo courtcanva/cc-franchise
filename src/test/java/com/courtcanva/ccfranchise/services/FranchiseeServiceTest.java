@@ -2,11 +2,14 @@ package com.courtcanva.ccfranchise.services;
 
 
 import com.courtcanva.ccfranchise.constants.DutyAreaFilterMode;
+import com.courtcanva.ccfranchise.constants.OrderAssignmentStatus;
 import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderAssignmentListPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderAssignmentPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
@@ -29,10 +32,7 @@ import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import com.courtcanva.ccfranchise.repositories.OrderAssignmentRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
-import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
-import com.courtcanva.ccfranchise.utils.OrderTestHelper;
-import com.courtcanva.ccfranchise.utils.StaffTestHelper;
-import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
+import com.courtcanva.ccfranchise.utils.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -234,8 +234,19 @@ class FranchiseeServiceTest {
     }
 
     @Test
-    public void givenOrderIds_whenFranchiseeRejectOrders_thenUpdateOrdersStatusToRejected() {
-        OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
+    public void givenOrderIds_whenFranchiseeRejectOrders_thenUpdateOrders() {
+        orderRepository.save(OrderTestHelper.order1());
+        Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithDutyAreas();
+        franchiseeRepository.save(franchisee);
+        OrderAssignment orderAssignment = OrderAssignmentTestHelper.createOrderAssignment();
+        orderAssignmentRepository.save(orderAssignment);
+        List<OrderAssignmentPostDto> orderList = new ArrayList<>();
+        orderList.add(OrderAssignmentPostDto.builder().id(orderAssignment.getId()).build());
+        franchiseeService.rejectOrders(OrderAssignmentListPostDto.builder().orderAssignments(orderList).build());
+        Optional<Order> rejectOrder = orderRepository.findById(orderAssignment.getOrder().getId());
+        Optional<OrderAssignment> rejectOrderAssignment = orderAssignmentRepository.findById(orderAssignment.getId());
+        assertEquals(rejectOrder.get().getStatus(), OrderStatus.UNASSIGNED);
+        assertEquals(rejectOrderAssignment.get().getStatus(), OrderAssignmentStatus.REJECTED);
     }
 
 
