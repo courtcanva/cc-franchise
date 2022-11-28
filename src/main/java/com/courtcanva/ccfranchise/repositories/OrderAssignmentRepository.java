@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface OrderAssignmentRepository extends JpaRepository<OrderAssignment, OrderAssignmentId> {
 
-    List<OrderAssignment> findByOrderIdIn(List<Long> order_id);
+    List<OrderAssignment> findByOrderIdIn(List<Long> orderId);
 }

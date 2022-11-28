@@ -172,9 +172,9 @@ public class FranchiseeService {
                         .stream()
                         .map(OrderPostDto::getId)
                         .collect(Collectors.toList()));
-        assignedOrders.forEach(order_assignment -> {
-            order_assignment.setStatus(OrderAssignmentStatus.ACCEPTED);
-            order_assignment.setUpdatedTime(currentTime);
+        assignedOrders.forEach(orderAssignment -> {
+            orderAssignment.setStatus(OrderAssignmentStatus.ACCEPTED);
+            orderAssignment.setUpdatedTime(currentTime);
         });
 
         List<Order> acceptedOrderList = orderRepository.saveAll(selectedOrders);
