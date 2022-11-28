@@ -27,6 +27,15 @@ class OrderAssignmentRepositoryTest {
     private FranchiseeRepository franchiseeRepository;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private StaffRepository staffRepository;
+
+    @BeforeEach
+    void setOrderRepositoryUp() {
+        orderRepository.deleteAll();
+        staffRepository.deleteAll();
+        franchiseeRepository.deleteAll();
+    }
 
     @BeforeEach
     void setOrderAssignmentRepository() {
