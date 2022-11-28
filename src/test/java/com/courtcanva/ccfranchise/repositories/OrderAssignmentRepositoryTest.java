@@ -8,7 +8,6 @@ import com.courtcanva.ccfranchise.models.OrderAssignmentId;
 import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
 import com.courtcanva.ccfranchise.utils.OrderAssignmentTestHelper;
 import com.courtcanva.ccfranchise.utils.OrderTestHelper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,14 +27,8 @@ class OrderAssignmentRepositoryTest {
     @Autowired
     private OrderRepository orderRepository;
 
-    @BeforeEach
-    void setOrderRepositoryUp() {
-        franchiseeRepository.deleteAll();
-        orderAssignmentRepository.deleteAll();
-    }
-
-    @BeforeEach
-    void setOrderAssignmentRepository() {
+    @Test
+    void shouldReturnOrderAssignmentFindByOrderId() {
         Order order = orderRepository.save(OrderTestHelper.mockAcceptedOrder1());
         Franchisee franchisee = franchiseeRepository.save(FranchiseeTestHelper.createFranchisee());
         OrderAssignment orderAssignment = OrderAssignmentTestHelper.createOrderAssignment();
@@ -46,10 +39,6 @@ class OrderAssignmentRepositoryTest {
         orderAssignment.setOrder(order);
         orderAssignment.setFranchisee(franchisee);
         orderAssignmentRepository.save(orderAssignment);
-    }
-
-    @Test
-    void shouldReturnOrderAssignmentFindByOrderId() {
         assertEquals(1L, orderAssignmentRepository.findByOrderIdIn(
                         OrderTestHelper.createOrderListPostDto().getOrders()
                                 .stream()
