@@ -1,10 +1,7 @@
 package com.courtcanva.ccfranchise.utils;
 
 import com.courtcanva.ccfranchise.constants.OrderAssignmentStatus;
-import com.courtcanva.ccfranchise.models.Franchisee;
-import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.models.OrderAssignment;
-import com.courtcanva.ccfranchise.models.OrderAssignmentId;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
