@@ -32,10 +32,10 @@ class OrderAssignmentRepositoryTest {
 
     @BeforeEach
     void setOrderRepositoryUp() {
-        franchiseeRepository.deleteAll();
         orderAssignmentRepository.deleteAll();
         orderRepository.deleteAll();
         staffRepository.deleteAll();
+        franchiseeRepository.deleteAll();
     }
 
     @Test
@@ -50,7 +50,6 @@ class OrderAssignmentRepositoryTest {
         orderAssignment.setOrder(order);
         orderAssignment.setFranchisee(franchisee);
         orderAssignmentRepository.save(orderAssignment);
-//        orderAssignmentRepository.save(OrderAssignmentTestHelper.createOrderAssignment());
         assertEquals(1L, orderAssignmentRepository.findByOrderIdIn(
                         OrderTestHelper.createOrderListPostDto().getOrders()
                                 .stream()

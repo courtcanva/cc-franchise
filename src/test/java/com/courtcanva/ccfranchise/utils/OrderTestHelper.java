@@ -1,8 +1,6 @@
 package com.courtcanva.ccfranchise.utils;
 
 import com.courtcanva.ccfranchise.constants.OrderStatus;
-import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedAndCompletedPaginationGetDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
 import com.courtcanva.ccfranchise.models.Franchisee;
@@ -143,34 +141,6 @@ public class OrderTestHelper {
                 .paidAmount(BigDecimal.valueOf(1.00))
                 .contactInformation("{\"name\": \"Alex\", \"phone\": \"0404123457\"}")
                 .status(OrderStatus.ACCEPTED)
-                .build();
-    }
-
-    public static Order mockAcceptedOrderWithFranchisee(){
-        return Order.builder()
-                .id(3L)
-                .orderId("111")
-                .customerId("102")
-                .unpaidAmount(BigDecimal.valueOf(998.00))
-                .postcode("3003")
-                .sscCode("11344")
-                .totalAmount(BigDecimal.valueOf(999.00))
-                .designInformation("{\"name\": \"draft 1\"}")
-                .paidAmount(BigDecimal.valueOf(1.00))
-                .contactInformation("{\"name\": \"Alex\", \"phone\": \"0404123457\"}")
-                .status(OrderStatus.ACCEPTED)
-                .franchisee(FranchiseeTestHelper.createFranchisee())
-                .build();
-    }
-
-    public static OrderAcceptedAndCompletedPaginationGetDto mockAcceptedListDto() {
-        return OrderAcceptedAndCompletedPaginationGetDto.builder()
-                .acceptedOrders(List.of(
-                        OrderGetDto.builder()
-                                .orderId("802")
-                                .build()
-                ))
-                .pageNumber(1)
                 .build();
     }
 

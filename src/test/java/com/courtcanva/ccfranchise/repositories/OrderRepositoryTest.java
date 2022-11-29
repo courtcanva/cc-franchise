@@ -2,7 +2,6 @@ package com.courtcanva.ccfranchise.repositories;
 
 
 import com.courtcanva.ccfranchise.constants.OrderStatus;
-import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
@@ -15,7 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -39,19 +37,19 @@ class OrderRepositoryTest {
         orderRepository.deleteAll();
         staffRepository.deleteAll();
         franchiseeRepository.deleteAll();
-//        orderAssignmentRepository.deleteAll();
     }
 
     @Test
     void findByIdIn() {
-        orderRepository.save(OrderTestHelper.order1());
-        orderRepository.save(OrderTestHelper.order2());
-        assertEquals(2L, orderRepository.findByIdIn(
-                        OrderTestHelper.createOrderListPostDto().getOrders()
-                                .stream()
-                                .map(OrderPostDto::getId)
-                                .collect(Collectors.toList()))
-                .get(0).getId());
+        Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithId();
+        Franchisee franchiseeFromDb = franchiseeRepository.save(franchisee);
+        List<Order> orderList = List.of(
+                OrderTestHelper.createOrder("101", "3000", 3000L, franchiseeFromDb),
+                OrderTestHelper.createOrder("102", "4000", 4000L, franchiseeFromDb));
+        List<Order> ordersSave = orderRepository.saveAll(orderList);
+        List<Long> orderIds = ordersSave.stream().map(Order::getId).toList();
+        List<Order> ordersGetFromDb = orderRepository.findByIdIn(orderIds);
+        ordersGetFromDb.forEach(order -> assertTrue(orderIds.contains(order.getId())));
     }
 
     @Test
