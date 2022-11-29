@@ -27,18 +27,22 @@ class OrderAssignmentRepositoryTest {
     private FranchiseeRepository franchiseeRepository;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private StaffRepository staffRepository;
 
     @BeforeEach
     void setOrderRepositoryUp() {
-//        franchiseeRepository.deleteAll();
+        franchiseeRepository.deleteAll();
         orderAssignmentRepository.deleteAll();
+        orderRepository.deleteAll();
+        staffRepository.deleteAll();
     }
 
     @Test
     void shouldReturnOrderAssignmentFindByOrderId() {
         Order order = orderRepository.save(OrderTestHelper.mockAcceptedOrder1());
-        Franchisee franchisee = franchiseeRepository.save(FranchiseeTestHelper.createFranchisee1());
-        OrderAssignment orderAssignment = OrderAssignmentTestHelper.createOrderAssignment1();
+        Franchisee franchisee = franchiseeRepository.save(FranchiseeTestHelper.createFranchisee());
+        OrderAssignment orderAssignment = OrderAssignmentTestHelper.createOrderAssignment();
         orderAssignment.setId(OrderAssignmentId.builder()
                 .orderId(order.getId())
                 .franchiseeId(franchisee.getId())
@@ -46,6 +50,7 @@ class OrderAssignmentRepositoryTest {
         orderAssignment.setOrder(order);
         orderAssignment.setFranchisee(franchisee);
         orderAssignmentRepository.save(orderAssignment);
+//        orderAssignmentRepository.save(OrderAssignmentTestHelper.createOrderAssignment());
         assertEquals(1L, orderAssignmentRepository.findByOrderIdIn(
                         OrderTestHelper.createOrderListPostDto().getOrders()
                                 .stream()

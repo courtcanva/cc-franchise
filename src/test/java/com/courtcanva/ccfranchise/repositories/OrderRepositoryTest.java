@@ -35,10 +35,11 @@ class OrderRepositoryTest {
 
     @BeforeEach
     void setOrderRepositoryUp() {
+        orderAssignmentRepository.deleteAll();
         orderRepository.deleteAll();
         staffRepository.deleteAll();
         franchiseeRepository.deleteAll();
-        orderAssignmentRepository.deleteAll();
+//        orderAssignmentRepository.deleteAll();
     }
 
     @Test
