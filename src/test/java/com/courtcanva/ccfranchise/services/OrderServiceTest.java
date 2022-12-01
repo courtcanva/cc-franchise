@@ -1,19 +1,13 @@
 package com.courtcanva.ccfranchise.services;
 
-import com.courtcanva.ccfranchise.constants.OrderAssignmentStatus;
 import com.courtcanva.ccfranchise.constants.OrderStatus;
-import com.courtcanva.ccfranchise.dtos.orders.OrderAssignmentListPostDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderAssignmentPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderOpenGetDto;
 import com.courtcanva.ccfranchise.mappers.*;
-import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
-import com.courtcanva.ccfranchise.models.OrderAssignment;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import com.courtcanva.ccfranchise.repositories.OrderAssignmentRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
-import com.courtcanva.ccfranchise.utils.OrderAssignmentTestHelper;
 import com.courtcanva.ccfranchise.utils.OrderTestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,7 +47,6 @@ class OrderServiceTest {
     @Mock
     private OrderAssignmentRepository orderAssignmentRepository;
 
-    @Autowired
     private FranchiseeService franchiseeService;
 
     @BeforeEach

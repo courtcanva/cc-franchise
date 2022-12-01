@@ -13,7 +13,7 @@ public class RejectOrderJob {
     @Autowired
     private OrderService orderService;
 
-    public void rejectAllExpriedOrders() throws InterruptedException {
+    public void rejectAllExpriedOrders() {
         orderService.rejectAllExpriedOrders();
     }
 }
