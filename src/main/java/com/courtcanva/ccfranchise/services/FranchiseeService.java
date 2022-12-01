@@ -19,6 +19,11 @@ import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.mappers.SuburbMapper;
 import com.courtcanva.ccfranchise.models.*;
+import com.courtcanva.ccfranchise.models.Franchisee;
+import com.courtcanva.ccfranchise.models.Order;
+import com.courtcanva.ccfranchise.models.Staff;
+import com.courtcanva.ccfranchise.models.Suburb;
+import com.courtcanva.ccfranchise.models.OrderAssignment;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import com.courtcanva.ccfranchise.repositories.OrderAssignmentRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
@@ -154,7 +159,21 @@ public class FranchiseeService {
             throw new ResourceNotFoundException("You have not selected any order.");
         }
 
-        selectedOrders.forEach(order -> order.setStatus(OrderStatus.ACCEPTED));
+        OffsetDateTime currentTime = OffsetDateTime.now();
+        selectedOrders.forEach(order -> {
+            order.setStatus(OrderStatus.ACCEPTED);
+            order.setUpdatedTime(currentTime);
+        });
+
+        List<OrderAssignment> assignedOrders = orderAssignmentRepository.findByOrderIdIn(
+                orderListPostDto.getOrders()
+                        .stream()
+                        .map(OrderPostDto::getId)
+                        .collect(Collectors.toList()));
+        assignedOrders.forEach(orderAssignment -> {
+            orderAssignment.setStatus(OrderAssignmentStatus.ACCEPTED);
+            orderAssignment.setUpdatedTime(currentTime);
+        });
 
         List<Order> acceptedOrderList = orderRepository.saveAll(selectedOrders);
         return OrderListGetDto.builder()

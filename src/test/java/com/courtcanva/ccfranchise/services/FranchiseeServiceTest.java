@@ -8,8 +8,6 @@ import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderAssignmentListPostDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderAssignmentPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
@@ -32,7 +30,11 @@ import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
 import com.courtcanva.ccfranchise.repositories.OrderAssignmentRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.repositories.SuburbRepository;
-import com.courtcanva.ccfranchise.utils.*;
+import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
+import com.courtcanva.ccfranchise.utils.OrderTestHelper;
+import com.courtcanva.ccfranchise.utils.StaffTestHelper;
+import com.courtcanva.ccfranchise.utils.SuburbTestHelper;
+import com.courtcanva.ccfranchise.utils.OrderAssignmentTestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -168,7 +170,6 @@ class FranchiseeServiceTest {
         assertNull(suburbListAndFilterModeGetDto);
     }
 
-
     @Test
     void shouldReturnTrueWhenResourceAlreadyExist() {
 
@@ -215,13 +216,18 @@ class FranchiseeServiceTest {
     void shouldThrowOrderListGetDto() {
         List<Order> orders = OrderTestHelper.orderList();
         List<Order> acceptedOrders = OrderTestHelper.acceptedOrderList();
+        List<OrderAssignment> orderAssignmentList = OrderAssignmentTestHelper.orderAssignmentList();
+        List<OrderAssignment> orderAcceptedAssignmentList = OrderAssignmentTestHelper.orderAcceptedAssignmentList();
+
         OrderListPostDto orderListPostDto = OrderTestHelper.createOrderListPostDto();
 
         when(orderRepository.findByIdIn(any())).thenReturn(orders);
         when(orderRepository.saveAll(any())).thenReturn(acceptedOrders);
+        when(orderAssignmentRepository.findByOrderIdIn(any())).thenReturn(orderAssignmentList);
 
         OrderListGetDto orderListGetDto = franchiseeService.acceptOrders(orderListPostDto);
         assertEquals(OrderStatus.ACCEPTED, orderListGetDto.getOrders().get(0).getStatus());
+        assertEquals(OrderAssignmentStatus.ACCEPTED, orderAcceptedAssignmentList.get(0).getStatus());
     }
 
     @Test

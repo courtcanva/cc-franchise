@@ -10,4 +10,5 @@ public interface OrderAssignmentRepository extends JpaRepository<OrderAssignment
     List<OrderAssignment> findOrderAssignmentByIdIn(List<OrderAssignmentId> ids);
 
     List<OrderAssignment> findOrderAssignmentByAssignedTimeBefore(OffsetDateTime dateTime);
+    List<OrderAssignment> findByOrderIdIn(List<Long> orderId);
 }
