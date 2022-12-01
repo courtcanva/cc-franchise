@@ -1,0 +1,1 @@
+ALTER TABLE suburb ALTER COLUMN ssc_code TYPE BIGINT;
