@@ -1,19 +1,26 @@
 package com.courtcanva.ccfranchise.services;
 
+import com.courtcanva.ccfranchise.constants.OrderAssignmentStatus;
 import com.courtcanva.ccfranchise.constants.OrderStatus;
+import com.courtcanva.ccfranchise.dtos.orders.OrderAssignmentListPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.OrderAssignmentPostDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderOpenGetDto;
-import com.courtcanva.ccfranchise.mappers.OrderMapper;
-import com.courtcanva.ccfranchise.mappers.OrderMapperImpl;
+import com.courtcanva.ccfranchise.mappers.*;
+import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
+import com.courtcanva.ccfranchise.models.OrderAssignment;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.OrderAssignmentRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
+import com.courtcanva.ccfranchise.utils.OrderAssignmentTestHelper;
 import com.courtcanva.ccfranchise.utils.OrderTestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 
@@ -43,6 +50,12 @@ class OrderServiceTest {
     @Mock
     private OrderAssignmentService orderAssignmentService;
 
+    @Mock
+    private OrderAssignmentRepository orderAssignmentRepository;
+
+    @Autowired
+    private FranchiseeService franchiseeService;
+
     @BeforeEach
     void setUp() {
         orderRepository.saveAll(orders);
@@ -51,7 +64,8 @@ class OrderServiceTest {
     @BeforeEach
     void setOrderServiceUp() {
         OrderMapper orderMapper = new OrderMapperImpl();
-        orderService = new OrderService(orderRepository, orderMapper, franchiseeRepository, orderAssignmentService);
+        OrderAssigmentMapper orderAssigmentMapper = new OrderAssigmentMapperImpl();
+        orderService = new OrderService(orderRepository, orderMapper, franchiseeRepository, orderAssignmentService, orderAssignmentRepository, franchiseeService, orderAssigmentMapper);
     }
 
     @Test
@@ -73,7 +87,7 @@ class OrderServiceTest {
         List<OrderOpenGetDto> firstTenOpenOrdersGetDto = orderService.getFirstTenOpenOrdersById(1L);
         assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderOpenGetDto::getPostcode).toList().containsAll(List.of("3000", "4000")));
         assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderOpenGetDto::getTotalAmount).toList()
-                       .containsAll(List.of(BigDecimal.valueOf(3000L), BigDecimal.valueOf(4000L))));
+                .containsAll(List.of(BigDecimal.valueOf(3000L), BigDecimal.valueOf(4000L))));
     }
 
     @Test
@@ -96,4 +110,19 @@ class OrderServiceTest {
 
     }
 
+    @Test
+    public void givenOrderIds_whenFranchiseeRejectOrders_thenUpdateOrders() {
+        Order order = OrderTestHelper.order1();
+        orderRepository.save(order);
+        franchiseeRepository.save(FranchiseeTestHelper.createFranchiseeWithDutyAreas());
+        OrderAssignment orderAssignment = OrderAssignmentTestHelper.createOrderAssignment();
+        orderAssignmentRepository.save(orderAssignment);
+        List<OrderAssignmentPostDto> orderList = new ArrayList<>();
+        orderList.add(OrderAssignmentPostDto.builder().id(orderAssignment.getId()).build());
+        when(orderAssignmentRepository.findOrderAssignmentByIdIn(any())).thenReturn(List.of(orderAssignment));
+        when(orderRepository.findByIdIn(any())).thenReturn(List.of(order));
+        franchiseeService.rejectOrders(OrderAssignmentListPostDto.builder().orderAssignments(orderList).build());
+        assertEquals(OrderStatus.UNASSIGNED, order.getStatus());
+        assertEquals(OrderAssignmentStatus.REJECTED, orderAssignment.getStatus());
+    }
 }

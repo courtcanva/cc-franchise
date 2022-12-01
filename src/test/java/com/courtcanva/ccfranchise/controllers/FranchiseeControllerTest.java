@@ -178,4 +178,7 @@ class FranchiseeControllerTest {
             .andExpect(jsonPath("$[1].totalAmount").value("4000.0"));
     }
 
+    void givenOrderIds_whenFranchiseeRejectOrders_thenUpdateOrders() throws Exception {
+
+    }
 }

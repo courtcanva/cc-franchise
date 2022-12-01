@@ -233,21 +233,4 @@ class FranchiseeServiceTest {
                 () -> franchiseeService.acceptOrders(orderListPostDto));
     }
 
-    @Test
-    public void givenOrderIds_whenFranchiseeRejectOrders_thenUpdateOrders() {
-        orderRepository.save(OrderTestHelper.order1());
-        Franchisee franchisee = FranchiseeTestHelper.createFranchiseeWithDutyAreas();
-        franchiseeRepository.save(franchisee);
-        OrderAssignment orderAssignment = OrderAssignmentTestHelper.createOrderAssignment();
-        orderAssignmentRepository.save(orderAssignment);
-        List<OrderAssignmentPostDto> orderList = new ArrayList<>();
-        orderList.add(OrderAssignmentPostDto.builder().id(orderAssignment.getId()).build());
-        franchiseeService.rejectOrders(OrderAssignmentListPostDto.builder().orderAssignments(orderList).build());
-        Optional<Order> rejectOrder = orderRepository.findById(orderAssignment.getOrder().getId());
-        Optional<OrderAssignment> rejectOrderAssignment = orderAssignmentRepository.findById(orderAssignment.getId());
-        assertEquals(rejectOrder.get().getStatus(), OrderStatus.UNASSIGNED);
-        assertEquals(rejectOrderAssignment.get().getStatus(), OrderAssignmentStatus.REJECTED);
-    }
-
-
 }
