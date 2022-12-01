@@ -109,20 +109,4 @@ class OrderServiceTest {
         assertEquals(OrderStatus.UNASSIGNED, unassignedOrders.get(0).getStatus());
 
     }
-
-    @Test
-    public void givenOrderIds_whenFranchiseeRejectOrders_thenUpdateOrders() {
-        Order order = OrderTestHelper.order1();
-        orderRepository.save(order);
-        franchiseeRepository.save(FranchiseeTestHelper.createFranchiseeWithDutyAreas());
-        OrderAssignment orderAssignment = OrderAssignmentTestHelper.createOrderAssignment();
-        orderAssignmentRepository.save(orderAssignment);
-        List<OrderAssignmentPostDto> orderList = new ArrayList<>();
-        orderList.add(OrderAssignmentPostDto.builder().id(orderAssignment.getId()).build());
-        when(orderAssignmentRepository.findOrderAssignmentByIdIn(any())).thenReturn(List.of(orderAssignment));
-        when(orderRepository.findByIdIn(any())).thenReturn(List.of(order));
-        franchiseeService.rejectOrders(OrderAssignmentListPostDto.builder().orderAssignments(orderList).build());
-        assertEquals(OrderStatus.UNASSIGNED, order.getStatus());
-        assertEquals(OrderAssignmentStatus.REJECTED, orderAssignment.getStatus());
-    }
 }
