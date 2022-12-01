@@ -2,11 +2,7 @@ package com.courtcanva.ccfranchise.controllers;
 
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffPostDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderAssignmentListPostDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderAcceptedAndCompletedPaginationGetDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderOpenGetDto;
+import com.courtcanva.ccfranchise.dtos.orders.*;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.services.FranchiseeService;
@@ -78,9 +74,9 @@ public class FranchiseeController {
 
     @PostMapping("/{franchiseeId}/reject_orders2")
     @ResponseStatus(HttpStatus.OK)
-    public boolean rejectOrders2(@RequestBody @Valid OrderListPostDto orderListPostDto,
+    public boolean rejectOrders2(@RequestBody @Valid OrdersPostDto ordersPostDto,
                                 @PathVariable(value = "franchiseeId") Long franchiseeId) {
-        return franchiseeService.rejectOrders2(orderListPostDto, franchiseeId);
+        return franchiseeService.rejectOrders2(ordersPostDto, franchiseeId);
     }
 
     @GetMapping("/{franchiseeId}/pending_orders")

@@ -190,15 +190,15 @@ public class FranchiseeService {
     }
 
     @Transactional
-    public boolean rejectOrders2(OrderListPostDto orderListPostDto, Long franchiseeId) {
-        List<OrderPostDto> orders1 = orderListPostDto.getOrders();
+    public boolean rejectOrders2(OrdersPostDto ordersPostDto, Long franchiseeId) {
+        List<Long> ids = ordersPostDto.getIds();
         List<OrderAssignmentId> orderAssignmentIds = new ArrayList<>();
-        orders1.forEach(orderPostDto -> orderAssignmentIds.add(OrderAssignmentId.builder().orderId(orderPostDto.getId()).franchiseeId(franchiseeId).build()));
+        ids.forEach(id -> orderAssignmentIds.add(OrderAssignmentId.builder().orderId(id).franchiseeId(franchiseeId).build()));
         List<OrderAssignment> orderAssignments = orderAssignmentRepository.findOrderAssignmentByIdIn(orderAssignmentIds);
         if (orderAssignments.isEmpty()) {
             return true;
         }
-        List<Order> orders = orderRepository.findByIdIn(orders1.stream().map(order -> order.getId()).toList());
+        List<Order> orders = orderRepository.findByIdIn(ids);
         for (Order order : orders) {
             order.setStatus(OrderStatus.UNASSIGNED);
             order.setFranchisee(null);
