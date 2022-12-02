@@ -53,7 +53,7 @@ class OrderAssignmentServiceTest {
         Order order = OrderTestHelper.order1();
         List<Franchisee> availableFranchisee = FranchiseeTestHelper.createFranchiseeList();
 
-        when(franchiseeService.findMatchedFranchisee(11344, 1L)).thenReturn(availableFranchisee);
+        when(franchiseeService.findMatchedFranchisee(11344L, 1L)).thenReturn(availableFranchisee);
 
         orderAssignmentService.createOrderAssignment(order);
 

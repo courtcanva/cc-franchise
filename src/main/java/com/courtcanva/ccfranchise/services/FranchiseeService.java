@@ -185,7 +185,7 @@ public class FranchiseeService {
                         .collect(Collectors.toList())).build();
     }
 
-    public List<Franchisee> findMatchedFranchisee(long sscCode, long orderId) {
+    public List<Franchisee> findMatchedFranchisee(Long sscCode, Long orderId) {
 
         Set<Suburb> dutyAreas = new HashSet<>(suburbService.findSuburbBySscCodes(List.of(sscCode)));
 
