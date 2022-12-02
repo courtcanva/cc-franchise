@@ -1,6 +1,7 @@
 package com.courtcanva.ccfranchise.dtos.orders;
 
 import com.courtcanva.ccfranchise.constants.OrderStatus;
+import com.courtcanva.ccfranchise.models.DesignInformation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,5 +32,5 @@ public class OrderGetDto {
 
     private BigDecimal totalAmount;
 
-    private String designInformation;
+    private DesignInformation designInformation;
 }
