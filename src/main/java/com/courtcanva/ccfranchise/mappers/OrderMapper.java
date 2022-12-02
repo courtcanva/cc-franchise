@@ -21,6 +21,7 @@ public interface OrderMapper {
 
     Order postDtoToOrder(OrderPostDto orderPostDto);
 
+    @Mapping(source = "designInformation", target = "designInformation", qualifiedByName = "mapDesignInformation")
     OrderGetDto orderToGetDto(Order order);
 
     @Mapping(source = "designInformation", target = "designInformation", qualifiedByName = "mapDesignInformation")
