@@ -33,13 +33,12 @@ public class OrderAssignmentService {
         OffsetDateTime currentTime = OffsetDateTime.now();
         OffsetDateTime updateTime = OffsetDateTime.now();
 
-        int sscCode = Integer.parseInt(order.getSscCode());
 
-        List<Franchisee> franchiseeList = franchiseeService.findMatchedFranchisee(sscCode, order.getId());
+        List<Franchisee> franchiseeList = franchiseeService.findMatchedFranchisee(Long.parseLong(order.getSscCode()), order.getId());
 
 
         if (franchiseeList.isEmpty()) {
-            log.debug("No available franchisee for sscCode: {}", sscCode);
+            log.debug("No available franchisee for sscCode: {}", Long.parseLong(order.getSscCode()));
         }
 
         OrderAssignmentId orderAssignmentId = buildOrderAssignmentId(franchiseeList.get(0).getId(), order.getId());
