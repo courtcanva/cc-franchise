@@ -7,9 +7,7 @@ import com.courtcanva.ccfranchise.dtos.FranchiseeAndStaffDto;
 import com.courtcanva.ccfranchise.dtos.FranchiseePostDto;
 import com.courtcanva.ccfranchise.dtos.StaffGetDto;
 import com.courtcanva.ccfranchise.dtos.StaffPostDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderListGetDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderListPostDto;
-import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
+import com.courtcanva.ccfranchise.dtos.orders.*;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModeGetDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbListAndFilterModePostDto;
 import com.courtcanva.ccfranchise.dtos.suburbs.SuburbPostDto;
@@ -20,6 +18,7 @@ import com.courtcanva.ccfranchise.mappers.FranchiseeMapper;
 import com.courtcanva.ccfranchise.mappers.OrderMapper;
 import com.courtcanva.ccfranchise.mappers.StaffMapper;
 import com.courtcanva.ccfranchise.mappers.SuburbMapper;
+import com.courtcanva.ccfranchise.models.*;
 import com.courtcanva.ccfranchise.models.Franchisee;
 import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.models.Staff;
@@ -35,6 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -147,8 +147,6 @@ public class FranchiseeService {
 
     @Transactional
     public OrderListGetDto acceptOrders(OrderListPostDto orderListPostDto) {
-
-
         List<Order> selectedOrders = orderRepository.findByIdIn(
                 orderListPostDto.getOrders()
                         .stream()
@@ -185,6 +183,39 @@ public class FranchiseeService {
                         .collect(Collectors.toList())).build();
     }
 
+    @Transactional
+    public boolean rejectOrders(OrderAssignmentListPostDto orderAssignmentListPostDto) {
+        List<OrderAssignmentPostDto> orderAssignmentPostDtos = orderAssignmentListPostDto.getOrderAssignments();
+        List<OrderAssignment> orderAssignments = orderAssignmentRepository.findOrderAssignmentByIdIn(orderAssignmentPostDtos
+                .stream()
+                .map(OrderAssignmentPostDto::getId).
+                toList());
+        if (orderAssignments.isEmpty()) {
+            return true;
+        }
+        List<Order> orders = orderRepository.findByIdIn(orderAssignmentPostDtos
+                .stream()
+                .map(OrderAssignmentPostDto::getId)
+                .toList()
+                .stream().map(OrderAssignmentId::getOrderId).toList());
+        for (Order order : orders) {
+            order.setStatus(OrderStatus.UNASSIGNED);
+            order.setFranchisee(null);
+        }
+        updateStatusAndUpdateAt(orderAssignments);
+        orderRepository.saveAll(orders);
+        orderAssignmentRepository.saveAll(orderAssignments);
+        return true;
+    }
+
+    private static void updateStatusAndUpdateAt(List<OrderAssignment> orderAssignments) {
+        OffsetDateTime now = OffsetDateTime.now();
+        for (OrderAssignment orderAssignment : orderAssignments) {
+            orderAssignment.setStatus(OrderAssignmentStatus.REJECTED);
+            orderAssignment.setUpdatedTime(now);
+        }
+    }
+
     public List<Franchisee> findMatchedFranchisee(long sscCode, long orderId) {
 
         Set<Suburb> dutyAreas = new HashSet<>(suburbService.findSuburbBySscCodes(List.of(sscCode)));
@@ -200,6 +231,4 @@ public class FranchiseeService {
                 .toList();
 
     }
-
-
 }

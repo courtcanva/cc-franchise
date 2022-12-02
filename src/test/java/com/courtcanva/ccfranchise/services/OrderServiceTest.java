@@ -2,10 +2,10 @@ package com.courtcanva.ccfranchise.services;
 
 import com.courtcanva.ccfranchise.constants.OrderStatus;
 import com.courtcanva.ccfranchise.dtos.orders.OrderOpenGetDto;
-import com.courtcanva.ccfranchise.mappers.OrderMapper;
-import com.courtcanva.ccfranchise.mappers.OrderMapperImpl;
+import com.courtcanva.ccfranchise.mappers.*;
 import com.courtcanva.ccfranchise.models.Order;
 import com.courtcanva.ccfranchise.repositories.FranchiseeRepository;
+import com.courtcanva.ccfranchise.repositories.OrderAssignmentRepository;
 import com.courtcanva.ccfranchise.repositories.OrderRepository;
 import com.courtcanva.ccfranchise.utils.FranchiseeTestHelper;
 import com.courtcanva.ccfranchise.utils.OrderTestHelper;
@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 
@@ -43,6 +44,11 @@ class OrderServiceTest {
     @Mock
     private OrderAssignmentService orderAssignmentService;
 
+    @Mock
+    private OrderAssignmentRepository orderAssignmentRepository;
+
+    private FranchiseeService franchiseeService;
+
     @BeforeEach
     void setUp() {
         orderRepository.saveAll(orders);
@@ -51,7 +57,8 @@ class OrderServiceTest {
     @BeforeEach
     void setOrderServiceUp() {
         OrderMapper orderMapper = new OrderMapperImpl();
-        orderService = new OrderService(orderRepository, orderMapper, franchiseeRepository, orderAssignmentService);
+        OrderAssigmentMapper orderAssigmentMapper = new OrderAssigmentMapperImpl();
+        orderService = new OrderService(orderRepository, orderMapper, franchiseeRepository, orderAssignmentService, orderAssignmentRepository, franchiseeService, orderAssigmentMapper);
     }
 
     @Test
@@ -73,7 +80,7 @@ class OrderServiceTest {
         List<OrderOpenGetDto> firstTenOpenOrdersGetDto = orderService.getFirstTenOpenOrdersById(1L);
         assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderOpenGetDto::getPostcode).toList().containsAll(List.of("3000", "4000")));
         assertTrue(firstTenOpenOrdersGetDto.stream().map(OrderOpenGetDto::getTotalAmount).toList()
-                       .containsAll(List.of(BigDecimal.valueOf(3000L), BigDecimal.valueOf(4000L))));
+                .containsAll(List.of(BigDecimal.valueOf(3000L), BigDecimal.valueOf(4000L))));
     }
 
     @Test
@@ -95,5 +102,4 @@ class OrderServiceTest {
         assertEquals(OrderStatus.UNASSIGNED, unassignedOrders.get(0).getStatus());
 
     }
-
 }
