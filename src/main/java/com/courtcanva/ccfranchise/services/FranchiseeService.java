@@ -208,27 +208,6 @@ public class FranchiseeService {
         return true;
     }
 
-    @Transactional
-    public boolean rejectOrders2(OrdersPostDto ordersPostDto, Long franchiseeId) {
-        List<Long> ids = ordersPostDto.getIds();
-        List<OrderAssignmentId> orderAssignmentIds = new ArrayList<>();
-        ids.forEach(id -> orderAssignmentIds.add(OrderAssignmentId.builder().orderId(id).franchiseeId(franchiseeId).build()));
-        List<OrderAssignment> orderAssignments = orderAssignmentRepository.findOrderAssignmentByIdIn(orderAssignmentIds);
-        if (orderAssignments.isEmpty()) {
-            return true;
-        }
-        List<Order> orders = orderRepository.findByIdIn(ids);
-        for (Order order : orders) {
-            order.setStatus(OrderStatus.UNASSIGNED);
-            order.setFranchisee(null);
-        }
-        updateStatusAndUpdateAt(orderAssignments);
-        orderRepository.saveAll(orders);
-        orderAssignmentRepository.saveAll(orderAssignments);
-        return true;
-    }
-
-
     private static void updateStatusAndUpdateAt(List<OrderAssignment> orderAssignments) {
         OffsetDateTime now = OffsetDateTime.now();
         for (OrderAssignment orderAssignment : orderAssignments) {

@@ -72,13 +72,6 @@ public class FranchiseeController {
         return franchiseeService.rejectOrders(orderAssignmentListPostDto);
     }
 
-    @PostMapping("/{franchiseeId}/reject_orders2")
-    @ResponseStatus(HttpStatus.OK)
-    public boolean rejectOrders2(@RequestBody @Valid OrdersPostDto ordersPostDto,
-                                @PathVariable(value = "franchiseeId") Long franchiseeId) {
-        return franchiseeService.rejectOrders2(ordersPostDto, franchiseeId);
-    }
-
     @GetMapping("/{franchiseeId}/pending_orders")
     @ResponseStatus(HttpStatus.OK)
     public List<OrderOpenGetDto> getFirstTenOpenOrders(@PathVariable Long franchiseeId) {
