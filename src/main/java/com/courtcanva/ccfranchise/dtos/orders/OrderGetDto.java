@@ -1,6 +1,7 @@
 package com.courtcanva.ccfranchise.dtos.orders;
 
 import com.courtcanva.ccfranchise.constants.OrderStatus;
+import com.courtcanva.ccfranchise.models.ContactInformation;
 import com.courtcanva.ccfranchise.models.DesignInformation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +25,7 @@ public class OrderGetDto {
 
     private OrderStatus status;
 
-    private String contactInformation;
+    private ContactInformation contactInformation;
 
     private OffsetDateTime createdTime;
 

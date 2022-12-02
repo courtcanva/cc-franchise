@@ -3,6 +3,7 @@ package com.courtcanva.ccfranchise.mappers;
 import com.courtcanva.ccfranchise.dtos.orders.OrderGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderOpenGetDto;
 import com.courtcanva.ccfranchise.dtos.orders.OrderPostDto;
+import com.courtcanva.ccfranchise.models.ContactInformation;
 import com.courtcanva.ccfranchise.models.DesignInformation;
 import com.courtcanva.ccfranchise.models.Order;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,6 +22,7 @@ public interface OrderMapper {
 
     Order postDtoToOrder(OrderPostDto orderPostDto);
 
+    @Mapping(source = "contactInformation",target="contactInformation", qualifiedByName = "mapContactInformation")
     @Mapping(source = "designInformation", target = "designInformation", qualifiedByName = "mapDesignInformation")
     OrderGetDto orderToGetDto(Order order);
 
@@ -37,6 +39,17 @@ public interface OrderMapper {
             log.debug("exception message: {}",e.getMessage());
             log.debug("failed deignInformation value is {}", designInformation);
             return new DesignInformation();
+        }
+    }
+
+    @Named("mapContactInformation")
+    static ContactInformation mapContactInformation(String contactInformation){
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.readValue(contactInformation, ContactInformation.class);
+        } catch (JsonProcessingException e) {
+            log.debug("Failed map contact information with: {}", contactInformation);
+            return new ContactInformation();
         }
     }
 
